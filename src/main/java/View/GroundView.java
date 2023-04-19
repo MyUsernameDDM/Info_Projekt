@@ -39,14 +39,16 @@ public class GroundView {
 
     VBox rightGroupBox = new VBox();
 
-    HBox Timeline = new HBox();
+    HBox TimeBox = new HBox();
 
-    HBox Searchline = new HBox();
+    HBox SearchBox = new HBox();
 
     public GroundView() {
+
+        displayGraphic();
         root.setRight(rightGroupBox);
-        root.setTop(Searchline);
-        root.setBottom(Timeline);
+        root.setTop(SearchBox);
+        root.setBottom(TimeBox);
     }
 
 
@@ -75,9 +77,9 @@ public class GroundView {
 
 
 
-    public void displayGraphic(Stage stage){
-
-       /*
+    public void displayGraphic(){
+//
+         /*
         LineChart<?,?> lineChart = null;
 
         XYChart.Series series = new XYChart.Series();
@@ -94,43 +96,56 @@ public class GroundView {
 
         root.setCenter(lineChart);
         */
+        int buttonX = 100;
+        int buttonY = 100;
 
         searchInputTextField.setText("Search");
+        searchButton.setText("Search");
         searchButton.setLayoutX(150);
         searchButton.setLayoutY(20);
 
-        oneDayButton.setLayoutX(50);
-        oneDayButton.setLayoutY(50);
+        oneDayButton.setText("1D");
+        oneDayButton.setLayoutX(buttonX);
+        oneDayButton.setLayoutY(buttonY);
 
-        fiveDayButton.setLayoutX(50);
-        fiveDayButton.setLayoutY(50);
+        fiveDayButton.setText("5D");
+        fiveDayButton.setLayoutX(buttonX);
+        fiveDayButton.setLayoutY(buttonY);
 
-        oneMonthButton.setLayoutX(50);
-        oneMonthButton.setLayoutY(50);
+        oneMonthButton.setText("1M");
+        oneMonthButton.setLayoutX(buttonX);
+        oneMonthButton.setLayoutY(buttonY);
 
-        threeMonthButton.setLayoutX(50);
-        threeMonthButton.setLayoutY(50);
+        threeMonthButton.setText("3M");
+        threeMonthButton.setLayoutX(buttonX);
+        threeMonthButton.setLayoutY(buttonY);
 
-        sixMonthButton.setLayoutX(50);
-        sixMonthButton.setLayoutY(50);
+        sixMonthButton.setText("6M");
+        sixMonthButton.setLayoutX(buttonX);
+        sixMonthButton.setLayoutY(buttonY);
 
-        ytdButton.setLayoutX(50);
-        ytdButton.setLayoutY(50);
+        oneYearButton.setText("1Y");
+        oneYearButton.setLayoutX(buttonX);
+        oneYearButton.setLayoutY(buttonY);
 
-        oneYearButton.setLayoutX(50);
-        oneYearButton.setLayoutY(50);
+        fiveYearButton.setText("5Y");
+        fiveYearButton.setLayoutX(buttonX);
+        fiveYearButton.setLayoutY(buttonY);
 
-        fiveYearButton.setLayoutX(50);
-        fiveYearButton.setLayoutY(50);
+        ytdButton.setLayoutX(buttonX);
+        ytdButton.setLayoutY(buttonY);
 
-        Timeline = new HBox(oneDayButton, fiveDayButton, oneMonthButton, threeMonthButton, sixMonthButton, ytdButton, oneYearButton, fiveDayButton);
+        TimeBox.getChildren().add(oneDayButton);
+        TimeBox.getChildren().add(fiveDayButton);
+        TimeBox.getChildren().add(oneMonthButton);
+        TimeBox.getChildren().add(sixMonthButton);
+        TimeBox.getChildren().add(oneYearButton);
+        TimeBox.getChildren().add(fiveYearButton);
+        TimeBox.getChildren().add(ytdButton);
 
-        Searchline = new HBox(searchInputTextField, searchButton);
+        SearchBox = new HBox(searchInputTextField, searchButton);
 
         root.getChildren().add(simulationModeButton);
         scene = new Scene(root, 500, 500);
-        stage.setTitle("Realtime Mode");
-        stage.setScene(scene);
-        stage.show();
     }
 }
