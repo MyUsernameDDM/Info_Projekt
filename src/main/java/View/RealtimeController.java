@@ -1,13 +1,21 @@
 package View;
 
+import MainModel.Main;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class RealtimeController {
-    GroundView groundView = new GroundView();
+import static MainModel.Main.mode;
+
+public class RealtimeController extends Controller{
+    GroundView groundView = new GroundView(this);
     SearchView searchView = new SearchView();
+    WatchListView watchListView = new WatchListView();
+
+    public RealtimeController() {
+        groundView.root.setLeft(watchListView.wlRoot);
+    }
 
     public GroundView getGroundView() {
         return groundView;
@@ -20,4 +28,14 @@ public class RealtimeController {
     public Scene getScene(){
         return groundView.scene;
     }
+
+
+    /**
+     * Wechsel auf den SimulationController und somit auf den SimulationMode
+     */
+    @Override
+    public void changeMode() {
+        mode = Main.status.simulation;
+    }
+
 }

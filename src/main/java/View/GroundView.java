@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GroundView {
-    public static boolean change = true;
+
     private int MAX = 500;
     private double old_height = MAX;
 
@@ -61,30 +61,17 @@ public class GroundView {
     HBox searchBox = new HBox();
 
     HBox changeBox = new HBox();
+    Controller controller;
 
-    public GroundView() {
+    public GroundView(Controller controller) {
         displayGraphic();
         root.setRight(changeBox);
         root.setTop(searchBox);
         root.setBottom(timeBox);
         root.setCenter(graph);
+        this.controller = controller;
+
     }
-
-
-
-
-
-    /*
-    new Scene(controller.view.root)
-     */
-
-
-    /**
-     * Zeigt den Realtime Modus auf dem Bildschirm.
-     *
-     */
-
-
     /*
 
     Alle größen setzen (Button, etc.)
@@ -154,9 +141,12 @@ public class GroundView {
         searchBox = new HBox(searchInputTextField, searchButton);
 
         changeBox = new HBox(simulationModeButton);
-
         scene = new Scene(root, MAX, MAX);
 
+
+
+
+        //vielleicht dech tim Controller mochn, dass man theoretisch lei des in der Mitte unpasst
         ChangeListener changeListener = new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -167,19 +157,11 @@ public class GroundView {
                 old_height = scene.getHeight();
             }
         };
+        //Um View mit Model zu trennen immer mit Lambda die entsprechenden Methoden aufrufen siehe oben
 
-        simulationModeButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                System.out.println("Pressed");
-                if (change == true){
-                    change = false;
-                } else {
-                    change = true;
-                }
-            }
-        });
+        simulationModeButton.setOnAction(actionEvent -> {
+            System.out.println("Test");
+            controller.changeMode();});
 
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);

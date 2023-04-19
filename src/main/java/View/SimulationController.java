@@ -1,9 +1,12 @@
 package View;
 
+import MainModel.Main;
 import javafx.scene.Scene;
 
-public class SimulationController {
-    GroundView groundView = new GroundView();
+import static MainModel.Main.mode;
+
+public class SimulationController extends Controller{
+    GroundView groundView = new GroundView(this);
     SearchView searchView = new SearchView();
 
     public GroundView getGroundView() {
@@ -18,4 +21,8 @@ public class SimulationController {
         return groundView.scene;
     }
 
+    @Override
+    public void changeMode() {
+        mode = Main.status.realtime;
+    }
 }
