@@ -8,6 +8,8 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -28,6 +30,7 @@ public class Main extends Application {
      * standby: damit in der TimeLine nicht immer aktualisiert wird, obwohl keine Änderung war
      */
     public enum status {realtime, simulation, standby}
+
     public static status mode = status.realtime;
 
     @Override
@@ -55,6 +58,7 @@ public class Main extends Application {
                 mode = status.standby;
             }
         }));
+
         run.setCycleCount(Animation.INDEFINITE);
         run.play();
 

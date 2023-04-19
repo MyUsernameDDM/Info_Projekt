@@ -14,7 +14,6 @@ public class RealtimeController extends Controller{
     WatchListView watchListView = new WatchListView();
 
     public RealtimeController() {
-        groundView.root.setLeft(watchListView.wlRoot);
     }
 
     public GroundView getGroundView() {
