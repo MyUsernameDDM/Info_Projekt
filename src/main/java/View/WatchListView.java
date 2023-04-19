@@ -1,6 +1,8 @@
 package View;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 import java.nio.Buffer;
 import java.util.ArrayList;
@@ -8,9 +10,12 @@ import java.util.ArrayList;
 public class WatchListView {
     int articleAmount;
     ArrayList<Button> buttonList = new ArrayList<>();
+    Label titel = new Label("Watchlist");
+    HBox wlRoot = new HBox();
 
     public WatchListView(int articleAmount) {
         this.articleAmount = articleAmount;
+        wlRoot.getChildren().add(titel);
     }
 
     /**
@@ -20,7 +25,11 @@ public class WatchListView {
      */
     public void setArticles(ArrayList<String> articleNames){
         for (String str :articleNames) {
-            buttonList.add(new Button(str));
+            Button temp = new Button(str);
+            temp.setPrefHeight(30);
+            temp.setPrefWidth(100);
+            buttonList.add(temp);
+            wlRoot.getChildren().add(temp);
         }
     }
     public void addArticle(String articleName){
