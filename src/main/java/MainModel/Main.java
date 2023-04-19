@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
-
+// ölasdjf
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Aktienkurs");
