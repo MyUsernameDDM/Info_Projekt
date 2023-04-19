@@ -3,18 +3,17 @@ package View;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class WatchListView {
-    int articleAmount;
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Watchlist");
-    HBox wlRoot = new HBox();
+    VBox wlRoot = new VBox();
 
-    public WatchListView(int articleAmount) {
-        this.articleAmount = articleAmount;
+    public WatchListView() {
         wlRoot.getChildren().add(titel);
     }
 
