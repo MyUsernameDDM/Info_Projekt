@@ -1,20 +1,37 @@
 package View;
 
+import MainModel.Main;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GroundView {
+    public static boolean change = true;
+    private int MAX = 500;
+    private double old_height = MAX;
+
+    private double old_width = MAX;
+
     //Border Pane erstellen
     BorderPane root = new BorderPane();
 
     //Scene erstellen
     Scene scene;
+
+    Rectangle graph = new Rectangle();
 
     //Buttons erstellen
     Button simulationModeButton = new Button();
@@ -39,16 +56,18 @@ public class GroundView {
 
     VBox rightGroupBox = new VBox();
 
-    HBox TimeBox = new HBox();
+    HBox timeBox = new HBox();
 
-    HBox SearchBox = new HBox();
+    HBox searchBox = new HBox();
+
+    HBox changeBox = new HBox();
 
     public GroundView() {
-
         displayGraphic();
-        root.setRight(rightGroupBox);
-        root.setTop(SearchBox);
-        root.setBottom(TimeBox);
+        root.setRight(changeBox);
+        root.setTop(searchBox);
+        root.setBottom(timeBox);
+        root.setCenter(graph);
     }
 
 
@@ -79,30 +98,21 @@ public class GroundView {
 
     public void displayGraphic(){
 //
-         /*
-        LineChart<?,?> lineChart = null;
+        graph.setHeight(300);
+        graph.setWidth(300);
+        graph.setFill(Color.GREEN);
 
-        XYChart.Series series = new XYChart.Series();
-        series.setName("No of schools in an year");
-
-        series.getData().add(new XYChart.Data(1970, 15));
-        series.getData().add(new XYChart.Data(1980, 30));
-        series.getData().add(new XYChart.Data(1990, 60));
-        series.getData().add(new XYChart.Data(2000, 120));
-        series.getData().add(new XYChart.Data(2013, 240));
-        series.getData().add(new XYChart.Data(2014, 300));
-
-        lineChart.getData().addAll(series);
-
-        root.setCenter(lineChart);
-        */
         int buttonX = 100;
         int buttonY = 100;
 
+        /*
         searchInputTextField.setText("Search");
         searchButton.setText("Search");
         searchButton.setLayoutX(150);
         searchButton.setLayoutY(20);
+
+        Kimp in Searchview inne
+         */
 
         oneDayButton.setText("1D");
         oneDayButton.setLayoutX(buttonX);
@@ -135,17 +145,43 @@ public class GroundView {
         ytdButton.setLayoutX(buttonX);
         ytdButton.setLayoutY(buttonY);
 
-        TimeBox.getChildren().add(oneDayButton);
-        TimeBox.getChildren().add(fiveDayButton);
-        TimeBox.getChildren().add(oneMonthButton);
-        TimeBox.getChildren().add(sixMonthButton);
-        TimeBox.getChildren().add(oneYearButton);
-        TimeBox.getChildren().add(fiveYearButton);
-        TimeBox.getChildren().add(ytdButton);
+        simulationModeButton.setText("Simulation");
+        simulationModeButton.setLayoutY(200);
+        simulationModeButton.setLayoutX(200);
 
-        SearchBox = new HBox(searchInputTextField, searchButton);
+        timeBox = new HBox(oneDayButton, fiveDayButton, oneMonthButton, sixMonthButton, oneYearButton, fiveYearButton, ytdButton);
 
-        root.getChildren().add(simulationModeButton);
-        scene = new Scene(root, 500, 500);
+        searchBox = new HBox(searchInputTextField, searchButton);
+
+        changeBox = new HBox(simulationModeButton);
+
+        scene = new Scene(root, MAX, MAX);
+
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                graph.setX(graph.getX() / old_width * scene.getWidth());
+                graph.setY(graph.getY() / old_height * scene.getHeight());
+
+                old_width = scene.getWidth();
+                old_height = scene.getHeight();
+            }
+        };
+
+        simulationModeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                System.out.println("Pressed");
+                if (change == true){
+                    change = false;
+                } else {
+                    change = true;
+                }
+            }
+        });
+
+        scene.heightProperty().addListener(changeListener);
+        scene.widthProperty().addListener(changeListener);
     }
 }
