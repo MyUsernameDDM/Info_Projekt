@@ -1,5 +1,6 @@
 package MainModel;
 
+import View.GroundView;
 import View.RealtimeController;
 import View.SimulationController;
 import javafx.application.Application;
@@ -17,9 +18,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+
         stage.setTitle("Aktienkurs");
         RealtimeController realtimeController = new RealtimeController();
         Scene scene = realtimeController.getScene();
+        stage.setScene(scene);
         stage.show();
     }
 

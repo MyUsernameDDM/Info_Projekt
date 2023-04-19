@@ -1,6 +1,7 @@
 package View;
 
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
@@ -22,7 +23,14 @@ public class RealtimeController {
     }
 
     public RealtimeController() {
-        realtimeView.root.setCenter(new Rectangle(20,20));
+        Rectangle rectangle = new Rectangle();
+        rectangle.setFill(Color.RED);
+        rectangle.setWidth(40);
+        rectangle.setHeight(40);
+
+        rectangle.setX(50);
+
+        realtimeView.root.setCenter(rectangle);
         realtimeView.root.setLeft(searchView.root);
     }
 }
