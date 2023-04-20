@@ -9,11 +9,15 @@ import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class WatchListView {
+    Controller controller;
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Watchlist");
     VBox wlRoot = new VBox();
 
-    public WatchListView() {
+
+
+    public WatchListView(Controller controller) {
+        this.controller = controller;
         wlRoot.getChildren().add(titel);
     }
 

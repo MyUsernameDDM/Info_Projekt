@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 public class WalletView {
+    Controller controller;
     String selectedArticle;
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Wallet");
@@ -18,7 +19,8 @@ public class WalletView {
 
 
 
-    public WalletView() {
+    public WalletView(Controller controller) {
+        this.controller = controller;
         wlRoot.getChildren().add(titel);
     }
 

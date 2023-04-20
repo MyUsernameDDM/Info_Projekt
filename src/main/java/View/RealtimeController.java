@@ -10,8 +10,8 @@ import static MainModel.Main.mode;
 
 public class RealtimeController extends Controller{
     GroundView groundView = new GroundView(this);
-    SearchView searchView = new SearchView();
-    WatchListView watchListView = new WatchListView();
+    SearchView searchView = new SearchView(this);
+    WatchListView watchListView = new WatchListView(this);
 
     public RealtimeController() {
     }

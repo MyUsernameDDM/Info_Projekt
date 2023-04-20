@@ -7,7 +7,7 @@ import static MainModel.Main.mode;
 
 public class SimulationController extends Controller{
     GroundView groundView = new GroundView(this);
-    SearchView searchView = new SearchView();
+    SearchView searchView = new SearchView(this);
 
     public GroundView getGroundView() {
         return groundView;
