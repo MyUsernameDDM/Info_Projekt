@@ -2,6 +2,7 @@ package View;
 
 import MainModel.*;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 
 import java.util.ArrayList;
 
@@ -66,9 +67,24 @@ public class RealtimeController extends Controller{
      */
     @Override
     public void wlSafeCurrentArticle(String articleName) {
+        //vorher ausgewählten Button wieder zuruecksetzen
+        if(watchLCurrentArticle != null){
+            for (int i = 0; i < watchListView.buttonList.size(); i++) {
+                if(watchLCurrentArticle.getName().equals(watchListView.buttonList.get(i).getText())){
+                    watchListView.buttonList.get(i).setStyle("");
+                }
+            }
+        }
+
+        //neuen Artikel als aktuellen Artikel erstellen
         for (Article article:watchListArticles) {
             if(articleName.equals(article.getName())){
                 watchLCurrentArticle = article;
+                for (int i = 0; i < watchListView.buttonList.size(); i++) {
+                    if(articleName.equals(watchListView.buttonList.get(i).getText())){
+                        setButtonStyle(watchListView.buttonList.get(i));
+                    }
+                }
             }
         }
     }
@@ -81,5 +97,16 @@ public class RealtimeController extends Controller{
         watchListView.removeArticle(watchLCurrentArticle.getName());
         watchListArticles.remove(watchLCurrentArticle);
     }
+
+    /**
+     * Diese Methode kann häufiger aufgerufen werden um einen einheitlichen Stil zu haben
+     * @param button Button der bearbeitet wird
+     *
+     */
+    public void setButtonStyle(Button button){
+        button.setStyle("-fx-border-insets: 5");
+        button.setStyle("-fx-border-color: #1970d2");
+    }
+
 
 }
