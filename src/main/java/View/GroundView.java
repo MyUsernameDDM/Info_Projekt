@@ -15,9 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.*;
-
 import static javafx.scene.paint.Color.GRAY;
-
 public class GroundView {
 
     private int MAX = 500;
@@ -29,7 +27,6 @@ public class GroundView {
     Menu menu_2 = new Menu("Mode");
     Menu menu_3 = new Menu("Wallet");
     Menu menu_4 = new Menu("Search");
-
     MenuItem submenu_2_1 = new MenuItem("Switch");
 
     BorderPane window = new BorderPane();
@@ -93,13 +90,6 @@ public class GroundView {
         menu_2.getItems().add(submenu_2_1);
         submenu_2_1.setOnAction(actionEvent -> {
             controller.changeMode();
-        });
-
-        menu_1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Pressed Menu_1");
-            }
         });
 
         window.setTop(topMenuBar);
