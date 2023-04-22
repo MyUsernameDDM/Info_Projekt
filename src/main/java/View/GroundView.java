@@ -1,32 +1,38 @@
 package View;
 
-import MainModel.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import javafx.scene.*;
+
+import static javafx.scene.paint.Color.GRAY;
 
 public class GroundView {
 
     private int MAX = 500;
     private double old_height = MAX;
-
     private double old_width = MAX;
 
-    //Border Pane erstellen
-    BorderPane root = new BorderPane();
+    MenuBar topMenuBar = new MenuBar();
+    Menu menu_1 = new Menu("Login");
+    Menu menu_2 = new Menu("Mode");
+    Menu menu_3 = new Menu("Wallet");
+    Menu menu_4 = new Menu("Search");
+
+    MenuItem submenu_2_1 = new MenuItem("Switch");
+
+    BorderPane window = new BorderPane();
 
     //Scene erstellen
     Scene scene;
@@ -63,12 +69,44 @@ public class GroundView {
     HBox changeBox = new HBox();
     Controller controller;
 
+
+
+    Button[]buttonTime = new Button[7];
+
+    String[]buttonTimeName = {
+            "1D",
+            "5D",
+            "1M",
+            "3M",
+            "6M",
+            "1Y",
+            "5Y"
+    };
+
+
+
     public GroundView(Controller controller) {
         displayGraphic();
-        root.setRight(changeBox);
-        root.setTop(searchBox);
-        root.setBottom(timeBox);
-        root.setCenter(graph);
+
+        topMenuBar.getMenus().addAll(menu_1, menu_2, menu_3, menu_4);
+
+        menu_2.getItems().add(submenu_2_1);
+        submenu_2_1.setOnAction(actionEvent -> {
+            controller.changeMode();
+        });
+
+        menu_1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Pressed Menu_1");
+            }
+        });
+
+        window.setTop(topMenuBar);
+        //window.setRight(changeBox);
+        //window.setTop(searchBox);
+        window.setBottom(timeBox);
+        window.setCenter(graph);
         this.controller = controller;
 
     }
@@ -84,13 +122,31 @@ public class GroundView {
 
 
     public void displayGraphic(){
-//
-        graph.setHeight(300);
-        graph.setWidth(300);
-        graph.setFill(Color.GREEN);
 
         int buttonX = 100;
         int buttonY = 100;
+
+        /*
+        buttonTime[0] ==> 1D
+        buttonTime[1] ==> 5D
+        buttonTime[2] ==> 1M
+        buttonTime[3] ==> 3M
+        buttonTime[4] ==> 6M
+        buttonTime[5] ==> 1Y
+        buttonTime[6] ==> 5Y
+         */
+
+        for (int i = 0; i < buttonTime.length; i++){
+            buttonTime[i] = new Button();
+            buttonTime[i].setPadding(new Insets(10, 10, 10, 10));
+            buttonTime[i].setText(buttonTimeName[i]);
+            buttonTime[i].setLayoutX(buttonX);
+            buttonTime[i].setLayoutY(buttonY);
+        }
+
+        graph.setHeight(300);
+        graph.setWidth(300);
+        graph.setFill(Color.GREEN);
 
         /*
         searchInputTextField.setText("Search");
@@ -101,7 +157,109 @@ public class GroundView {
         Kimp in Searchview inne
          */
 
-        oneDayButton.setText("1D");
+        ytdButton.setLayoutX(buttonX);
+        ytdButton.setLayoutY(buttonY);
+
+        simulationModeButton.setText("Mode");
+        simulationModeButton.setLayoutY(200);
+        simulationModeButton.setLayoutX(200);
+
+        for (int i = 0; i < buttonTime.length; i++){
+            timeBox.getChildren().add(buttonTime[i]);
+        }
+
+        /*
+        timeBox = new HBox();
+         */
+
+        searchBox = new HBox(searchInputTextField, searchButton);
+        scene = new Scene(window, MAX, MAX);
+
+
+
+
+        //vielleicht dech tim Controller mochn, dass man theoretisch lei des in der Mitte unpasst
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                graph.setX(graph.getX() / old_width * scene.getWidth());
+                graph.setY(graph.getY() / old_height * scene.getHeight());
+
+                old_width = scene.getWidth();
+                old_height = scene.getHeight();
+            }
+        };
+        //Um View mit Model zu trennen immer mit Lambda die entsprechenden Methoden aufrufen siehe oben
+
+        buttonTime[0].setOnAction(actionEvent -> {
+            System.out.println("1D");
+            controller.changeTimeMode(0);
+            changeWindow(0);
+        });
+
+        buttonTime[1].setOnAction(actionEvent -> {
+            System.out.println("5D");
+            controller.changeTimeMode(1);
+            changeWindow(1);
+
+        });
+
+        buttonTime[2].setOnAction(actionEvent -> {
+            System.out.println("1M");
+            controller.changeTimeMode(2);
+            changeWindow(2);
+        });
+
+        buttonTime[3].setOnAction(actionEvent -> {
+            System.out.println("3M");
+            controller.changeTimeMode(3);
+            changeWindow(3);
+        });
+
+        buttonTime[4].setOnAction(actionEvent -> {
+            System.out.println("6M");
+            controller.changeTimeMode(4);
+            changeWindow(4);
+        });
+
+        buttonTime[5].setOnAction(actionEvent -> {
+            System.out.println("1Y");
+            controller.changeTimeMode(5);
+            changeWindow(5);
+        });
+
+        buttonTime[6].setOnAction(actionEvent -> {
+            System.out.println("5Y");
+            controller.changeTimeMode(6);
+            changeWindow(6);
+        });
+
+
+
+        scene.heightProperty().addListener(changeListener);
+        scene.widthProperty().addListener(changeListener);
+    }
+
+    private void changeWindow(int i) {
+
+        if (i <= 3) {
+            graph.setFill(Color.BLUE);
+            window.setCenter(null);
+            window.setCenter(graph);
+        } else {
+            graph.setFill(Color.PURPLE);
+            window.setCenter(null);
+            window.setCenter(graph);
+        }
+    }
+}
+
+
+/*
+Buttons:
+
+
+   oneDayButton.setText("1D");
         oneDayButton.setLayoutX(buttonX);
         oneDayButton.setLayoutY(buttonY);
 
@@ -129,41 +287,6 @@ public class GroundView {
         fiveYearButton.setLayoutX(buttonX);
         fiveYearButton.setLayoutY(buttonY);
 
-        ytdButton.setLayoutX(buttonX);
-        ytdButton.setLayoutY(buttonY);
-
-        simulationModeButton.setText("Simulation");
-        simulationModeButton.setLayoutY(200);
-        simulationModeButton.setLayoutX(200);
-
-        timeBox = new HBox(oneDayButton, fiveDayButton, oneMonthButton, sixMonthButton, oneYearButton, fiveYearButton, ytdButton);
-
-        searchBox = new HBox(searchInputTextField, searchButton);
-
-        changeBox = new HBox(simulationModeButton);
-        scene = new Scene(root, MAX, MAX);
 
 
-
-
-        //vielleicht dech tim Controller mochn, dass man theoretisch lei des in der Mitte unpasst
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                graph.setX(graph.getX() / old_width * scene.getWidth());
-                graph.setY(graph.getY() / old_height * scene.getHeight());
-
-                old_width = scene.getWidth();
-                old_height = scene.getHeight();
-            }
-        };
-        //Um View mit Model zu trennen immer mit Lambda die entsprechenden Methoden aufrufen siehe oben
-
-        simulationModeButton.setOnAction(actionEvent -> {
-            System.out.println("Test");
-            controller.changeMode();});
-
-        scene.heightProperty().addListener(changeListener);
-        scene.widthProperty().addListener(changeListener);
-    }
-}
+ */

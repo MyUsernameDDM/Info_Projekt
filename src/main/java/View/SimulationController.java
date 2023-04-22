@@ -22,7 +22,12 @@ public class SimulationController extends Controller{
     }
 
     @Override
-    public void changeMode() {
+    public void changeMode() { // Simulation - Realtime
         mode = Main.status.realtime;
+    }
+
+    @Override
+    public void changeTimeMode(int ID){
+        Main.buttonTime[ID] = ID;
     }
 }

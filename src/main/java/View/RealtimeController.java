@@ -1,12 +1,9 @@
 package View;
 
 import MainModel.Main;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
-import static MainModel.Main.mode;
+import static MainModel.Main.*;
 
 public class RealtimeController extends Controller{
     GroundView groundView = new GroundView(this);
@@ -37,4 +34,8 @@ public class RealtimeController extends Controller{
         mode = Main.status.simulation;
     }
 
+    @Override
+    public void changeTimeMode(int ID){
+        Main.buttonTime[ID] = ID;
+    }
 }

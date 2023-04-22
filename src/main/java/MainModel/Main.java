@@ -1,21 +1,12 @@
 package MainModel;
 
-import View.GroundView;
 import View.RealtimeController;
-import View.Simulation;
 import View.SimulationController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -23,6 +14,8 @@ import java.io.IOException;
 
 
 public class Main extends Application {
+
+    public static int[] buttonTime = new int[100];
     Scene scene;
 
     /**
@@ -30,12 +23,12 @@ public class Main extends Application {
      * standby: damit in der TimeLine nicht immer aktualisiert wird, obwohl keine Änderung war
      */
     public enum status {realtime, simulation, standby}
-
     public static status mode = status.realtime;
+
+    //public int[]button = new int[7];
 
     @Override
     public void start(Stage stage) throws IOException {
-
 
         stage.setTitle("Aktienkurs");
 
@@ -43,7 +36,7 @@ public class Main extends Application {
         RealtimeController realtimeController = new RealtimeController();
         SimulationController simulationController = new SimulationController();
         Timeline run = new Timeline(new KeyFrame(new Duration(10), actionEvent -> {
-            System.out.println(mode.toString());
+            //System.out.println(mode.toString());
             if (mode == status.realtime){
                 scene = realtimeController.getScene();
                 stage.setTitle("Realtime");
