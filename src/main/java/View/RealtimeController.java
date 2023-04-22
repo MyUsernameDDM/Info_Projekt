@@ -1,7 +1,9 @@
 package View;
 
-import MainModel.Main;
+import MainModel.*;
 import javafx.scene.Scene;
+
+import java.util.ArrayList;
 
 import static MainModel.Main.*;
 
@@ -9,9 +11,15 @@ public class RealtimeController extends Controller{
     GroundView groundView = new GroundView(this);
     SearchView searchView = new SearchView(this);
     WatchListView watchListView = new WatchListView(this);
+    ArrayList<Article> watchListArticles = new ArrayList<>();
+    Article watchLCurrentArticle = null;
 
     public RealtimeController() {
+        groundView.window.setRight(watchListView.wlRoot);
+        setUpWatchList();
     }
+
+
 
     public GroundView getGroundView() {
         return groundView;
@@ -23,6 +31,19 @@ public class RealtimeController extends Controller{
 
     public Scene getScene(){
         return groundView.scene;
+    }
+
+    /**
+     * setzt die ActionHandler
+     */
+    private void setUpWatchList() {
+        watchListView.removeButton.setOnAction(actionEvent -> {
+            wlRemoveCurrentArticle();
+        });
+        for (int i = 0; i < 20; i++) {
+            watchListView.addArticle("Article " + i);
+            watchListArticles.add(new Article("Article " + i));
+        }
     }
 
 
@@ -38,4 +59,27 @@ public class RealtimeController extends Controller{
     public void changeTimeMode(int ID){
         Main.buttonTime[ID] = ID;
     }
+
+    /**
+     *
+     * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
+     */
+    @Override
+    public void wlSafeCurrentArticle(String articleName) {
+        for (Article article:watchListArticles) {
+            if(articleName.equals(article.getName())){
+                watchLCurrentArticle = article;
+            }
+        }
+    }
+
+    /**
+     * Die Methode löscht das aktuell ausgewählte Element der Watchlist aus dieser
+     */
+    @Override
+    public void wlRemoveCurrentArticle() {
+        watchListView.removeArticle(watchLCurrentArticle.getName());
+        watchListArticles.remove(watchLCurrentArticle);
+    }
+
 }

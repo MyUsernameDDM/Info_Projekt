@@ -2,46 +2,77 @@ package View;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class WatchListView {
     Controller controller;
+    ScrollPane wlRoot = new ScrollPane();
+    Button addButton = new Button("Artikel hinzufügen");
+    Button removeButton = new Button("Artikel entfernen");
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Watchlist");
-    VBox wlRoot = new VBox();
+    VBox vBox = new VBox();
 
 
 
     public WatchListView(Controller controller) {
         this.controller = controller;
-        wlRoot.getChildren().add(titel);
+        setButtons();
+        vBox.getChildren().addAll(titel,addButton, removeButton);
+        wlRoot.setContent(vBox);
+        wlRoot.setPrefWidth(100);
+
+    }
+
+    private void setButtons() {
+        addButton.setStyle(String.valueOf(Color.ALICEBLUE));
+        addButton.setPrefWidth(100);
+        addButton.setPrefHeight(30);
+        removeButton.setStyle(String.valueOf(Color.ALICEBLUE));
+        removeButton.setPrefWidth(100);
+        removeButton.setPrefHeight(30);
     }
 
     /**
-     * Methode zum setzen der Artikel-Namen in der buttonList
+     * Methode zum setzen der Artikel-Namen in der buttonList, mehrere auf einmal
      * @param articleNames Enthält die Namen von den Artikeln die angezeigt werden sollen
      *
      */
-    public void setArticles(ArrayList<String> articleNames){
+    public void addArticles(ArrayList<String> articleNames){
         for (String str :articleNames) {
             Button temp = new Button(str);
             temp.setPrefHeight(30);
             temp.setPrefWidth(100);
             buttonList.add(temp);
-            wlRoot.getChildren().add(temp);
+            vBox.getChildren().add(temp);
         }
     }
     public void addArticle(String articleName){
-        buttonList.add(new Button(articleName));
+        Button temp = new Button(articleName);
+        temp.setOnAction(actionEvent -> {
+            /*Mothe aufrufen zur Anzeige des GRaphs*/
+            controller.wlSafeCurrentArticle(articleName);
+        });
+        buttonList.add(temp);
+        vBox.getChildren().add(temp);
     }
+
+    /**
+     *
+     * @param articleName Artikelname der aus der Watchlist geloescht werden soll
+     */
     public void removeArticle(String articleName){
         for (Button b :buttonList) {
             if(b.getText().equals(articleName)){
+                vBox.getChildren().remove(b);
                 buttonList.remove(b);
+                return;
             }
         }
     }

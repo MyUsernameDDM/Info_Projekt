@@ -1,19 +1,28 @@
 package MainModel;
-/*
+
 
 import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 
 public class Article {
-    private ArrayList<Unit> values= new ArrayList<>();
+
     private String name;
+
+    public String getName() {
+        return name;
+    }
+    public Article(String str){
+        this.name = str;
+    }
+
+    /*
+       private ArrayList<Unit> values= new ArrayList<>();
+
     public ArrayList<Unit> getValues() {
         return values;
     }
 
-    public Article(String str){
-        this.name = str;
-    }
+
 
     private void setValues(TimeSpan timeSpan){
         ObjectInputFilter.Config cfg = Config.builder()
@@ -27,6 +36,7 @@ public class Article {
             values.add(new Unit(u));
         }
     }
+
+     */
 }
 
- */

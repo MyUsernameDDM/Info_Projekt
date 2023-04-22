@@ -9,4 +9,6 @@ public abstract class Controller {
     abstract public void changeMode();
 
     abstract public void changeTimeMode(int ID);
+    abstract public void wlSafeCurrentArticle(String articleName);
+    abstract public void wlRemoveCurrentArticle();
 }
