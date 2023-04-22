@@ -179,7 +179,21 @@ public class GroundView {
                 old_height = scene.getHeight();
             }
         };
-        //Um View mit Model zu trennen immer mit Lambda die entsprechenden Methoden aufrufen siehe oben
+
+
+        //isch changeWIndow lei zum Testen?
+        for (int i = 0; i < buttonTime.length; i++) {
+            int finalI = i;
+            buttonTime[i].setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    System.out.println(finalI + "D");
+                    controller.changeTimeMode(finalI);
+                    changeWindow(finalI);
+                }
+            });
+        }
+
 
         buttonTime[0].setOnAction(actionEvent -> {
             System.out.println("1D");
