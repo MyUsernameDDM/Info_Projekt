@@ -20,8 +20,6 @@ public class RealtimeController extends Controller{
         setUpWatchList();
     }
 
-
-
     public GroundView getGroundView() {
         return groundView;
     }
