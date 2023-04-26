@@ -7,21 +7,23 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.*;
-import static javafx.scene.paint.Color.GRAY;
+
+
 public class GroundView {
+
+    //CourseUtils courseUtils = new CourseUtils();
 
     private int MAX = 500;
     private double old_height = MAX;
     private double old_width = MAX;
 
+    public enum menus {};
     MenuBar topMenuBar = new MenuBar();
     Menu menu_1 = new Menu("Login");
     Menu menu_2 = new Menu("Mode");
@@ -30,13 +32,8 @@ public class GroundView {
     MenuItem submenu_2_1 = new MenuItem("Switch");
 
     BorderPane window = new BorderPane();
-
-    //Scene erstellen
     Scene scene;
-
     Rectangle graph = new Rectangle();
-
-    //Buttons erstellen
     Button simulationModeButton = new Button();
     Button oneDayButton = new Button();
     Button fiveDayButton = new Button();
@@ -60,16 +57,10 @@ public class GroundView {
     VBox rightGroupBox = new VBox();
 
     HBox timeBox = new HBox();
-
     HBox searchBox = new HBox();
-
     HBox changeBox = new HBox();
     Controller controller;
-
-
-
     Button[]buttonTime = new Button[7];
-
     String[]buttonTimeName = {
             "1D",
             "5D",
@@ -80,16 +71,26 @@ public class GroundView {
             "5Y"
     };
 
-
-
     public GroundView(Controller controller) {
         displayGraphic();
 
         topMenuBar.getMenus().addAll(menu_1, menu_2, menu_3, menu_4);
 
+        topMenuBar.setUseSystemMenuBar(true);
+
+
+
         menu_2.getItems().add(submenu_2_1);
         submenu_2_1.setOnAction(actionEvent -> {
             controller.changeMode();
+        });
+
+        menu_3.setOnAction(actionEvent -> {
+            System.out.println("Wallet");
+        });
+
+        menu_4.setOnAction(actionEvent -> {
+
         });
 
         window.setTop(topMenuBar);
@@ -98,7 +99,6 @@ public class GroundView {
         window.setBottom(timeBox);
         window.setCenter(graph);
         this.controller = controller;
-
     }
     /*
 
@@ -194,67 +194,12 @@ public class GroundView {
             });
         }
 
-
-        buttonTime[0].setOnAction(actionEvent -> {
-            System.out.println("1D");
-            controller.changeTimeMode(0);
-            changeWindow(0);
-        });
-
-        buttonTime[1].setOnAction(actionEvent -> {
-            System.out.println("5D");
-            controller.changeTimeMode(1);
-            changeWindow(1);
-
-        });
-
-        buttonTime[2].setOnAction(actionEvent -> {
-            System.out.println("1M");
-            controller.changeTimeMode(2);
-            changeWindow(2);
-        });
-
-        buttonTime[3].setOnAction(actionEvent -> {
-            System.out.println("3M");
-            controller.changeTimeMode(3);
-            changeWindow(3);
-        });
-
-        buttonTime[4].setOnAction(actionEvent -> {
-            System.out.println("6M");
-            controller.changeTimeMode(4);
-            changeWindow(4);
-        });
-
-        buttonTime[5].setOnAction(actionEvent -> {
-            System.out.println("1Y");
-            controller.changeTimeMode(5);
-            changeWindow(5);
-        });
-
-        buttonTime[6].setOnAction(actionEvent -> {
-            System.out.println("5Y");
-            controller.changeTimeMode(6);
-            changeWindow(6);
-        });
-
-
-
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);
     }
 
     private void changeWindow(int i) {
-
-        if (i <= 3) {
-            graph.setFill(Color.BLUE);
-            window.setCenter(null);
-            window.setCenter(graph);
-        } else {
-            graph.setFill(Color.PURPLE);
-            window.setCenter(null);
-            window.setCenter(graph);
-        }
+        ///changeShowInterval();
     }
 }
 

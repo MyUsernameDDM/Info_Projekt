@@ -43,6 +43,7 @@ public class CourseUtils {
      * Die View wird so umgestellt, dass das angegebene Interval angezeigt wird
      */
     public void changeShowInterval(){
+        //enum übergeben, damit es gesetzt wird
 
     }
 
