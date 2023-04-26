@@ -46,6 +46,7 @@ public class RealtimeController extends Controller{
         groundView.window.setRight(watchListView.wlRoot);
         groundView.window.setLeft(searchView.root);
         setUpWatchList();
+        setSearchList();
 
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
@@ -83,6 +84,28 @@ public class RealtimeController extends Controller{
         });
     }
 
+    private void setSearchList() {
+        ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
+        searchView.showSearchResults(searchHelp);
+
+        //On Action für "Search" Button
+        searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //Lei zum Testen
+                for(int i = 0; i < 5; i++){
+                    Article tmp = new Article("Autoreifen" + i);
+                    shares.add(tmp);
+                }
+                for(int i = 0; i < 3; i++){
+                    Article tmp = new Article("Traktorreifen" + i);
+                    shares.add(tmp);
+                }
+            }
+        });
+    }
+
+
     /**
      *
      * @param articleName Name des aktuell angezeigten Artikels
@@ -104,11 +127,6 @@ public class RealtimeController extends Controller{
         watchListView.vBox.getChildren().add(temp);
     }
 
-                ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
-                searchView.showSearchResults(searchHelp);
-            }
-        });
-    }
 
 
     /**
@@ -123,7 +141,7 @@ public class RealtimeController extends Controller{
         watchListView.addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(currentArticle != null){
+                if (currentArticle != null) {
                     wlAddArticle(currentArticle.getName());
 
                 }
@@ -135,20 +153,9 @@ public class RealtimeController extends Controller{
             wlAddArticle("Article " + i);
             watchListArticles.add(new Article("Article " + i));
         }
+    }
 
-        //On Action für "Search" Button
-        searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //Lei zum Testen
-                for(int i = 0; i < 5; i++){
-                    Article tmp = new Article("Autoreifen" + i);
-                    shares.add(tmp);
-                }
-                for(int i = 0; i < 3; i++){
-                    Article tmp = new Article("Traktorreifen" + i);
-                    shares.add(tmp);
-                }
+
 
 
     /**

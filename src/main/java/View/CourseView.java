@@ -1,11 +1,19 @@
 package View;
 
+import MainModel.Article;
+import MainModel.Main;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
+
+import static MainModel.Main.mode;
+import static View.CourseUtils.intervals.*;
 
 
 public class CourseView {
