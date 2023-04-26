@@ -1,6 +1,8 @@
 package MainModel;
-/*
+
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
+
+import java.util.Date;
 
 public class Unit {
     private final double open;
@@ -56,9 +58,9 @@ public class Unit {
         return splitCoefficient;
     }
 
-    public String getDateTime() {
+    public String getDate() {
         return dateTime;
     }
 }
 
- */
+
