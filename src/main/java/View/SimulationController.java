@@ -27,11 +27,6 @@ public class SimulationController extends Controller{
     }
 
     @Override
-    public void changeTimeMode(int ID){
-        Main.buttonTime[ID] = ID;
-    }
-
-    @Override
     public void wlSafeCurrentArticle(String articleName) {
 
     }

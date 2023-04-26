@@ -1,12 +1,15 @@
 package View;
 
 import MainModel.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 import java.util.ArrayList;
 
 import static MainModel.Main.*;
+import static View.CourseUtils.intervals.*;
 
 public class RealtimeController extends Controller{
     GroundView groundView = new GroundView(this);
@@ -14,11 +17,9 @@ public class RealtimeController extends Controller{
     WatchListView watchListView = new WatchListView(this);
     ArrayList<Article> watchListArticles = new ArrayList<>();
     Article watchLCurrentArticle = null;
-
-    public RealtimeController() {
-        groundView.window.setRight(watchListView.wlRoot);
-        setUpWatchList();
-    }
+    Article currentArticle;
+    CourseView courseView = new CourseView();
+    CourseUtils courseUtils = new CourseUtils(CourseUtils.intervals.fiveY, CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
 
     public GroundView getGroundView() {
         return groundView;
@@ -31,6 +32,32 @@ public class RealtimeController extends Controller{
     public Scene getScene(){
         return groundView.scene;
     }
+
+    public RealtimeController() {
+        groundView.window.setRight(watchListView.wlRoot);
+        setUpWatchList();
+
+        //isch changeWIndow lei zum Testen?
+        for (int i = 0; i < groundView.timeButtons.length; i++) {
+            int finalI = i;
+            groundView.timeButtons[i].setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    switch (groundView.timeButtons[finalI].getText()){
+                        case "1D": courseUtils.changeShowInterval(oneD); break;
+                        case "1M": courseUtils.changeShowInterval(oneM); break;
+                        case "3M": courseUtils.changeShowInterval(threeM); break;
+                        case "6M": courseUtils.changeShowInterval(sixM); break;
+                        case "1Y": courseUtils.changeShowInterval(oneY); break;
+                        case "5Y": courseUtils.changeShowInterval(fiveY); break;
+                        case "MAX": courseUtils.changeShowInterval(max); break;
+                    }
+                }
+            });
+        }
+    }
+
+
 
     /**
      * setzt die ActionHandler
@@ -54,10 +81,6 @@ public class RealtimeController extends Controller{
         mode = Main.status.simulation;
     }
 
-    @Override
-    public void changeTimeMode(int ID){
-        Main.buttonTime[ID] = ID;
-    }
 
     /**
      *
@@ -105,6 +128,8 @@ public class RealtimeController extends Controller{
         button.setStyle("-fx-border-insets: 5");
         button.setStyle("-fx-border-color: #1970d2");
     }
+
+
 
 
 }

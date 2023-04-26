@@ -3,7 +3,7 @@ package View;
 import MainModel.Article;
 
 public class CourseUtils {
-    public enum intervals {oneD, fiveD, oneM, threeM, sixM, oneY, fiveY, always}
+    public enum intervals {oneD, oneM, threeM, sixM, oneY, fiveY, max}
     public enum courseStatus {normalCourse, hammerCourse}
 
     /**
@@ -42,8 +42,9 @@ public class CourseUtils {
     /**
      * Die View wird so umgestellt, dass das angegebene Interval angezeigt wird
      */
-    public void changeShowInterval(){
+    public void changeShowInterval(intervals interval){
         //enum übergeben, damit es gesetzt wird
+        System.out.println("timeButtonsTest");
 
 
     }

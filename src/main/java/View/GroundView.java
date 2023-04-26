@@ -60,8 +60,8 @@ public class GroundView {
     HBox searchBox = new HBox();
     HBox changeBox = new HBox();
     Controller controller;
-    Button[]buttonTime = new Button[7];
-    String[]buttonTimeName = {
+    Button[]timeButtons = new Button[7];
+    String[]timeButtonsName = {
             "1D",
             "1M",
             "3M",
@@ -116,22 +116,14 @@ public class GroundView {
         int buttonX = 100;
         int buttonY = 100;
 
-        /*
-        buttonTime[0] ==> 1D
-        buttonTime[1] ==> 5D
-        buttonTime[2] ==> 1M
-        buttonTime[3] ==> 3M
-        buttonTime[4] ==> 6M
-        buttonTime[5] ==> 1Y
-        buttonTime[6] ==> 5Y
-         */
 
-        for (int i = 0; i < buttonTime.length; i++){
-            buttonTime[i] = new Button();
-            buttonTime[i].setPadding(new Insets(10, 10, 10, 10));
-            buttonTime[i].setText(buttonTimeName[i]);
-            buttonTime[i].setLayoutX(buttonX);
-            buttonTime[i].setLayoutY(buttonY);
+
+        for (int i = 0; i < timeButtons.length; i++){
+            timeButtons[i] = new Button();
+            timeButtons[i].setPadding(new Insets(10, 10, 10, 10));
+            timeButtons[i].setText(timeButtonsName[i]);
+            timeButtons[i].setLayoutX(buttonX);
+            timeButtons[i].setLayoutY(buttonY);
         }
 
         graph.setHeight(300);
@@ -154,8 +146,8 @@ public class GroundView {
         simulationModeButton.setLayoutY(200);
         simulationModeButton.setLayoutX(200);
 
-        for (int i = 0; i < buttonTime.length; i++){
-            timeBox.getChildren().add(buttonTime[i]);
+        for (int i = 0; i < timeButtons.length; i++){
+            timeBox.getChildren().add(timeButtons[i]);
         }
 
         /*
@@ -181,61 +173,7 @@ public class GroundView {
         };
 
 
-        //isch changeWIndow lei zum Testen?
-        for (int i = 0; i < buttonTime.length; i++) {
-            int finalI = i;
-            buttonTime[i].setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    System.out.println(finalI + "D");
-                    controller.changeTimeMode(finalI);
-                    changeWindow(finalI);
-                }
-            });
-        }
-
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);
     }
-
-    private void changeWindow(int i) {
-        ///changeShowInterval();
-    }
 }
-
-
-/*
-Buttons:
-
-
-   oneDayButton.setText("1D");
-        oneDayButton.setLayoutX(buttonX);
-        oneDayButton.setLayoutY(buttonY);
-
-        fiveDayButton.setText("5D");
-        fiveDayButton.setLayoutX(buttonX);
-        fiveDayButton.setLayoutY(buttonY);
-
-        oneMonthButton.setText("1M");
-        oneMonthButton.setLayoutX(buttonX);
-        oneMonthButton.setLayoutY(buttonY);
-
-        threeMonthButton.setText("3M");
-        threeMonthButton.setLayoutX(buttonX);
-        threeMonthButton.setLayoutY(buttonY);
-
-        sixMonthButton.setText("6M");
-        sixMonthButton.setLayoutX(buttonX);
-        sixMonthButton.setLayoutY(buttonY);
-
-        oneYearButton.setText("1Y");
-        oneYearButton.setLayoutX(buttonX);
-        oneYearButton.setLayoutY(buttonY);
-
-        fiveYearButton.setText("5Y");
-        fiveYearButton.setLayoutX(buttonX);
-        fiveYearButton.setLayoutY(buttonY);
-
-
-
- */
