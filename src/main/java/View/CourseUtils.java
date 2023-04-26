@@ -45,6 +45,7 @@ public class CourseUtils {
     public void changeShowInterval(){
         //enum übergeben, damit es gesetzt wird
 
+
     }
 
 }

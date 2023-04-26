@@ -63,12 +63,12 @@ public class GroundView {
     Button[]buttonTime = new Button[7];
     String[]buttonTimeName = {
             "1D",
-            "5D",
             "1M",
             "3M",
             "6M",
             "1Y",
-            "5Y"
+            "5Y",
+            "MAX"
     };
 
     public GroundView(Controller controller) {
