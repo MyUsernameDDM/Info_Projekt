@@ -19,8 +19,6 @@ public class WatchListView {
     Label titel = new Label("Watchlist");
     VBox vBox = new VBox();
 
-
-
     public WatchListView(Controller controller) {
         this.controller = controller;
         setButtons();

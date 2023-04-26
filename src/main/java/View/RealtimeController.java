@@ -1,6 +1,7 @@
 package View;
 
 import MainModel.*;
+import Utils.SearchUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -21,6 +22,14 @@ public class RealtimeController extends Controller{
     CourseView courseView = new CourseView();
     CourseUtils courseUtils = new CourseUtils(CourseUtils.intervals.fiveY, CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
 
+    SearchUtils searchUtils = new SearchUtils();
+
+
+
+    //Lei zum Testen
+    ArrayList<Article> shares = new ArrayList<>();
+
+
     public GroundView getGroundView() {
         return groundView;
     }
@@ -35,6 +44,7 @@ public class RealtimeController extends Controller{
 
     public RealtimeController() {
         groundView.window.setRight(watchListView.wlRoot);
+        groundView.window.setLeft(searchView.root);
         setUpWatchList();
 
         //Handler fuer die Buttons zum setzen des Intervals
@@ -94,6 +104,11 @@ public class RealtimeController extends Controller{
         watchListView.vBox.getChildren().add(temp);
     }
 
+                ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
+                searchView.showSearchResults(searchHelp);
+            }
+        });
+    }
 
 
     /**
@@ -120,7 +135,20 @@ public class RealtimeController extends Controller{
             wlAddArticle("Article " + i);
             watchListArticles.add(new Article("Article " + i));
         }
-    }
+
+        //On Action für "Search" Button
+        searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //Lei zum Testen
+                for(int i = 0; i < 5; i++){
+                    Article tmp = new Article("Autoreifen" + i);
+                    shares.add(tmp);
+                }
+                for(int i = 0; i < 3; i++){
+                    Article tmp = new Article("Traktorreifen" + i);
+                    shares.add(tmp);
+                }
 
 
     /**
@@ -184,8 +212,6 @@ public class RealtimeController extends Controller{
         button.setStyle("-fx-border-insets: 5");
         button.setStyle("-fx-border-color: #1970d2");
     }
-
-
 
 
 }

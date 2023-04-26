@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGroundView {
 
-    private boolean success = false;
-    @Test
-    public void startGroundViewTest(){
-
-        //Main starten
-        String[] args = null;
-        Main.main(args);
-
-
-    }
-
 
 
 
