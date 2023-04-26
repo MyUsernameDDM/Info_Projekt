@@ -23,6 +23,7 @@ public class GroundView {
     private double old_height = MAX;
     private double old_width = MAX;
 
+
     public enum menus {};
     MenuBar topMenuBar = new MenuBar();
     Menu menu_1 = new Menu("Login");
@@ -44,6 +45,7 @@ public class GroundView {
     Button oneYearButton = new Button();
     Button fiveYearButton = new Button();
     Button searchButton = new Button();
+    Button changeStateButton = new Button("Normal");
 
     //Input (Textfeld) erstellen
     TextField searchInputTextField = new TextField();
@@ -72,12 +74,12 @@ public class GroundView {
     };
 
     public GroundView(Controller controller) {
+        this.controller = controller;
         displayGraphic();
 
         topMenuBar.getMenus().addAll(menu_1, menu_2, menu_3, menu_4);
 
         topMenuBar.setUseSystemMenuBar(true);
-
 
 
         menu_2.getItems().add(submenu_2_1);
@@ -98,7 +100,7 @@ public class GroundView {
         //window.setTop(searchBox);
         window.setBottom(timeBox);
         window.setCenter(graph);
-        this.controller = controller;
+
     }
     /*
 
@@ -113,50 +115,30 @@ public class GroundView {
 
     public void displayGraphic(){
 
-        int buttonX = 100;
-        int buttonY = 100;
 
-
+        changeStateButton.setPadding(new Insets(10, 10, 10, 10));
+        changeStateButton.setPrefWidth(60);
+        timeBox.getChildren().add(changeStateButton);
 
         for (int i = 0; i < timeButtons.length; i++){
             timeButtons[i] = new Button();
             timeButtons[i].setPadding(new Insets(10, 10, 10, 10));
             timeButtons[i].setText(timeButtonsName[i]);
-            timeButtons[i].setLayoutX(buttonX);
-            timeButtons[i].setLayoutY(buttonY);
+            timeBox.getChildren().add(timeButtons[i]);
         }
 
         graph.setHeight(300);
         graph.setWidth(300);
         graph.setFill(Color.GREEN);
 
-        /*
-        searchInputTextField.setText("Search");
-        searchButton.setText("Search");
-        searchButton.setLayoutX(150);
-        searchButton.setLayoutY(20);
-
-        Kimp in Searchview inne
-         */
-
-        ytdButton.setLayoutX(buttonX);
-        ytdButton.setLayoutY(buttonY);
 
         simulationModeButton.setText("Mode");
         simulationModeButton.setLayoutY(200);
         simulationModeButton.setLayoutX(200);
 
-        for (int i = 0; i < timeButtons.length; i++){
-            timeBox.getChildren().add(timeButtons[i]);
-        }
-
-        /*
-        timeBox = new HBox();
-         */
 
         searchBox = new HBox(searchInputTextField, searchButton);
         scene = new Scene(window, MAX, MAX);
-
 
 
 
@@ -171,7 +153,6 @@ public class GroundView {
                 old_height = scene.getHeight();
             }
         };
-
 
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);

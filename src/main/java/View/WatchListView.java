@@ -26,16 +26,17 @@ public class WatchListView {
         setButtons();
         vBox.getChildren().addAll(titel,addButton, removeButton);
         wlRoot.setContent(vBox);
-        wlRoot.setPrefWidth(100);
+        wlRoot.setPrefWidth(500);
+
 
     }
 
     private void setButtons() {
         addButton.setStyle(String.valueOf(Color.ALICEBLUE));
-        addButton.setPrefWidth(100);
+        addButton.setPrefWidth(150);
         addButton.setPrefHeight(30);
         removeButton.setStyle(String.valueOf(Color.ALICEBLUE));
-        removeButton.setPrefWidth(100);
+        removeButton.setPrefWidth(150);
         removeButton.setPrefHeight(30);
     }
 
@@ -53,27 +54,5 @@ public class WatchListView {
             vBox.getChildren().add(temp);
         }
     }
-    public void addArticle(String articleName){
-        Button temp = new Button(articleName);
-        temp.setOnAction(actionEvent -> {
-            /*Mothe aufrufen zur Anzeige des GRaphs*/
-            controller.wlSafeCurrentArticle(articleName);
-        });
-        buttonList.add(temp);
-        vBox.getChildren().add(temp);
-    }
 
-    /**
-     *
-     * @param articleName Artikelname der aus der Watchlist geloescht werden soll
-     */
-    public void removeArticle(String articleName){
-        for (Button b :buttonList) {
-            if(b.getText().equals(articleName)){
-                vBox.getChildren().remove(b);
-                buttonList.remove(b);
-                return;
-            }
-        }
-    }
 }

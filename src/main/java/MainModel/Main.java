@@ -23,8 +23,6 @@ public class Main extends Application {
     public enum status {realtime, simulation, standby}
     public static status mode = status.realtime;
 
-    //public int[]button = new int[7];
-
     @Override
     public void start(Stage stage) throws IOException {
 

@@ -37,7 +37,7 @@ public class RealtimeController extends Controller{
         groundView.window.setRight(watchListView.wlRoot);
         setUpWatchList();
 
-        //isch changeWIndow lei zum Testen?
+        //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
             int finalI = i;
             groundView.timeButtons[i].setOnAction(new EventHandler<ActionEvent>() {
@@ -55,6 +55,43 @@ public class RealtimeController extends Controller{
                 }
             });
         }
+
+        //Handler für den Button zum Veraendern der Ansicht
+        groundView.changeStateButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(groundView.changeStateButton.getText().equals("Normal")){
+                    groundView.changeStateButton.setText("Charts");
+                    courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
+                    courseUtils.showNormalCourse();
+                }else{
+                    groundView.changeStateButton.setText("Normal");
+                    courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
+                    courseUtils.showCharts();
+                }
+            }
+        });
+    }
+
+    /**
+     *
+     * @param articleName Name des aktuell angezeigten Artikels
+     */
+    public void wlAddArticle(String articleName){
+        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
+        for (Button b:watchListView.buttonList) {
+            String name = b.getText();
+            if(name.equals(articleName)){
+                return;
+            }
+        }
+        Button temp = new Button(articleName);
+        temp.setOnAction(actionEvent -> {
+            /*Mothe aufrufen zur Anzeige des GRaphs*/
+            wlSafeCurrentArticle(articleName);
+        });
+        watchListView.buttonList.add(temp);
+        watchListView.vBox.getChildren().add(temp);
     }
 
 
@@ -66,8 +103,21 @@ public class RealtimeController extends Controller{
         watchListView.removeButton.setOnAction(actionEvent -> {
             wlRemoveCurrentArticle();
         });
+
+        //Handler fuer den addButton in der Watchlist
+        watchListView.addButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(currentArticle != null){
+                    wlAddArticle(currentArticle.getName());
+
+                }
+            }
+        });
+
+        //Probe
         for (int i = 0; i < 20; i++) {
-            watchListView.addArticle("Article " + i);
+            wlAddArticle("Article " + i);
             watchListArticles.add(new Article("Article " + i));
         }
     }
@@ -115,7 +165,13 @@ public class RealtimeController extends Controller{
      */
     @Override
     public void wlRemoveCurrentArticle() {
-        watchListView.removeArticle(watchLCurrentArticle.getName());
+        for (Button b :watchListView.buttonList) {
+            if(b.getText().equals(watchLCurrentArticle.getName())){
+                watchListView.vBox.getChildren().remove(b);
+                watchListView.buttonList.remove(b);
+                return;
+            }
+        }
         watchListArticles.remove(watchLCurrentArticle);
     }
 

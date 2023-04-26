@@ -15,6 +15,10 @@ public class Article {
         this.name = str;
     }
 
+    public int getPointAmount(){
+        return 10;
+    }
+
     /*
        private ArrayList<Unit> values= new ArrayList<>();
 
