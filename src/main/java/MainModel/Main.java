@@ -1,5 +1,6 @@
 package MainModel;
 
+import View.RealtimeController;
 import View.SimulationController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
