@@ -24,6 +24,5 @@ public class TestMainModel {
         matches.start();
         matches.join();
 
-
     }
 }
