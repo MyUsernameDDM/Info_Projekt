@@ -25,6 +25,8 @@ public class GroundView {
 
 
     public enum menus {};
+
+    //Menü Leiste mit Items erstellen
     MenuBar topMenuBar = new MenuBar();
     Menu menu_1 = new Menu("Login");
     Menu menu_2 = new Menu("Mode");
@@ -36,6 +38,8 @@ public class GroundView {
     Scene scene;
     Rectangle graph = new Rectangle();
     Button simulationModeButton = new Button();
+
+    /*
     Button oneDayButton = new Button();
     Button fiveDayButton = new Button();
     Button oneMonthButton = new Button();
@@ -44,6 +48,8 @@ public class GroundView {
     Button ytdButton = new Button();
     Button oneYearButton = new Button();
     Button fiveYearButton = new Button();
+     */
+
     Button searchButton = new Button();
     Button changeStateButton = new Button("Normal");
 
@@ -63,6 +69,7 @@ public class GroundView {
     HBox changeBox = new HBox();
     Controller controller;
     Button[]timeButtons = new Button[7];
+
     String[]timeButtonsName = {
             "1D",
             "1M",
@@ -73,6 +80,7 @@ public class GroundView {
             "MAX"
     };
 
+
     public GroundView(Controller controller) {
         this.controller = controller;
         displayGraphic();
@@ -81,7 +89,6 @@ public class GroundView {
 
         topMenuBar.setUseSystemMenuBar(true);
 
-
         menu_2.getItems().add(submenu_2_1);
         submenu_2_1.setOnAction(actionEvent -> {
             controller.changeMode();
@@ -89,10 +96,6 @@ public class GroundView {
 
         menu_3.setOnAction(actionEvent -> {
             System.out.println("Wallet");
-        });
-
-        menu_4.setOnAction(actionEvent -> {
-
         });
 
         window.setTop(topMenuBar);
@@ -105,17 +108,14 @@ public class GroundView {
     /*
 
     Alle größen setzen (Button, etc.)
-
     Mingröße
-
 
      */
 
-
-
+    /**
+     * Methode um die GroundView grafisch darzustellen
+     */
     public void displayGraphic(){
-
-
         changeStateButton.setPadding(new Insets(10, 10, 10, 10));
         changeStateButton.setPrefWidth(60);
         timeBox.getChildren().add(changeStateButton);
@@ -131,16 +131,12 @@ public class GroundView {
         graph.setWidth(300);
         graph.setFill(Color.GREEN);
 
-
         simulationModeButton.setText("Mode");
         simulationModeButton.setLayoutY(200);
         simulationModeButton.setLayoutX(200);
 
-
         searchBox = new HBox(searchInputTextField, searchButton);
         scene = new Scene(window, MAX, MAX);
-
-
 
         //vielleicht dech tim Controller mochn, dass man theoretisch lei des in der Mitte unpasst
         ChangeListener changeListener = new ChangeListener() {

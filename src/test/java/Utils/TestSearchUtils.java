@@ -15,6 +15,7 @@ public class TestSearchUtils {
      */
     @Test
     public void searchSharesTest(){
+        /*
         SearchUtils searchUtils = new SearchUtils();
         ArrayList<Article> shares = new ArrayList<>();
         for(int i = 0; i < 5; i++){
@@ -26,12 +27,16 @@ public class TestSearchUtils {
             shares.add(tmp);
         }
 
-        ArrayList<String> results = searchUtils.search("auto", shares);
+        ArrayList<String> results = searchUtils.search("reif", shares);
 
         for(int i = 0; i < results.size(); i++){
             System.out.println(results.get(i));
         }
+        */
+    
     }
+
+
 
 
 

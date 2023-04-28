@@ -45,12 +45,14 @@ public class CourseUtils {
      */
     public void changeShowInterval(intervals interval){
         this.interval = interval;
+        /*
         //enum übergeben, damit es gesetzt wird
         System.out.println("timeButtonsTest");
         int pointAmount = currentArticle.getPointAmount();
         for (int i = 0; i < pointAmount; i++) {
             courseView.points.add(new Circle(20));
         }
+         */
 
     }
 

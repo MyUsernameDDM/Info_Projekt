@@ -1,9 +1,6 @@
 package View;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -16,12 +13,14 @@ public class SearchView {
     HBox inputBox = new HBox();
 
     ScrollPane outputSearchView = new ScrollPane();
+    VBox vBoxSearchResults = new VBox();
     TextField searchInputTextField = new TextField();
     Button searchButton = new Button();
 
-    ArrayList<Button> buttonList = new ArrayList<>();
-
     ComboBox<Button> searchBox = new ComboBox<>();
+
+    ArrayList<String> searchResult = new ArrayList<>();
+
 
     /**
      * Konstruktor zum Erstellen der SearchView mit allen Konfigurationen und Elementen
@@ -30,6 +29,7 @@ public class SearchView {
         this.controller = controller;
         setButtonsSearchView();
         inputBox.getChildren().addAll(searchBox, searchButton);
+        //GroundView.menu.getChildren().add(inputBox);
         root.getChildren().add(inputBox);
     }
 
@@ -42,44 +42,42 @@ public class SearchView {
         searchBox.setPrefHeight(30);
         searchBox.setPrefWidth(150);
 
-        /*
-        searchInputTextField.setPrefHeight(30);
-        searchInputTextField.setPrefWidth(100);
-        searchInputTextField.setStyle(String.valueOf(Color.ALICEBLUE));
-         */
-
         searchButton.setText("Search");
         searchButton.setPrefHeight(30);
         searchButton.setPrefWidth(60);
         searchButton.setStyle(String.valueOf(Color.ALICEBLUE));
 
         inputBox.setSpacing(5);
+
     }
+
 
     /**
      * Methode um Suchergebnisse anzuzeigen
-     * @param searchArticles ArrayList wo alle Ergenisse Übergeben werden, die dann angezeigt werden
+     * @param resultStr ArrayList wo alle Ergenisse Übergeben werden, die dann angezeigt werden
      */
-    public void addSearchArticle(ArrayList<String> searchArticles){
-        for(String str : searchArticles){
-            Button tmp = new Button();
-            tmp.setText(str);
-            tmp.setPrefHeight(30);
-            tmp.setPrefWidth(root.getWidth() - 10);
-            root.getChildren().add(tmp);
-        }
-    }
-
-
-    public void showSearchResults(ArrayList<String> searchResults){
-        for(String str : searchResults){
+    public void showSearchResults(ArrayList<String> resultStr){
+        searchResult = resultStr;
+        for(String str : searchResult){
             Button tmp = new Button();
             tmp.setText(str);
             tmp.setMaxWidth(100);
             tmp.setPrefHeight(30);
-            searchBox.getItems().add(tmp);
+            vBoxSearchResults.getChildren().add(tmp);
         }
-        //root.getChildren().add(searchBox);
+        outputSearchView.setPrefWidth(searchButton.getWidth());
+        outputSearchView.setPrefHeight(100);
+        outputSearchView.setContent(vBoxSearchResults);
+        root.getChildren().add(outputSearchView);
+    }
+
+
+    /**
+     * Methode um den Namen der vorgeschlagenen Aktien zurückgibt
+     * @return Name von Aktien
+     */
+    public ArrayList<String> getSearchResult(){
+        return searchResult;
     }
 
 

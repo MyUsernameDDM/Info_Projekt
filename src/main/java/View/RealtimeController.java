@@ -98,22 +98,18 @@ public class RealtimeController extends Controller {
     }
 
     private void setSearchList() {
-        ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
-        searchView.showSearchResults(searchHelp);
-
-        //On Action für "Search" Button
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //Lei zum Testen
-                for (int i = 0; i < 5; i++) {
-                    Article tmp = new Article("Autoreifen" + i);
-                    shares.add(tmp);
-                }
-                for (int i = 0; i < 3; i++) {
-                    Article tmp = new Article("Traktorreifen" + i);
-                    shares.add(tmp);
-                }
+
+                /*
+                ArrayList<String> searchHelp = Article.matching (statische Methode);
+                ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
+
+
+                searchView.showSearchResults(searchHelp);
+                setResultButtonsListener();
+                 */
             }
         });
     }
@@ -138,9 +134,12 @@ public class RealtimeController extends Controller {
         watchListView.buttonList.add(temp);
         watchListView.vBox.getChildren().add(temp);
 
+        /*
 
         ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
         searchView.showSearchResults(searchHelp);
+
+         */
     }
 
 

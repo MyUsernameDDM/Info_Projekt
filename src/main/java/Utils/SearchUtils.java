@@ -12,6 +12,7 @@ public class SearchUtils {
      * @param inputStr Name der gesuchten Aktie
      * @return Liste der Aktien die den Namen der gesuchten Aktie beinhalten
      */
+    /*
     public ArrayList<String> search(String inputStr, ArrayList<Article> shares){
         ArrayList<String> searchResults = new ArrayList<>();
         for(int i = 0; i < shares.size(); i++){
@@ -21,6 +22,8 @@ public class SearchUtils {
         }
         return searchResults;
     }
+
+     */
 
 
 
