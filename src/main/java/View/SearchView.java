@@ -2,6 +2,7 @@ package View;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -48,7 +49,6 @@ public class SearchView {
         searchButton.setStyle(String.valueOf(Color.ALICEBLUE));
 
         inputBox.setSpacing(5);
-
     }
 
 
@@ -56,8 +56,8 @@ public class SearchView {
      * Methode um Suchergebnisse anzuzeigen
      * @param resultStr ArrayList wo alle Ergenisse Übergeben werden, die dann angezeigt werden
      */
-    public void showSearchResults(ArrayList<String> resultStr){
-        searchResult = resultStr;
+    public void showSearchResults(String[] resultStr){
+        //searchResult = resultStr;
         for(String str : searchResult){
             Button tmp = new Button();
             tmp.setText(str);

@@ -61,6 +61,8 @@ public class Matching extends Thread {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
+    }
+    public matchUnits[] getMatches(){
+        return matches;
     }
 }

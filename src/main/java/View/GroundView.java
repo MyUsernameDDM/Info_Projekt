@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -26,6 +27,7 @@ public class GroundView {
 
     public enum menus {};
 
+
     //Menü Leiste mit Items erstellen
     MenuBar topMenuBar = new MenuBar();
     Menu menu_1 = new Menu("Login");
@@ -39,7 +41,6 @@ public class GroundView {
     Rectangle graph = new Rectangle();
     Button simulationModeButton = new Button();
 
-    /*
     Button oneDayButton = new Button();
     Button fiveDayButton = new Button();
     Button oneMonthButton = new Button();
@@ -48,7 +49,7 @@ public class GroundView {
     Button ytdButton = new Button();
     Button oneYearButton = new Button();
     Button fiveYearButton = new Button();
-     */
+
 
     Button searchButton = new Button();
     Button changeStateButton = new Button("Normal");
@@ -68,8 +69,9 @@ public class GroundView {
     HBox searchBox = new HBox();
     HBox changeBox = new HBox();
     Controller controller;
-    Button[]timeButtons = new Button[7];
 
+    //Button Array für die Zeitspanne
+    Button[]timeButtons = new Button[7];
     String[]timeButtonsName = {
             "1D",
             "1M",
@@ -85,9 +87,11 @@ public class GroundView {
         this.controller = controller;
         displayGraphic();
 
+        //MenuBar: MenuItems hinzugefügen
         topMenuBar.getMenus().addAll(menu_1, menu_2, menu_3, menu_4);
 
         topMenuBar.setUseSystemMenuBar(true);
+
 
         menu_2.getItems().add(submenu_2_1);
         submenu_2_1.setOnAction(actionEvent -> {

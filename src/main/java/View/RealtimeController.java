@@ -101,14 +101,15 @@ public class RealtimeController extends Controller {
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                String[] help = SearchUtils.search(String.valueOf(searchView.searchBox.getValue()));
+                searchView.showSearchResults(help);
 
                 /*
                 ArrayList<String> searchHelp = Article.matching (statische Methode);
-                ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
+                ArrayList<String> searchHelp = searchUtils.search(, shares);
 
 
                 searchView.showSearchResults(searchHelp);
-                setResultButtonsListener();
                  */
             }
         });
