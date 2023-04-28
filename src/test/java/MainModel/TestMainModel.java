@@ -2,6 +2,9 @@ package MainModel;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 
 public class TestMainModel {
     @Test
@@ -15,8 +18,13 @@ public class TestMainModel {
             for(Unit u: art.getValues()){
                 System.out.println(u.getDate());
             }
-
         }
+    }
+    @Test
+    public void testMatching() throws IOException, InterruptedException {
+        Matching matches= new Matching("Tes");
+        matches.start();
+        matches.join();
 
 
     }
