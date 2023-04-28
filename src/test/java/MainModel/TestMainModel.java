@@ -2,8 +2,6 @@ package MainModel;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class TestMainModel {
@@ -21,8 +19,8 @@ public class TestMainModel {
         }
     }
     @Test
-    public void testMatching() throws IOException, InterruptedException {
-        Matching matches= new Matching("Tes");
+    public void testMatching()throws InterruptedException {
+        Matching matches= new Matching("tes");
         matches.start();
         matches.join();
 
