@@ -30,6 +30,7 @@ public class TestMainModel {
             Thread.sleep(5000);
         CourseView cv= new CourseView();
         CourseUtils courseUtils = new CourseUtils(TimeSpan.oneMonth, CourseUtils.courseStatus.chartCourse, cv, art);
-        courseUtils.setCourse(art);
+        courseUtils.setCurrentArticle(art);
+        courseUtils.showChartCourse();
     }
 }

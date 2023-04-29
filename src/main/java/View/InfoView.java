@@ -12,11 +12,6 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class InfoView {
-    Controller controller;
-
-    public InfoView(Controller controller) {
-        this.controller = controller;
-    }
     public void showInfoView(Button button){
         Tooltip t = new Tooltip();
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> {
@@ -37,5 +32,4 @@ public class InfoView {
         Duration.millis(500);
         timeline.play();
     }
-
 }

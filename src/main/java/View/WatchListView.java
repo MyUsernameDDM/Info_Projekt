@@ -12,7 +12,9 @@ import java.util.ArrayList;
 
 public class WatchListView {
     Controller controller;
-    ScrollPane wlRoot = new ScrollPane();
+    VBox wlRoot = new VBox();
+    ScrollPane scrollPane = new ScrollPane();
+
     Button addButton = new Button("Artikel hinzufügen");
     Button removeButton = new Button("Artikel entfernen");
     ArrayList<Button> buttonList = new ArrayList<>();
@@ -22,8 +24,8 @@ public class WatchListView {
     public WatchListView(Controller controller) {
         this.controller = controller;
         setButtons();
-        vBox.getChildren().addAll(titel,addButton, removeButton);
-        wlRoot.setContent(vBox);
+        scrollPane.setContent(vBox);
+        wlRoot.getChildren().addAll(titel,addButton, removeButton, scrollPane);
         wlRoot.setPrefWidth(500);
 
 

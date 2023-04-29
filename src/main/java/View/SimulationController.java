@@ -6,9 +6,9 @@ import javafx.scene.Scene;
 import static MainModel.Main.mode;
 
 public class SimulationController extends Controller {
-    GroundView groundView = new GroundView(this);
-    SearchView searchView = new SearchView(this);
-    WalletView walletView = new WalletView(this);
+    public SimulationController() {
+        super();
+    }
 
     public GroundView getGroundView() {
         return groundView;
@@ -27,13 +27,4 @@ public class SimulationController extends Controller {
         mode = Main.status.realtime;
     }
 
-    @Override
-    public void wlSafeCurrentArticle(String articleName) {
-
-    }
-
-    @Override
-    public void wlRemoveCurrentArticle() {
-
-    }
 }

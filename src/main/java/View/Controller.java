@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import static MainModel.Main.*;
 import static MainModel.TimeSpan.max;
 
-public class Controller extends Controller {
+public class Controller {
     GroundView groundView = new GroundView(this);
     SearchView searchView = new SearchView(this);
     WatchListView watchListView = new WatchListView(this);
@@ -42,10 +42,11 @@ public class Controller extends Controller {
     }
 
     public Controller() {
-        groundView.window.setRight(watchListView.wlRoot);
+        System.out.println("TestConstr");
         groundView.window.setLeft(searchView.root);
-        setUpWatchList();
+        setWatchList();
         setSearchList();
+        setCourseView();
 
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
@@ -91,10 +92,17 @@ public class Controller extends Controller {
                 } else {
                     groundView.changeStateButton.setText("Normal");
                     courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
-                    courseUtils.showCharts();
+                    courseUtils.showChartCourse();
                 }
             }
         });
+    }
+
+    /**
+     * Methode fuegt die CourseView an den GroundView an
+     */
+    private void setCourseView() {
+        groundView.window.setCenter(courseView.root);
     }
 
     private void setSearchList() {
@@ -147,7 +155,8 @@ public class Controller extends Controller {
     /**
      * setzt die ActionHandler
      */
-    private void setUpWatchList() {
+    private void setWatchList() {
+        groundView.window.setRight(watchListView.wlRoot);
         watchListView.removeButton.setOnAction(actionEvent -> {
             wlRemoveCurrentArticle();
         });
@@ -174,7 +183,6 @@ public class Controller extends Controller {
     /**
      * Wechsel auf den SimulationController und somit auf den SimulationMode
      */
-    @Override
     public void changeMode() {
         mode = Main.status.simulation;
     }
@@ -183,7 +191,6 @@ public class Controller extends Controller {
     /**
      * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
      */
-    @Override
     public void wlSafeCurrentArticle(String articleName) {
         //vorher ausgewählten Button wieder zuruecksetzen
         if (watchLCurrentArticle != null) {
@@ -210,16 +217,18 @@ public class Controller extends Controller {
     /**
      * Die Methode löscht das aktuell ausgewählte Element der Watchlist aus dieser
      */
-    @Override
     public void wlRemoveCurrentArticle() {
-        for (Button b : watchListView.buttonList) {
-            if (b.getText().equals(watchLCurrentArticle.getName())) {
-                watchListView.vBox.getChildren().remove(b);
-                watchListView.buttonList.remove(b);
-                return;
+        if(watchLCurrentArticle != null){
+            for (Button b : watchListView.buttonList) {
+                if (b.getText().equals(watchLCurrentArticle.getName())) {
+                    watchListView.vBox.getChildren().remove(b);
+                    watchListView.buttonList.remove(b);
+                    return;
+                }
             }
+            watchListArticles.remove(watchLCurrentArticle);
         }
-        watchListArticles.remove(watchLCurrentArticle);
+
     }
 
     /**
