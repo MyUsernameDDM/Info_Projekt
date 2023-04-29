@@ -1,5 +1,6 @@
 package MainModel;
 
+import View.CourseView;
 import org.junit.jupiter.api.Test;
 
 
@@ -13,9 +14,6 @@ public class TestMainModel {
             while(!art.setValues(t)){
                 Thread.sleep(5000);
             }
-            for(Unit u: art.getValues()){
-                System.out.println(u.getDate());
-            }
         }
     }
     @Test
@@ -23,6 +21,13 @@ public class TestMainModel {
         Matching matches= new Matching("tes");
         matches.start();
         matches.join();
-
+    }
+    @Test
+    public void testCourseView() throws InterruptedException {
+        Article art= new Article("IBM");
+        while(!art.setValues(TimeSpan.oneMonth))
+            Thread.sleep(5000);
+        CourseView cv= new CourseView();
+        cv.setCourse(art);
     }
 }

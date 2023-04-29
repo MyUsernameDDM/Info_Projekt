@@ -13,7 +13,7 @@ public class Unit {
     private final long volume;
     private final double dividendAmount;
     private final double splitCoefficient;
-    private final String dateTime;
+    private final Date dateTime;
     public Unit(StockUnit unit){
         this.open= unit.getOpen();
         this.high= unit.getHigh();
@@ -23,7 +23,7 @@ public class Unit {
         this.volume= unit.getVolume();
         this.dividendAmount= unit.getDividendAmount();
         this.splitCoefficient= unit.getSplitCoefficient();
-        this.dateTime= unit.getDate();
+        this.dateTime= Article.convStringToDate(unit.getDate());
     }
 
     public double getOpen() {
@@ -58,7 +58,7 @@ public class Unit {
         return splitCoefficient;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return dateTime;
     }
 }
