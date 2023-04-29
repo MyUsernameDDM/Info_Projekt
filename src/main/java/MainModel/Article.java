@@ -113,5 +113,6 @@ public class Article{
     public int getPointAmount() {
         return pointAmount;
     }
+
 }
 

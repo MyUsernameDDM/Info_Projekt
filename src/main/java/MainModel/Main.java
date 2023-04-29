@@ -1,6 +1,6 @@
 package MainModel;
 
-import View.RealtimeController;
+import View.Controller;
 import View.SimulationController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -29,7 +29,7 @@ public class Main extends Application {
         stage.setTitle("Aktienkurs");
 
         mode = status.realtime;
-        RealtimeController realtimeController = new RealtimeController();
+        Controller realtimeController = new Controller();
         SimulationController simulationController = new SimulationController();
         Timeline run = new Timeline(new KeyFrame(new Duration(10), actionEvent -> {
             //System.out.println(mode.toString());

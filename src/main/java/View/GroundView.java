@@ -17,9 +17,12 @@ public class GroundView {
 
     //CourseUtils courseUtils = new CourseUtils();
 
-    private int MAX = 500;
-    private double old_height = MAX;
-    private double old_width = MAX;
+    private int sceneWith = 800;
+    private int sceneHeight = 500;
+
+    private double old_width = sceneWith;
+    private double old_height = sceneHeight;
+
 
 
     public enum menus {};
@@ -137,9 +140,9 @@ public class GroundView {
         simulationModeButton.setLayoutX(200);
 
         searchBox = new HBox(searchInputTextField, searchButton);
-        scene = new Scene(window, MAX, MAX);
+        scene = new Scene(window, sceneWith, sceneHeight);
 
-        InfoView infoView = new InfoView(controller);
+        InfoView infoView = new InfoView();
 
         for (int i = 0; i < timeButtons.length; i++){
             infoView.showInfoView(timeButtons[i]);
