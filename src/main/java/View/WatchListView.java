@@ -1,21 +1,17 @@
 package View;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class WatchListView {
     Controller controller;
     VBox wlRoot = new VBox();
     ScrollPane scrollPane = new ScrollPane();
-
     Button addButton = new Button("Artikel hinzufügen");
     Button removeButton = new Button("Artikel entfernen");
     ArrayList<Button> buttonList = new ArrayList<>();

@@ -8,15 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 
 public class GroundView {
-
-    //CourseUtils courseUtils = new CourseUtils();
 
     private int sceneWith = 800;
     private int sceneHeight = 500;
@@ -24,9 +20,6 @@ public class GroundView {
     private double old_width = sceneWith;
     private double old_height = sceneHeight;
 
-
-
-    public enum menus {};
 
 
     //Menü Leiste mit Items erstellen
@@ -42,31 +35,11 @@ public class GroundView {
     Scene scene;
     Rectangle graph = new Rectangle();
     Button simulationModeButton = new Button();
-
-    Button oneDayButton = new Button();
-    Button fiveDayButton = new Button();
-    Button oneMonthButton = new Button();
-    Button threeMonthButton = new Button();
-    Button sixMonthButton = new Button();
-    Button ytdButton = new Button();
-    Button oneYearButton = new Button();
-    Button fiveYearButton = new Button();
-
-
     Button searchButton = new Button();
     Button changeStateButton = new Button("Normal");
 
     //Input (Textfeld) erstellen
     TextField searchInputTextField = new TextField();
-
-    //Ausgabe Textfeld erstellen
-    Text shareNameText = new Text();
-    Text watchlistText = new Text();
-    Text sharePriceText = new Text();
-    Text sharePercentText = new Text();
-
-    VBox rightGroupBox = new VBox();
-
     HBox timeBox = new HBox();
     HBox searchBox = new HBox();
     HBox changeBox = new HBox();

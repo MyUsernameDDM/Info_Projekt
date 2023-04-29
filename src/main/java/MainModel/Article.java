@@ -1,12 +1,12 @@
 package MainModel;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class Article {
@@ -71,7 +71,7 @@ public class Article {
      * @param timeSpan ; Gibt an, welche Zeitspanne von daten gewollt sind.
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
-    boolean setValues(TimeSpan timeSpan) {
+    public boolean setValues(TimeSpan timeSpan) {
         values.clear();
         pointAmount = 0;
         TimeSeriesResponse response = null;

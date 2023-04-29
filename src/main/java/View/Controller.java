@@ -1,17 +1,19 @@
 package View;
 
-import MainModel.*;
+import MainModel.Article;
+import MainModel.Main;
+import MainModel.TimeSpan;
 import Utils.SearchUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
-import static MainModel.Main.*;
+import static MainModel.Main.mode;
+import static MainModel.Main.status;
 import static MainModel.TimeSpan.max;
 
 public class Controller {
@@ -234,6 +236,9 @@ public class Controller {
      */
     public void changeMode() {
         mode = Main.status.simulation;
+    }
+    public void changeModeRealtime() {
+        mode = status.realtime;
     }
 
     /**
