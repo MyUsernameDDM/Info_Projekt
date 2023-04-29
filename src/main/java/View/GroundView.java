@@ -2,14 +2,11 @@ package View;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -142,6 +139,11 @@ public class GroundView {
         searchBox = new HBox(searchInputTextField, searchButton);
         scene = new Scene(window, MAX, MAX);
 
+        InfoView infoView = new InfoView(controller);
+
+        for (int i = 0; i < timeButtons.length; i++){
+            infoView.showInfoView(timeButtons[i]);
+        }
         //vielleicht dech tim Controller mochn, dass man theoretisch lei des in der Mitte unpasst
         ChangeListener changeListener = new ChangeListener() {
             @Override
