@@ -72,7 +72,7 @@ public class Article{
      * @param timeSpan ; Gibt an, welche Zeitspanne von daten gewollt sind.
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
-    public boolean setValues(TimeSpan timeSpan) {
+    boolean setValues(TimeSpan timeSpan) {
         values.clear();
         pointAmount=0;
         TimeSeriesResponse response = null;
