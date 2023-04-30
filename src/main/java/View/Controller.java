@@ -20,8 +20,7 @@ public class Controller {
     Article watchLCurrentArticle = null;
     Article currentArticle;
     CourseView courseView = new CourseView();
-    CourseUtils courseUtils = new CourseUtils(TimeSpan.fiveYear, CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
-
+    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
     SearchUtils searchUtils = new SearchUtils();
 
 
@@ -42,7 +41,6 @@ public class Controller {
     }
 
     public Controller() {
-        System.out.println("TestConstr");
         groundView.window.setLeft(searchView.root);
         setWatchList();
         setSearchList();
@@ -102,7 +100,14 @@ public class Controller {
      * Methode fuegt die CourseView an den GroundView an
      */
     private void setCourseView() {
+        Article testArticle = new Article("IBM");
+        if(testArticle.setValues(TimeSpan.year)){
+            System.out.println("Geat");
+        }
+        courseUtils.setCurrentArticle(testArticle);
+        //courseUtils.showChartCourse();
         groundView.window.setCenter(courseView.root);
+
     }
 
     private void setSearchList() {
