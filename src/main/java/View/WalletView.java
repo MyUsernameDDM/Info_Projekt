@@ -4,51 +4,34 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
-public class WalletView {
-    Controller controller;
-    String selectedArticle;
+public class WalletView{
+    SimulationController controller;
+    VBox walletRoot = new VBox();
+    ScrollPane scrollPane = new ScrollPane();
+    VBox vBox = new VBox();
+
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Wallet");
     Button sellButton = new Button("Verkaufen");
-    VBox wlRoot = new VBox();
+    Button sellAllButton = new Button("Alle verkaufen");
+    Button buyButton = new Button("Kaufen");
 
 
 
-    public WalletView(Controller controller) {
+
+    public WalletView(SimulationController controller) {
         this.controller = controller;
-        wlRoot.getChildren().add(titel);
-    }
+        buyButton.setPrefWidth(100);
+        sellButton.setPrefWidth(100);
+        sellAllButton.setPrefWidth(100);
 
-    /**
-     * Methode zum setzen der Artikel-Namen in der buttonList
-     *
-     * @param articleNames Enthält die Namen von den Artikeln die angezeigt werden sollen
-     */
-    public void setArticles(ArrayList<String> articleNames) {
-        for (String str : articleNames) {
-            Button temp = new Button(str);
-            temp.setPrefHeight(30);
-            temp.setPrefWidth(100);
-            buttonList.add(temp);
-            wlRoot.getChildren().add(temp);
-        }
-    }
-
-    public void addArticle(String articleName) {
-        buttonList.add(new Button(articleName));
-    }
-
-    public void removeArticle(String articleName) {
-        for (Button b : buttonList) {
-            if (b.getText().equals(articleName)) {
-                buttonList.remove(b);
-            }
-        }
+        walletRoot.getChildren().addAll(titel, buyButton, sellButton, sellAllButton);
     }
 
 }

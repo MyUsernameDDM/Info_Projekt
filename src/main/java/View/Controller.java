@@ -41,7 +41,6 @@ public class Controller {
     }
 
     public Controller() {
-        groundView.window.setLeft(searchView.root);
         setWatchList();
         setSearchList();
         setCourseView();
@@ -111,6 +110,11 @@ public class Controller {
     }
 
     private void setSearchList() {
+        groundView.window.setLeft(searchView.root);
+        searchView.outputSearchView.setLayoutY(100);
+        searchView.outputSearchView.setVisible(false);
+        groundView.root.getChildren().add(searchView.outputSearchView);
+
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -126,34 +130,6 @@ public class Controller {
                  */
             }
         });
-    }
-
-
-    /**
-     * @param articleName Name des aktuell angezeigten Artikels
-     */
-    public void wlAddArticle(String articleName) {
-        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
-        for (Button b : watchListView.buttonList) {
-            String name = b.getText();
-            if (name.equals(articleName)) {
-                return;
-            }
-        }
-        Button temp = new Button(articleName);
-        temp.setOnAction(actionEvent -> {
-            /*Mothe aufrufen zur Anzeige des GRaphs*/
-            wlSafeCurrentArticle(articleName);
-        });
-        watchListView.buttonList.add(temp);
-        watchListView.vBox.getChildren().add(temp);
-
-        /*
-
-        ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
-        searchView.showSearchResults(searchHelp);
-
-         */
     }
 
 
@@ -184,15 +160,32 @@ public class Controller {
         }
     }
 
-
     /**
-     * Wechsel auf den SimulationController und somit auf den SimulationMode
+     * @param articleName Name des aktuell angezeigten Artikels
      */
-    public void changeMode() {
-        mode = Main.status.simulation;
+    public void wlAddArticle(String articleName) {
+        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
+        for (Button b : watchListView.buttonList) {
+            String name = b.getText();
+            if (name.equals(articleName)) {
+                return;
+            }
+        }
+        Button temp = new Button(articleName);
+        temp.setOnAction(actionEvent -> {
+            /*Mothe aufrufen zur Anzeige des GRaphs*/
+            wlSafeCurrentArticle(articleName);
+        });
+        watchListView.buttonList.add(temp);
+        watchListView.vBox.getChildren().add(temp);
+
+        /*
+
+        ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
+        searchView.showSearchResults(searchHelp);
+
+         */
     }
-
-
     /**
      * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
      */
@@ -234,6 +227,14 @@ public class Controller {
             watchListArticles.remove(watchLCurrentArticle);
         }
 
+    }
+
+
+    /**
+     * Wechsel auf den SimulationController und somit auf den SimulationMode
+     */
+    public void changeMode() {
+        mode = Main.status.simulation;
     }
 
     /**

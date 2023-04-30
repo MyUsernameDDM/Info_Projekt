@@ -2,6 +2,7 @@ package MainModel;
 
 import View.CourseUtils;
 import View.CourseView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 
 
