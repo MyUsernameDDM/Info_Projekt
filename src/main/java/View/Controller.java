@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
@@ -23,11 +25,6 @@ public class Controller {
     CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
     SearchUtils searchUtils = new SearchUtils();
 
-
-    //Lei zum Testen
-    ArrayList<Article> shares = new ArrayList<>();
-
-
     public GroundView getGroundView() {
         return groundView;
     }
@@ -44,6 +41,7 @@ public class Controller {
         setWatchList();
         setSearchList();
         setCourseView();
+        setAddAndRemoveArticle();
 
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
@@ -93,6 +91,7 @@ public class Controller {
                 }
             }
         });
+
     }
 
     /**
@@ -246,6 +245,39 @@ public class Controller {
         button.setStyle("-fx-border-insets: 5");
         button.setStyle("-fx-border-color: #1970d2");
     }
+
+    public void setAddAndRemoveArticle(){
+        watchListView.addButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setAddButtonHover(true);
+            }
+        });
+
+        watchListView.addButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setAddButtonHover(false);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setRemoveButtonHover(true);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setRemoveButtonHover(false);
+            }
+        });
+
+
+    }
+
 
 
 }
