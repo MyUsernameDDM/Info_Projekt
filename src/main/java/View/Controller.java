@@ -76,6 +76,25 @@ public class Controller {
             });
         }
 
+
+
+    }
+
+    /**
+     * Methode fuegt die CourseView an den GroundView an
+     */
+    private void setCourseView() {
+        Article testArticle = new Article("IBM");
+        if(testArticle.setValues(TimeSpan.year)){
+            System.out.println("Geat");
+        }
+        courseUtils.setCurrentArticle(testArticle);
+        courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
+        courseUtils.showNormalCourse();
+        //courseUtils.showChartCourse();
+        groundView.window.setCenter(courseView.root);
+
+
         //Handler für den Button zum Veraendern der Ansicht
         groundView.changeStateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -91,21 +110,6 @@ public class Controller {
                 }
             }
         });
-
-    }
-
-    /**
-     * Methode fuegt die CourseView an den GroundView an
-     */
-    private void setCourseView() {
-        Article testArticle = new Article("IBM");
-        if(testArticle.setValues(TimeSpan.year)){
-            System.out.println("Geat");
-        }
-        courseUtils.setCurrentArticle(testArticle);
-        //courseUtils.showChartCourse();
-        groundView.window.setCenter(courseView.root);
-
     }
 
     private void setSearchList() {

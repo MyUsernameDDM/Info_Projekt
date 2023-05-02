@@ -167,7 +167,7 @@ public class GroundView {
         scene = new Scene(root, sceneWith, sceneHeight);
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);
-        scene.getStylesheets().add(getClass().getResource("ProgramStyle.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("ProgramStyle.css")).toExternalForm());
 
 
     }

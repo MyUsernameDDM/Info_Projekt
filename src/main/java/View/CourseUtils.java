@@ -51,10 +51,11 @@ public class CourseUtils {
         int pointAmount = currentArticle.getPointAmount();
         double sectionWidth = courseView.courseWidth / pointAmount;
         double pointX = 0;
-        for (Unit u :currentArticle.getValues()) {
-            Ellipse temp = new Ellipse(10, 10);
+        for (int i = currentArticle.getPointAmount() - 1; i >= 0; i--) {
+            Unit u = currentArticle.getValues().get(i);
+            Ellipse temp = new Ellipse(2, 2);
             temp.setCenterX(pointX);
-            temp.setCenterY(u.getClose() * 100 / max.getClose());
+            temp.setCenterY(courseView.courseHeight - u.getClose() * courseView.courseHeight / max.getClose());
             temp.setOnDragDetected(mouseEvent -> {
                 InfoView infoView = new InfoView();
                 /*Hier sollte der Wert dann gezeigt werden im Infoview*/
