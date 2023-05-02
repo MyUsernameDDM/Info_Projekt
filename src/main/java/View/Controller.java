@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
@@ -20,14 +22,8 @@ public class Controller {
     Article watchLCurrentArticle = null;
     Article currentArticle;
     CourseView courseView = new CourseView();
-    CourseUtils courseUtils = new CourseUtils(TimeSpan.fiveYear, CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
-
+    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
     SearchUtils searchUtils = new SearchUtils();
-
-
-    //Lei zum Testen
-    ArrayList<Article> shares = new ArrayList<>();
-
 
     public GroundView getGroundView() {
         return groundView;
@@ -42,11 +38,10 @@ public class Controller {
     }
 
     public Controller() {
-        System.out.println("TestConstr");
-        groundView.window.setLeft(searchView.root);
         setWatchList();
         setSearchList();
         setCourseView();
+        setAddAndRemoveArticle();
 
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
@@ -96,16 +91,29 @@ public class Controller {
                 }
             }
         });
+
     }
 
     /**
      * Methode fuegt die CourseView an den GroundView an
      */
     private void setCourseView() {
+        Article testArticle = new Article("IBM");
+        if(testArticle.setValues(TimeSpan.year)){
+            System.out.println("Geat");
+        }
+        courseUtils.setCurrentArticle(testArticle);
+        //courseUtils.showChartCourse();
         groundView.window.setCenter(courseView.root);
+
     }
 
     private void setSearchList() {
+        groundView.window.setLeft(searchView.root);
+        searchView.outputSearchView.setLayoutY(100);
+        searchView.outputSearchView.setVisible(false);
+        groundView.root.getChildren().add(searchView.outputSearchView);
+
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -121,34 +129,6 @@ public class Controller {
                  */
             }
         });
-    }
-
-
-    /**
-     * @param articleName Name des aktuell angezeigten Artikels
-     */
-    public void wlAddArticle(String articleName) {
-        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
-        for (Button b : watchListView.buttonList) {
-            String name = b.getText();
-            if (name.equals(articleName)) {
-                return;
-            }
-        }
-        Button temp = new Button(articleName);
-        temp.setOnAction(actionEvent -> {
-            /*Mothe aufrufen zur Anzeige des GRaphs*/
-            wlSafeCurrentArticle(articleName);
-        });
-        watchListView.buttonList.add(temp);
-        watchListView.vBox.getChildren().add(temp);
-
-        /*
-
-        ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
-        searchView.showSearchResults(searchHelp);
-
-         */
     }
 
 
@@ -179,15 +159,32 @@ public class Controller {
         }
     }
 
-
     /**
-     * Wechsel auf den SimulationController und somit auf den SimulationMode
+     * @param articleName Name des aktuell angezeigten Artikels
      */
-    public void changeMode() {
-        mode = Main.status.simulation;
+    public void wlAddArticle(String articleName) {
+        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
+        for (Button b : watchListView.buttonList) {
+            String name = b.getText();
+            if (name.equals(articleName)) {
+                return;
+            }
+        }
+        Button temp = new Button(articleName);
+        temp.setOnAction(actionEvent -> {
+            /*Mothe aufrufen zur Anzeige des GRaphs*/
+            wlSafeCurrentArticle(articleName);
+        });
+        watchListView.buttonList.add(temp);
+        watchListView.vBox.getChildren().add(temp);
+
+        /*
+
+        ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
+        searchView.showSearchResults(searchHelp);
+
+         */
     }
-
-
     /**
      * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
      */
@@ -231,6 +228,14 @@ public class Controller {
 
     }
 
+
+    /**
+     * Wechsel auf den SimulationController und somit auf den SimulationMode
+     */
+    public void changeMode() {
+        mode = Main.status.simulation;
+    }
+
     /**
      * Diese Methode kann häufiger aufgerufen werden um einen einheitlichen Stil zu haben
      *
@@ -240,6 +245,39 @@ public class Controller {
         button.setStyle("-fx-border-insets: 5");
         button.setStyle("-fx-border-color: #1970d2");
     }
+
+    public void setAddAndRemoveArticle(){
+        watchListView.addButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setAddButtonHover(true);
+            }
+        });
+
+        watchListView.addButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setAddButtonHover(false);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setRemoveButtonHover(true);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setRemoveButtonHover(false);
+            }
+        });
+
+
+    }
+
 
 
 }

@@ -68,7 +68,8 @@ public class SearchView {
         outputSearchView.setPrefWidth(searchButton.getWidth());
         outputSearchView.setPrefHeight(100);
         outputSearchView.setContent(vBoxSearchResults);
-        root.getChildren().add(outputSearchView);
+        outputSearchView.setVisible(true);
+        //root.getChildren().add(outputSearchView);
     }
 
 

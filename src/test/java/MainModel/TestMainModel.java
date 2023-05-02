@@ -2,6 +2,7 @@ package MainModel;
 
 import View.CourseUtils;
 import View.CourseView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 
 
@@ -29,7 +30,7 @@ public class TestMainModel {
         while(!art.setValues(TimeSpan.oneMonth))
             Thread.sleep(5000);
         CourseView cv= new CourseView();
-        CourseUtils courseUtils = new CourseUtils(TimeSpan.oneMonth, CourseUtils.courseStatus.chartCourse, cv, art);
+        CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.chartCourse, cv, art);
         courseUtils.setCurrentArticle(art);
         courseUtils.showChartCourse();
     }

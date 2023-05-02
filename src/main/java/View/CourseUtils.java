@@ -12,10 +12,6 @@ import javafx.scene.shape.Rectangle;
 public class CourseUtils {
     public enum courseStatus {normalCourse, chartCourse}
 
-    /**
-     * interval: Gibt an, für welches Zeitintervall der Kurs angezegit werden soll
-     */
-    TimeSpan interval;
 
     /**
      * courseState: Gibt an, ob die normale Kursansicht gezeigt wird, oder die Ansicht mit Hämmern
@@ -29,8 +25,7 @@ public class CourseUtils {
         this.currentArticle = currentArticle;
     }
 
-    public CourseUtils(TimeSpan interval, courseStatus courseState, CourseView courseView, Article currentArticle) {
-        this.interval = interval;
+    public CourseUtils(courseStatus courseState, CourseView courseView, Article currentArticle) {
         this.courseState = courseState;
         this.courseView = courseView;
         this.currentArticle = currentArticle;
@@ -75,7 +70,6 @@ public class CourseUtils {
      * Die View wird so umgestellt, dass das angegebene Intervall angezeigt wird
      */
     public void changeShowInterval(TimeSpan interval){
-        this.interval = interval;
         /*
         //enum übergeben, damit es gesetzt wird
         System.out.println("timeButtonsTest");
@@ -144,5 +138,4 @@ public class CourseUtils {
         Line bottomLine = new Line(candlePosx, (posy*(Math.min(u.getClose(),u.getOpen())-startHeight)), candlePosx, posy*(u.getLow()-startHeight));
         courseView.root.getChildren().addAll(body, topLine, bottomLine);
     }
-
 }

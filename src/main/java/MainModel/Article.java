@@ -9,16 +9,15 @@ import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
 
 
-public class Article{
+public class Article {
     private final ArrayList<Unit> values = new ArrayList<>();
     private final String name;
     private final String apiKey = "QESJBL81ZZ99LAQX";
-    private int pointAmount=0;
+    private int pointAmount = 0;
 
     public ArrayList<Unit> getValues() {
         return values;
     }
-
 
 
     public Article(String str) {
@@ -74,7 +73,7 @@ public class Article{
      */
     boolean setValues(TimeSpan timeSpan) {
         values.clear();
-        pointAmount=0;
+        pointAmount = 0;
         TimeSeriesResponse response = null;
         if (timeSpan == TimeSpan.day) {
             response = AlphaVantage.api().timeSeries().intraday().forSymbol(name).fetchSync();
@@ -85,7 +84,16 @@ public class Article{
         if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year || timeSpan == TimeSpan.fiveYear) {
             response = AlphaVantage.api().timeSeries().weekly().forSymbol(name).fetchSync();
         }
-        if (response==null|| response.getStockUnits()==null || response.getStockUnits().size() == 0)//wenn zu viele api calls gemacht wurden.
+        if (timeSpan == TimeSpan.max) {
+            response = AlphaVantage.api().timeSeries().monthly().fetchSync();
+            if (response.getStockUnits().size() < 25) {
+                response = AlphaVantage.api().timeSeries().weekly().fetchSync();
+                if (response.getStockUnits().size() < 25)
+                    response = AlphaVantage.api().timeSeries().daily().adjusted().fetchSync();
+
+            }
+        }
+        if (response == null || response.getStockUnits() == null || response.getStockUnits().size() == 0)//wenn zu viele api calls gemacht wurden.
             return false;
         String first = response.getStockUnits().get(0).getDate();
         Date dStart = convStringToDate(first);
@@ -104,10 +112,9 @@ public class Article{
                 break;
             values.add(new Unit(u));
         }
-        pointAmount=values.size();
+        pointAmount = values.size();
         return true;
     }
-
 
 
     public int getPointAmount() {

@@ -3,6 +3,7 @@ package View;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -36,6 +37,7 @@ public class GroundView {
     Menu menu_4 = new Menu("Search");
     MenuItem submenu_2_1 = new MenuItem("Switch");
 
+    Group root = new Group();
     BorderPane window = new BorderPane();
     Scene scene;
     Rectangle graph = new Rectangle();
@@ -107,6 +109,7 @@ public class GroundView {
         //window.setTop(searchBox);
         window.setBottom(timeBox);
         window.setCenter(graph);
+        root.getChildren().add(window);
 
     }
     /*
@@ -140,7 +143,6 @@ public class GroundView {
         simulationModeButton.setLayoutX(200);
 
         searchBox = new HBox(searchInputTextField, searchButton);
-        scene = new Scene(window, sceneWith, sceneHeight);
 
         InfoView infoView = new InfoView();
 
@@ -156,9 +158,11 @@ public class GroundView {
 
                 old_width = scene.getWidth();
                 old_height = scene.getHeight();
+                /*olls ungepasst werden*/
             }
         };
 
+        scene = new Scene(root, sceneWith, sceneHeight);
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);
     }
