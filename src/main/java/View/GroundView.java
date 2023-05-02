@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.util.Objects;
+
 
 public class GroundView {
 
@@ -165,5 +167,8 @@ public class GroundView {
         scene = new Scene(root, sceneWith, sceneHeight);
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);
+        scene.getStylesheets().add(getClass().getResource("ProgramStyle.css").toExternalForm());
+
+
     }
 }

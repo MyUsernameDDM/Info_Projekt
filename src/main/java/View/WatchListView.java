@@ -72,6 +72,9 @@ public class WatchListView {
 
     public void setAddButtonHover(Boolean status){
         if(status){
+            addButton.getStyleClass().removeAll();
+            addButton.getStyleClass().add("hoverButton");
+            /*
             addButton.setStyle("-fx-background-radius: 20;" +
                     "-fx-font-size: 14px;" +
                     "-fx-border-radius: 500px;" +
@@ -79,6 +82,8 @@ public class WatchListView {
                     "-fx-text-alignment: center;" +
                     "-fx-background-color: #72bcd4;" +
                     "-fx-border-color: #72bcd4;");
+
+             */
         } else {
             addButton.setStyle("-fx-background-radius: 20;" +
                     "-fx-font-size: 14px;" +
