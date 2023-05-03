@@ -4,10 +4,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -15,36 +18,30 @@ import java.util.Objects;
 
 
 public class GroundView {
-
     private int sceneWith = 800;
     private int sceneHeight = 500;
-
     private double old_width = sceneWith;
     private double old_height = sceneHeight;
-
-
-
-    //Menü Leiste mit Items erstellen
-    MenuBar topMenuBar = new MenuBar();
-    Menu menu_1 = new Menu("Login");
-    Menu menu_2 = new Menu("Mode");
-    Menu menu_3 = new Menu("Wallet");
-    Menu menu_4 = new Menu("Search");
-    MenuItem submenu_2_1 = new MenuItem("Switch");
 
     Group root = new Group();
     BorderPane window = new BorderPane();
     Scene scene;
+
+
+
+    //Menu erstellen
+    HBox menu = new HBox();
+    //Button login = new Button();
+    Button simulationMode = new Button();
+    Button wallet = new Button();
+
     Rectangle graph = new Rectangle();
     Button simulationModeButton = new Button();
-    Button searchButton = new Button();
     Button changeStateButton = new Button("Normal");
-
-    //Input (Textfeld) erstellen
-    TextField searchInputTextField = new TextField();
+    VBox rightGroupBox = new VBox();
     HBox timeBox = new HBox();
-    HBox searchBox = new HBox();
-    HBox changeBox = new HBox();
+
+
     Controller controller;
 
     //Button Array für die Zeitspanne
@@ -64,29 +61,15 @@ public class GroundView {
         this.controller = controller;
         displayGraphic();
 
-        //MenuBar: MenuItems hinzugefügen
-        topMenuBar.getMenus().addAll(menu_1, menu_2, menu_3, menu_4);
 
-        topMenuBar.setUseSystemMenuBar(true);
-
-
-        menu_2.getItems().add(submenu_2_1);
-        submenu_2_1.setOnAction(actionEvent -> {
-            controller.changeMode();
-        });
-
-        menu_3.setOnAction(actionEvent -> {
-            System.out.println("Wallet");
-        });
-
-        window.setTop(topMenuBar);
-        //window.setRight(changeBox);
-        //window.setTop(searchBox);
+        window.setTop(menu);
+        window.getTop().setStyle("-fx-background-color: #e6e8ec;");
         window.setBottom(timeBox);
         window.setCenter(graph);
         root.getChildren().add(window);
-
     }
+
+
     /*
 
     Alle größen setzen (Button, etc.)
@@ -98,14 +81,34 @@ public class GroundView {
      * Methode um die GroundView grafisch darzustellen
      */
     public void displayGraphic(){
+        //Menu
+        wallet.setText("WALLET");
+        wallet.getStyleClass().add("menuButton");
+        wallet.setPrefWidth(150);
+        wallet.setPrefHeight(30);
+
+        simulationMode.setText("MODE");
+        simulationMode.getStyleClass().add("menuButton");
+        simulationMode.setPrefWidth(150);
+        simulationMode.setPrefHeight(30);
+
+        menu.getChildren().addAll(simulationMode, wallet);
+
+        menu.setMargin(wallet, new Insets(10, 10, 10, 10));
+        menu.setMargin(simulationMode, new Insets(10, 10, 10, 10));
+
+
+
+
         changeStateButton.setPadding(new Insets(10, 10, 10, 10));
         changeStateButton.setPrefWidth(60);
         timeBox.getChildren().add(changeStateButton);
 
         for (int i = 0; i < timeButtons.length; i++){
             timeButtons[i] = new Button();
-            timeButtons[i].setPadding(new Insets(10, 10, 10, 10));
+            //timeButtons[i].setPadding(new Insets(10, 10, 10, 10));
             timeButtons[i].setText(timeButtonsName[i]);
+            timeButtons[i].getStyleClass().add("button");
             timeBox.getChildren().add(timeButtons[i]);
         }
 
@@ -117,7 +120,6 @@ public class GroundView {
         simulationModeButton.setLayoutY(200);
         simulationModeButton.setLayoutX(200);
 
-        searchBox = new HBox(searchInputTextField, searchButton);
 
         InfoView infoView = new InfoView();
 
@@ -137,11 +139,18 @@ public class GroundView {
             }
         };
 
+
         scene = new Scene(root, sceneWith, sceneHeight);
         scene.heightProperty().addListener(changeListener);
         scene.widthProperty().addListener(changeListener);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("ProgramStyle.css")).toExternalForm());
-
-
     }
+
+    public void setMenu(Node node){
+        menu.getChildren().add(node);
+    }
+
+
 }
+
+

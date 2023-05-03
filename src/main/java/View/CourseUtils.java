@@ -125,7 +125,7 @@ public class CourseUtils {
                 setCandleStick(u, valueperPixelWidth, valueperPixelHeight, candleStickWidth, min.getLow(), startTime);
             }
         } else {
-            setNormalView(valueperPixelWidth, valueperPixelHeight,min.getLow(),startTime,currentArticle.getValues().get(0).getClose()>currentArticle.getValues().get(currentArticle.getPointAmount()).getClose());
+            setNormalView(valueperPixelWidth, valueperPixelHeight,min.getLow(),startTime,currentArticle.getValues().get(0).getClose()>currentArticle.getValues().get(currentArticle.getPointAmount()-1).getClose());
         }
     }
 

@@ -22,6 +22,8 @@ public class SearchView {
 
     ArrayList<String> searchResult = new ArrayList<>();
 
+    //GroundView groundView = new GroundView(controller);
+
 
     /**
      * Konstruktor zum Erstellen der SearchView mit allen Konfigurationen und Elementen
@@ -29,26 +31,23 @@ public class SearchView {
     public SearchView(Controller controller) {
         this.controller = controller;
         setButtonsSearchView();
-        inputBox.getChildren().addAll(searchBox, searchButton);
-        //GroundView.menu.getChildren().add(inputBox);
-        root.getChildren().add(inputBox);
+        //groundView.setMenu(searchBox);
+        //groundView.setMenu(searchButton);
+        //GroundView.menu.getChildren().addAll(searchBox, searchButton);
+        //root.getChildren().addAll(searchBox, searchButton);
     }
 
     /**
-     * Methode sum Setzen der Elemente der SearchView
+     * Methode zum Setzen der Elemente der SearchView
      */
     public void setButtonsSearchView(){
         searchBox.setEditable(true);
-        searchBox.setStyle(String.valueOf(Color.ALICEBLUE));
         searchBox.setPrefHeight(30);
         searchBox.setPrefWidth(150);
 
         searchButton.setText("Search");
         searchButton.setPrefHeight(30);
         searchButton.setPrefWidth(60);
-        searchButton.setStyle(String.valueOf(Color.ALICEBLUE));
-
-        inputBox.setSpacing(5);
     }
 
 

@@ -1,5 +1,6 @@
 package View;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -21,36 +22,27 @@ public class WatchListView {
     public WatchListView(Controller controller) {
         this.controller = controller;
         setButtons();
+        setTitel();
         scrollPane.setContent(vBox);
         wlRoot.getChildren().addAll(titel,addButton, removeButton, scrollPane);
         wlRoot.setPrefWidth(500);
     }
 
+    public void setTitel(){
+        titel.setStyle("-fx-font-size: 35px;");
+    }
+
 
     private void setButtons() {
-        //addButton.setStyle(String.valueOf(Color.LIGHTGREEN));
         addButton.setPrefWidth(150);
         addButton.setPrefHeight(30);
-        //addButton.setStyle("-fx-padding: 10, 10, 10, 10;");
-
-        addButton.setStyle("-fx-background-radius: 20;" +
-                "-fx-font-size: 14px;" +
-                "-fx-border-radius: 500px;" +
-                "-fx-spacing: 2px;" +
-                "-fx-text-alignment: center;" +
-                "-fx-background-color: #add8e6;" +
-                "-fx-border-color: #72bcd4;");
-
-        removeButton.setStyle(String.valueOf(Color.ALICEBLUE));
+        addButton.getStyleClass().add("addAndRemoveButtonNormal");
         removeButton.setPrefWidth(150);
         removeButton.setPrefHeight(30);
-        removeButton.setStyle("-fx-background-radius: 20;" +
-                "-fx-font-size: 14px;" +
-                "-fx-border-radius: 500px;" +
-                "-fx-spacing: 2px;" +
-                "-fx-text-alignment: center;" +
-                "-fx-background-color: #add8e6;" +
-                "-fx-border-color: #72bcd4;");
+        removeButton.getStyleClass().add("addAndRemoveButtonNormal");
+
+        wlRoot.setMargin(addButton, new Insets(10, 10, 10, 10));
+        wlRoot.setMargin(removeButton, new Insets(10, 10, 10, 10));
     }
 
     /**
@@ -70,46 +62,21 @@ public class WatchListView {
 
     public void setAddButtonHover(Boolean status){
         if(status){
-            //addButton.getStyleClass().removeAll();
-            addButton.getStyleClass().add("hoverButton");
-            /*
-            addButton.setStyle("-fx-background-radius: 20;" +
-                    "-fx-font-size: 14px;" +
-                    "-fx-border-radius: 500px;" +
-                    "-fx-spacing: 2px;" +
-                    "-fx-text-alignment: center;" +
-                    "-fx-background-color: #72bcd4;" +
-                    "-fx-border-color: #72bcd4;");
-
-             */
+            addButton.getStyleClass().remove("addAndRemoveButtonNormal");
+            addButton.getStyleClass().add("addAndRemhoverButtonHover");
         } else {
-            addButton.setStyle("-fx-background-radius: 20;" +
-                    "-fx-font-size: 14px;" +
-                    "-fx-border-radius: 500px;" +
-                    "-fx-spacing: 2px;" +
-                    "-fx-text-alignment: center;" +
-                    "-fx-background-color: #add8e6;" +
-                    "-fx-border-color: #72bcd4;");
+            addButton.getStyleClass().remove("addAndRemhoverButtonHover");
+            addButton.getStyleClass().add("addAndRemoveButtonNormal");
         }
     }
 
     public void setRemoveButtonHover(Boolean status){
         if(status){
-            removeButton.setStyle("-fx-background-radius: 20;" +
-                    "-fx-font-size: 14px;" +
-                    "-fx-border-radius: 500px;" +
-                    "-fx-spacing: 2px;" +
-                    "-fx-text-alignment: center;" +
-                    "-fx-background-color: #72bcd4;" +
-                    "-fx-border-color: #72bcd4;");
+            removeButton.getStyleClass().remove("addAndRemoveButtonNormal");
+            removeButton.getStyleClass().add("addAndRemhoverButtonHover");
         } else {
-            removeButton.setStyle("-fx-background-radius: 20;" +
-                    "-fx-font-size: 14px;" +
-                    "-fx-border-radius: 500px;" +
-                    "-fx-spacing: 2px;" +
-                    "-fx-text-alignment: center;" +
-                    "-fx-background-color: #add8e6;" +
-                    "-fx-border-color: #72bcd4;");
+            removeButton.getStyleClass().remove("addAndRemhoverButtonHover");
+            removeButton.getStyleClass().add("addAndRemoveButtonNormal");
         }
     }
 }

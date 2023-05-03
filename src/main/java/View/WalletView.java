@@ -23,7 +23,6 @@ public class WalletView{
 
 
 
-
     public WalletView(SimulationController controller) {
 
         buyButton.setOnAction(event -> {

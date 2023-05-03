@@ -7,8 +7,6 @@ import MainModel.matchUnits;
 import java.util.ArrayList;
 
 public class SearchUtils {
-
-
     /**
      * Methode um Aktien zu suchen
      * @param  str der gesuchten Aktie
