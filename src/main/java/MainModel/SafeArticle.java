@@ -3,15 +3,22 @@ package MainModel;
 import java.io.*;
 
 public class SafeArticle {
-
+    public static void clearFile(){
+        try (FileOutputStream fileOut = new FileOutputStream("ArtSafe.ser", false)) {
+            // Write an empty byte array to the file to clear its contents
+            fileOut.write(new byte[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static Article getArticleFromFile(String name, TimeSpan ts) {
         String nameFile = "ArtSafe.ser";
+        File f= new File(nameFile);
+        if(f.length()==0)
+            return null;
         try (FileInputStream fileIn = new FileInputStream(nameFile);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
             Article[] articles = (Article[]) in.readObject();
-            if (articles.length == 0) {
-                return null;
-            }
             for (Article article : articles) {
                 if (article.getName().equals(name) && article.getTimeSpan() == ts) {
                     return article;

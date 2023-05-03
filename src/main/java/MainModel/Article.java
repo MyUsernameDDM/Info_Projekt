@@ -17,7 +17,6 @@ public class Article implements Serializable {
     private TimeSpan timeSpan;
 
 
-
     public ArrayList<Unit> getValues() {
         return values;
     }
@@ -33,6 +32,7 @@ public class Article implements Serializable {
     public String getName() {
         return name;
     }
+
     /**
      * Wandelt String in date um
      *
@@ -75,12 +75,12 @@ public class Article implements Serializable {
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
     public boolean setValues(TimeSpan timeSpan) {
-        Article safe=SafeArticle.getArticleFromFile(name,timeSpan);
-        this.timeSpan=timeSpan;
+        Article safe = SafeArticle.getArticleFromFile(name, timeSpan);
+        this.timeSpan = timeSpan;
         values.clear();
-        if(safe!=null){
-            pointAmount=safe.getPointAmount();
-            values=safe.getValues();
+        if (safe != null) {
+            pointAmount = safe.getPointAmount();
+            values = safe.getValues();
             return true;
         }
 
@@ -92,20 +92,14 @@ public class Article implements Serializable {
         if (timeSpan == TimeSpan.oneMonth || timeSpan == TimeSpan.threeMonths) {
             response = AlphaVantage.api().timeSeries().daily().adjusted().forSymbol(name).fetchSync();
         }
-        if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year ) {
+        if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year) {
             response = AlphaVantage.api().timeSeries().weekly().forSymbol(name).fetchSync();
         }
-        if(timeSpan==TimeSpan.fiveYear){
-            response= AlphaVantage.api().timeSeries().monthly().forSymbol(name).fetchSync();
+        if (timeSpan == TimeSpan.fiveYear) {
+            response = AlphaVantage.api().timeSeries().monthly().forSymbol(name).fetchSync();
         }
         if (timeSpan == TimeSpan.max) {// max benötigt 3 api calls. so umschreiben, dass man weekly nimmt und dann wenn zu viele werte sind in monthly umrechenne
-            response = AlphaVantage.api().timeSeries().monthly().fetchSync();
-            if (response.getStockUnits().size() > 0 && response.getStockUnits().size() < 25) {
-                response = AlphaVantage.api().timeSeries().weekly().fetchSync();
-                if (response.getStockUnits().size() > 0 && response.getStockUnits().size() < 25)
-                    response = AlphaVantage.api().timeSeries().daily().adjusted().fetchSync();
-
-            }
+            response = AlphaVantage.api().timeSeries().monthly().forSymbol(name).fetchSync();
         }
         if (response == null || response.getStockUnits() == null || response.getStockUnits().size() == 0)//wenn zu viele api calls gemacht wurden.
         {
@@ -113,6 +107,7 @@ public class Article implements Serializable {
         }
         String first = response.getStockUnits().get(0).getDate();
         Date dStart = convStringToDate(first);
+        int count=0;
         for (StockUnit u : response.getStockUnits()) {
             if (timeSpan == TimeSpan.oneMonth && diffDate(dStart, convStringToDate(u.getDate())) >= 30)
                 break;
@@ -126,7 +121,11 @@ public class Article implements Serializable {
                 break;
             if (timeSpan == TimeSpan.fiveYear && diffDate(dStart, convStringToDate(u.getDate())) >= 365 * 5)
                 break;
-            values.add(new Unit(u));
+            if (timeSpan == TimeSpan.max && count%4==0)//alle 4 monate
+                values.add(new Unit(u));
+            if (timeSpan != TimeSpan.max)
+                values.add(new Unit(u));
+            count++;
         }
         pointAmount = values.size();
         SafeArticle.addArticleFile(this);

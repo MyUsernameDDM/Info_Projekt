@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
 
 
 public class Main extends Application {
@@ -24,7 +23,7 @@ public class Main extends Application {
     public static status mode = status.realtime;
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage)  {
 
         stage.setTitle("Aktienkurs");
 

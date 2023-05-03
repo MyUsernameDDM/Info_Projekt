@@ -2,6 +2,7 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
+import MainModel.SafeArticle;
 import MainModel.TimeSpan;
 import Utils.SearchUtils;
 import javafx.event.ActionEvent;
@@ -87,7 +88,7 @@ public class Controller {
      */
     private void setCourseView() {
         Article testArticle = new Article("IBM");
-        while (!testArticle.setValues(TimeSpan.year)) {
+        while (!testArticle.setValues(TimeSpan.max)) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -95,11 +96,11 @@ public class Controller {
             }
 
         }
-
+        //SafeArticle.clearFile();
         courseUtils.setCurrentArticle(testArticle);
-        courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
+        courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
         //courseUtils.showNormalCourse();
-        courseUtils.showChartCourse();
+        courseUtils.showCourse();
         groundView.window.setCenter(courseView.root);
 
 
@@ -113,11 +114,11 @@ public class Controller {
                 if (groundView.changeStateButton.getText().equals("Normal")) {
                     groundView.changeStateButton.setText("Charts");
                     courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
-                    courseUtils.showChartCourse();
+                    courseUtils.showCourse();
                 } else {
                     groundView.changeStateButton.setText("Normal");
                     courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
-                    courseUtils.showChartCourse();
+                    courseUtils.showCourse();
                 }
             }
         });

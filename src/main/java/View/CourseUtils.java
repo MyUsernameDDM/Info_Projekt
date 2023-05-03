@@ -85,7 +85,7 @@ public class CourseUtils {
     /**
      * Die Methode showChartCourse setzt den View so, dass der Kurs mit den Charts angezeigt wird
      */
-    public void showChartCourse() {
+    public void showCourse() {
         if (currentArticle == null || currentArticle.getValues() == null || currentArticle.getPointAmount() == 0)
             throw new IllegalArgumentException();
         Unit min = currentArticle.getValues().get(0);

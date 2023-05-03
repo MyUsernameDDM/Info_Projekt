@@ -31,7 +31,7 @@ public class TestMainModel {
         CourseView cv= new CourseView();
         CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.chartCourse, cv, art);
         courseUtils.setCurrentArticle(art);
-        courseUtils.showChartCourse();
+        courseUtils.showCourse();
     }
     @Test
     public void testSafe(){
