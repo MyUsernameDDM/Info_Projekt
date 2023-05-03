@@ -2,9 +2,10 @@ package MainModel;
 
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Unit {
+public class Unit implements Serializable {
     private final double open;
     private final double high;
     private final double low;

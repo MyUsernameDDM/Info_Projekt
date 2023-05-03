@@ -2,9 +2,6 @@ package MainModel;
 
 import View.CourseUtils;
 import View.CourseView;
-import checkers.units.quals.A;
-import javafx.fxml.FXML;
-import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 
 
@@ -45,6 +42,7 @@ public class TestMainModel {
         SafeArticle.addArticleFile(article1);
         article1.setValues(TimeSpan.sixMonths);
         SafeArticle.addArticleFile(article1);
-
+        Article art=SafeArticle.getArticleFromFile("IBM", TimeSpan.oneMonth);
     }
+
 }

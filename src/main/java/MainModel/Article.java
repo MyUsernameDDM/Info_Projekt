@@ -13,10 +13,9 @@ import java.util.Date;
 public class Article implements Serializable {
     private final ArrayList<Unit> values = new ArrayList<>();
     private final String name;
-    private final String[] apiKey = {"QESJBL81ZZ99LAQX","SW5CZKALG7G6D5GT"};
     private int pointAmount = 0;
     private TimeSpan timeSpan;
-    private Config cfg;
+
 
 
     public ArrayList<Unit> getValues() {
@@ -26,15 +25,10 @@ public class Article implements Serializable {
 
     public Article(String str) {
         this.name = str;
-        cfg = Config.builder().key(apiKey[0]).timeOut(10).build();
+        Config cfg = Config.builder().key("QESJBL81ZZ99LAQX").timeOut(10).build();
         AlphaVantage.api().init(cfg);
     }
-    public Article(String str, TimeSpan ts, String pA, String values){
-        name= str;
-        timeSpan=ts;
-        pointAmount=Integer.parseInt(pA);
 
-    }
 
     public String getName() {
         return name;
@@ -108,15 +102,7 @@ public class Article implements Serializable {
         }
         if (response == null || response.getStockUnits() == null || response.getStockUnits().size() == 0)//wenn zu viele api calls gemacht wurden.
         {
-            if(cfg.getKey()==apiKey[1])
-                return false;
-            cfg = Config.builder().key(apiKey[1]).timeOut(10).build();
-            AlphaVantage.api().init(cfg);
-            if(!setValues(timeSpan)){
-                return false;
-            }else {
-                return true;
-            }
+            return false;
         }
         String first = response.getStockUnits().get(0).getDate();
         Date dStart = convStringToDate(first);
