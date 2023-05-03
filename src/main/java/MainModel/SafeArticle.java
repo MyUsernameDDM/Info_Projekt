@@ -4,17 +4,21 @@ import java.io.*;
 
 public class SafeArticle {
 
-
     public static Article getArticleFromFile(String name, TimeSpan ts) {
         String nameFile = "ArtSafe.ser";
         try (FileInputStream fileIn = new FileInputStream(nameFile);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
             Article[] articles = (Article[]) in.readObject();
+            if (articles.length == 0) {
+                return null;
+            }
             for (Article article : articles) {
                 if (article.getName().equals(name) && article.getTimeSpan() == ts) {
                     return article;
                 }
             }
+        } catch (EOFException e) {
+            return null;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -22,7 +26,7 @@ public class SafeArticle {
     }
 
     public static void addArticleFile(Article newArticle) {
-        if(newArticle==null||newArticle.getValues()==null|| newArticle.getValues().size()==0)
+        if (newArticle == null || newArticle.getValues() == null || newArticle.getValues().size() == 0)
             throw new IllegalArgumentException();
         String name = "ArtSafe.ser";
         File f = new File(name);

@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 public class Article implements Serializable {
-    private final ArrayList<Unit> values = new ArrayList<>();
+    private ArrayList<Unit> values = new ArrayList<>();
     private final String name;
     private int pointAmount = 0;
     private TimeSpan timeSpan;
@@ -75,8 +75,15 @@ public class Article implements Serializable {
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
     public boolean setValues(TimeSpan timeSpan) {
-        values.clear();
+        Article safe=SafeArticle.getArticleFromFile(name,timeSpan);
         this.timeSpan=timeSpan;
+        values.clear();
+        if(safe!=null){
+            pointAmount=safe.getPointAmount();
+            values=safe.getValues();
+            return true;
+        }
+
         pointAmount = 0;
         TimeSeriesResponse response = null;
         if (timeSpan == TimeSpan.day) {
@@ -122,6 +129,7 @@ public class Article implements Serializable {
             values.add(new Unit(u));
         }
         pointAmount = values.size();
+        SafeArticle.addArticleFile(this);
         return true;
     }
 
