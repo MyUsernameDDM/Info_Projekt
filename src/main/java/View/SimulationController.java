@@ -5,20 +5,17 @@ import MainModel.Main;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
-import java.util.ArrayList;
-
 import static MainModel.Main.mode;
 
 public class SimulationController extends Controller {
+    Simulation simulation = new Simulation();
     WalletView walletView = new WalletView(this);
-    Article walletCurrentArticle = null;
-    ArrayList<Article> walletArticles = new ArrayList<>();
+    Article walletCurrentArticle = null; // Aktueller Artikle
+
     public SimulationController() {
         super();
         setWalletView();
     }
-
-
 
     public GroundView getGroundView() {
         return groundView;
@@ -40,7 +37,7 @@ public class SimulationController extends Controller {
         groundView.window.setLeft(walletView.walletRoot);
     }
 
-    public void walletSafeCurrentArticle(String articleName){
+    public void walletSafeCurrentArticle(String articleName){ // CurrentArticle Umändern
         //vorher ausgewählten Button wieder zuruecksetzen
         if (walletCurrentArticle != null) {
             for (int i = 0; i < walletView.buttonList.size(); i++) {
@@ -51,7 +48,7 @@ public class SimulationController extends Controller {
         }
 
         //neuen Artikel als aktuellen Artikel erstellen
-        for (Article article : walletArticles) {
+        for (Article article : simulation.walletArticles) {
             if (articleName.equals(article.getName())) {
                 walletCurrentArticle = article;
                 for (int i = 0; i < walletView.buttonList.size(); i++) {
@@ -66,7 +63,7 @@ public class SimulationController extends Controller {
     /**
      * @param articleName Name des aktuell angezeigten Artikels
      */
-    public void walletAddArticle(String articleName) {
+    public void walletAddArticle(String articleName) { // Kaufen
         //nicht hinzufuegen, falls der Artikel bereits enthalten ist
         for (Button b : walletView.buttonList) {
             String name = b.getText();
@@ -86,7 +83,7 @@ public class SimulationController extends Controller {
     /**
      * Die Methode löscht das aktuell ausgewählte Element dem Wallet aus dieser
      */
-    public void walletRemoveCurrentArticle() {
+    public void walletRemoveCurrentArticle() { // Verkaufen
         if(walletCurrentArticle != null){
             for (Button b : walletView.buttonList) {
                 if (b.getText().equals(walletCurrentArticle.getName())) {
@@ -95,9 +92,8 @@ public class SimulationController extends Controller {
                     return;
                 }
             }
-            walletArticles.remove(watchLCurrentArticle);
+            simulation.walletArticles.remove(watchLCurrentArticle);
         }
-
     }
 
 }

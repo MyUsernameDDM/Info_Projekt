@@ -1,12 +1,12 @@
 package MainModel;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class Article {

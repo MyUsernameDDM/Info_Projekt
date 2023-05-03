@@ -1,16 +1,15 @@
 package View;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
 public class WalletView{
+
+    Simulation simulation = new Simulation();
     SimulationController controller;
     VBox walletRoot = new VBox();
     ScrollPane scrollPane = new ScrollPane();
@@ -26,6 +25,21 @@ public class WalletView{
 
 
     public WalletView(SimulationController controller) {
+
+        buyButton.setOnAction(event -> {
+            System.out.println("Test");
+            controller.walletSafeCurrentArticle("IBM");
+            //controller.walletAddArticle();
+            //simulation.walletArticles.add(controller.currentArticle);
+            //controller.walletAddArticle(controller.currentArticle.getName());
+        });
+
+       /*
+        sellAllButton.setOnAction(event -> {
+            controller.wallet
+        });
+        */
+
         this.controller = controller;
         buyButton.setPrefWidth(100);
         sellButton.setPrefWidth(100);
@@ -33,5 +47,8 @@ public class WalletView{
 
         walletRoot.getChildren().addAll(titel, buyButton, sellButton, sellAllButton);
     }
+
+
+
 
 }
