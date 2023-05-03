@@ -87,7 +87,7 @@ public class Controller {
      */
     private void setCourseView() {
         Article testArticle = new Article("IBM");
-        while (!testArticle.setValues(TimeSpan.day)) {
+        while (!testArticle.setValues(TimeSpan.fiveYear)) {
             try {
                 Thread.sleep(500);
             }catch(InterruptedException e){
