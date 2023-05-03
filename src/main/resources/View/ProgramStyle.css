@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 .buttonTime{
     -fx-background-color: #e0e0e0;
     -fx-background-radius: 10;
@@ -38,14 +40,16 @@
 
 .menuButton{
     -fx-alignment: center;
-    -fx-background-color: #add8e6;
-    -fx-border-color: #72bcd4;
-    -fx-font-size: 14px;
+    -fx-font-size: 30px;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #1752be;
+    -fx-border-color: #1752be;
 }
 
 .menuButtonHover{
+
 
 
 }
