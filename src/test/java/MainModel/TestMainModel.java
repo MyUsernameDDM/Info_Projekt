@@ -2,6 +2,8 @@ package MainModel;
 
 import View.CourseUtils;
 import View.CourseView;
+import checkers.units.quals.A;
+import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 
@@ -33,5 +35,16 @@ public class TestMainModel {
         CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.chartCourse, cv, art);
         courseUtils.setCurrentArticle(art);
         courseUtils.showChartCourse();
+    }
+    @Test
+    public void testSafe(){
+        Article article1= new Article("IBM");
+        article1.setValues(TimeSpan.oneMonth);
+        SafeArticle.addArticleFile(article1);
+        article1.setValues(TimeSpan.threeMonths);
+        SafeArticle.addArticleFile(article1);
+        article1.setValues(TimeSpan.sixMonths);
+        SafeArticle.addArticleFile(article1);
+
     }
 }
