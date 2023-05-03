@@ -81,14 +81,17 @@ public class Article {
         if (timeSpan == TimeSpan.oneMonth || timeSpan == TimeSpan.threeMonths) {
             response = AlphaVantage.api().timeSeries().daily().adjusted().forSymbol(name).fetchSync();
         }
-        if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year || timeSpan == TimeSpan.fiveYear) {
+        if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year ) {
             response = AlphaVantage.api().timeSeries().weekly().forSymbol(name).fetchSync();
         }
-        if (timeSpan == TimeSpan.max) {
+        if(timeSpan==TimeSpan.fiveYear){
+            response= AlphaVantage.api().timeSeries().monthly().forSymbol(name).fetchSync();
+        }
+        if (timeSpan == TimeSpan.max) {// max benötigt 3 api calls. so umschreiben, dass man weekly nimmt und dann wenn zu viele werte sind in monthly umrechenne
             response = AlphaVantage.api().timeSeries().monthly().fetchSync();
-            if (response.getStockUnits().size() < 25) {
+            if (response.getStockUnits().size() > 0 && response.getStockUnits().size() < 25) {
                 response = AlphaVantage.api().timeSeries().weekly().fetchSync();
-                if (response.getStockUnits().size() < 25)
+                if (response.getStockUnits().size() > 0 && response.getStockUnits().size() < 25)
                     response = AlphaVantage.api().timeSeries().daily().adjusted().fetchSync();
 
             }

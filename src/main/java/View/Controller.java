@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
@@ -85,13 +84,19 @@ public class Controller {
      */
     private void setCourseView() {
         Article testArticle = new Article("IBM");
-        if(testArticle.setValues(TimeSpan.year)){
-            System.out.println("Geat");
+        while (!testArticle.setValues(TimeSpan.day)) {
+            try {
+                Thread.sleep(500);
+            }catch(InterruptedException e){
+                System.out.println(e.getMessage());
+            }
+
         }
+
         courseUtils.setCurrentArticle(testArticle);
         courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
-        courseUtils.showNormalCourse();
-        //courseUtils.showChartCourse();
+        //courseUtils.showNormalCourse();
+        courseUtils.showChartCourse();
         groundView.window.setCenter(courseView.root);
 
 
@@ -219,7 +224,7 @@ public class Controller {
      * Die Methode löscht das aktuell ausgewählte Element der Watchlist aus dieser
      */
     public void wlRemoveCurrentArticle() {
-        if(watchLCurrentArticle != null){
+        if (watchLCurrentArticle != null) {
             for (Button b : watchListView.buttonList) {
                 if (b.getText().equals(watchLCurrentArticle.getName())) {
                     watchListView.vBox.getChildren().remove(b);
@@ -229,6 +234,7 @@ public class Controller {
             }
             watchListArticles.remove(watchLCurrentArticle);
         }
+
 
     }
 
