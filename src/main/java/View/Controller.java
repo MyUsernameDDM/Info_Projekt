@@ -87,7 +87,7 @@ public class Controller {
      */
     private void setCourseView() {
         Article testArticle = new Article("IBM");
-        while (!testArticle.setValues(TimeSpan.fiveYear)) {
+        while (!testArticle.setValues(TimeSpan.year)) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -97,7 +97,7 @@ public class Controller {
         }
 
         courseUtils.setCurrentArticle(testArticle);
-        courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
+        courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
         //courseUtils.showNormalCourse();
         courseUtils.showChartCourse();
         groundView.window.setCenter(courseView.root);
@@ -107,10 +107,13 @@ public class Controller {
         groundView.changeStateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                if (courseUtils.courseView.root.getChildren().size() > 1) {
+                    courseUtils.courseView.root.getChildren().subList(1, courseUtils.courseView.root.getChildren().size()).clear();
+                }
                 if (groundView.changeStateButton.getText().equals("Normal")) {
                     groundView.changeStateButton.setText("Charts");
                     courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
-                    courseUtils.showNormalCourse();
+                    courseUtils.showChartCourse();
                 } else {
                     groundView.changeStateButton.setText("Normal");
                     courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
