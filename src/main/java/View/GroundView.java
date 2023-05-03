@@ -63,7 +63,7 @@ public class GroundView {
 
 
         window.setTop(menu);
-        window.getTop().setStyle("-fx-background-color: #e6e8ec;");
+        window.getTop().setStyle("-fx-background-color: #1752be;");
         window.setBottom(timeBox);
         window.setCenter(graph);
         root.getChildren().add(window);
@@ -86,17 +86,18 @@ public class GroundView {
         wallet.getStyleClass().add("menuButton");
         wallet.setPrefWidth(150);
         wallet.setPrefHeight(30);
+        wallet.setTextFill(Color.WHITE);
 
         simulationMode.setText("MODE");
         simulationMode.getStyleClass().add("menuButton");
         simulationMode.setPrefWidth(150);
         simulationMode.setPrefHeight(30);
+        simulationMode.setTextFill(Color.WHITE);
 
         menu.getChildren().addAll(simulationMode, wallet);
 
-        menu.setMargin(wallet, new Insets(10, 10, 10, 10));
-        menu.setMargin(simulationMode, new Insets(10, 10, 10, 10));
-
+        menu.setMargin(wallet, new Insets(1,1,1,1));
+        menu.setMargin(simulationMode, new Insets(1, 1, 1, 1));
 
 
 
@@ -146,10 +147,22 @@ public class GroundView {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("ProgramStyle.css")).toExternalForm());
     }
 
-    public void setMenu(Node node){
-        menu.getChildren().add(node);
+
+    public void simulationModeHover(Boolean status){
+        if(status){
+            simulationMode.setTextFill(Color.LIGHTBLUE);
+        } else {
+            simulationMode.setTextFill(Color.WHITE);
+        }
     }
 
+    public void walletHover(Boolean status){
+        if(status){
+            wallet.setTextFill(Color.LIGHTBLUE);
+        } else {
+            wallet.setTextFill(Color.WHITE);
+        }
+    }
 
 }
 

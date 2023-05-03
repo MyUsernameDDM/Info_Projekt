@@ -44,6 +44,7 @@ public class Controller {
         setSearchList();
         setCourseView();
         setAddAndRemoveArticle();
+        menuButtonsListener();
 
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
@@ -79,7 +80,6 @@ public class Controller {
         }
 
 
-
     }
 
     /**
@@ -90,7 +90,7 @@ public class Controller {
         while (!testArticle.setValues(TimeSpan.fiveYear)) {
             try {
                 Thread.sleep(500);
-            }catch(InterruptedException e){
+            } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
 
@@ -197,6 +197,7 @@ public class Controller {
 
          */
     }
+
     /**
      * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
      */
@@ -248,6 +249,7 @@ public class Controller {
     public void changeMode() {
         mode = Main.status.simulation;
     }
+
     public void changeModeRealtime() {
         mode = status.realtime;
     }
@@ -262,7 +264,7 @@ public class Controller {
         button.setStyle("-fx-border-color: #1970d2");
     }
 
-    public void setAddAndRemoveArticle(){
+    public void setAddAndRemoveArticle() {
         watchListView.addButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -290,10 +292,39 @@ public class Controller {
                 watchListView.setRemoveButtonHover(false);
             }
         });
+    }
+
+    public void menuButtonsListener(){
+        groundView.simulationMode.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                groundView.simulationModeHover(true);
+            }
+        });
+
+        groundView.simulationMode.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                groundView.simulationModeHover(false);
+            }
+        });
+
+        groundView.wallet.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                groundView.walletHover(false);
+            }
+        });
+
+        groundView.wallet.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                groundView.walletHover(true);
+            }
+        });
+
 
 
     }
-
-
 
 }
