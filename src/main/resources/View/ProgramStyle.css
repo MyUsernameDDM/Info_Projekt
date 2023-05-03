@@ -1,0 +1,9 @@
+.hoverButton{
+    -fx-background-radius: 20;
+    -fx-font-size: 14px;
+    -fx-border-radius: 500px;
+    -fx-spacing: 2px;
+    -fx-text-alignment: center;
+    -fx-background-color: #add8e6;
+    -fx-border-color: #72bcd4;
+}

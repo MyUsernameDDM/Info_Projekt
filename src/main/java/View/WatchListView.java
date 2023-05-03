@@ -32,6 +32,7 @@ public class WatchListView {
         addButton.setPrefWidth(150);
         addButton.setPrefHeight(30);
         //addButton.setStyle("-fx-padding: 10, 10, 10, 10;");
+
         addButton.setStyle("-fx-background-radius: 20;" +
                 "-fx-font-size: 14px;" +
                 "-fx-border-radius: 500px;" +
@@ -39,6 +40,7 @@ public class WatchListView {
                 "-fx-text-alignment: center;" +
                 "-fx-background-color: #add8e6;" +
                 "-fx-border-color: #72bcd4;");
+
         removeButton.setStyle(String.valueOf(Color.ALICEBLUE));
         removeButton.setPrefWidth(150);
         removeButton.setPrefHeight(30);
@@ -68,6 +70,9 @@ public class WatchListView {
 
     public void setAddButtonHover(Boolean status){
         if(status){
+            //addButton.getStyleClass().removeAll();
+            addButton.getStyleClass().add("hoverButton");
+            /*
             addButton.setStyle("-fx-background-radius: 20;" +
                     "-fx-font-size: 14px;" +
                     "-fx-border-radius: 500px;" +
@@ -75,6 +80,8 @@ public class WatchListView {
                     "-fx-text-alignment: center;" +
                     "-fx-background-color: #72bcd4;" +
                     "-fx-border-color: #72bcd4;");
+
+             */
         } else {
             addButton.setStyle("-fx-background-radius: 20;" +
                     "-fx-font-size: 14px;" +
