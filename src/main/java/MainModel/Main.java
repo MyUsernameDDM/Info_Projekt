@@ -51,6 +51,9 @@ public class Main extends Application {
         run.setCycleCount(Animation.INDEFINITE);
         run.play();
 
+        stage.setMinWidth(800);
+        stage.setMinHeight(500);
+
         //haelt die Timeline an, damit sie nicht staendig neu gestartet wird
         stage.setOnCloseRequest(windowEvent -> {
             run.stop();

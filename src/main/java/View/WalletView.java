@@ -45,6 +45,7 @@ public class WalletView{
         sellAllButton.setPrefWidth(100);
 
         walletRoot.getChildren().addAll(titel, buyButton, sellButton, sellAllButton);
+        walletRoot.setPrefWidth(205);
     }
 
 

@@ -2,8 +2,12 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 import static MainModel.Main.mode;
 
@@ -15,6 +19,10 @@ public class SimulationController extends Controller {
     public SimulationController() {
         super();
         setWalletView();
+        courseUtils.adjustCourseSize(
+                groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(),
+                groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+
     }
 
     public GroundView getGroundView() {
@@ -26,9 +34,40 @@ public class SimulationController extends Controller {
     }
 
     /**
-     * Methode die aufgerufen wird, um in den RealtimeModus zu schalten
+     * Methode zum Anpassen der Inhalte an die Fentergroesse
+     * Unterschied zum Controller nur beim Aufruf courseUtils.adjustCourseSize() weil dort auch die Walletbreite weggerechnet werden muss
      */
     @Override
+    protected void setWindowAdjustment(){
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                double newSceneWidth = groundView.scene.getWidth();
+                double newSceneHeight = groundView.scene.getHeight();
+
+                //Hintergrund
+                groundView.window.setPrefWidth(newSceneWidth);
+                groundView.window.setPrefHeight(newSceneHeight);
+
+                double widthRatio = newSceneWidth / groundView.oldSceneWidth;
+                double heightRatio = newSceneHeight / groundView.oldSceneHeight;
+
+                //folgende Zeile ist zum normalen Controller unterschiedlich
+                courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+                groundView.oldSceneWidth = newSceneWidth;
+                groundView.oldSceneHeight = newSceneHeight;
+
+            }
+        };
+
+        groundView.scene.heightProperty().addListener(changeListener);
+        groundView.scene.widthProperty().addListener(changeListener);
+    }
+
+    /**
+     * Methode die aufgerufen wird, um in den RealtimeModus zu schalten
+     */
+    //@Override
     public void changeMode() { // Simulation - Realtime
         mode = Main.status.realtime;
     }
@@ -95,5 +134,17 @@ public class SimulationController extends Controller {
             simulation.walletArticles.remove(watchLCurrentArticle);
         }
     }
+
+    public void modeSceneChanger(){
+        groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                changeMode();
+            }
+        });{
+        }
+    }
+
+
 
 }

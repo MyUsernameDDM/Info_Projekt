@@ -15,21 +15,18 @@ import java.util.ArrayList;
 
 public class CourseView {
     Group root = new Group();
-    double courseWidth = 600;
-    double courseHeight = 400;
-    Rectangle backGround = new Rectangle(courseWidth, courseHeight);
+
+    Rectangle backGround;
 
     ArrayList<Ellipse> points = new ArrayList<>();
     ArrayList<Chart> charts = new ArrayList<>();
 
-    //braucht es nicht mehr, ist draußen bei den Zeitänderungen
-    //Button changeStateButton = new Button();
 
     public CourseView() {
         //Background anpassen
+        backGround = new Rectangle(500, 400);
         backGround.setFill(Color.ALICEBLUE);
-        backGround.setWidth(500);
-        backGround.setHeight(400);
+
 
         root.getChildren().add(backGround);
     }
