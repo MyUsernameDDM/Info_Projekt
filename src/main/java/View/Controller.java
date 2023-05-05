@@ -122,7 +122,7 @@ public class Controller {
      * Methode fuegt die CourseView an den GroundView an
      */
     private void setCourseView() {
-        Article testArticle = new Article("IBM");
+        Article testArticle = new Article("AAPL");
         currentArticle = testArticle;
         courseUtils.setCurrentArticle(testArticle);
         while (!testArticle.setValues(TimeSpan.max)) {
@@ -202,23 +202,22 @@ public class Controller {
             public void handle(ActionEvent actionEvent) {
                 if (currentArticle != null) {
                     wlAddArticle(currentArticle.getName());
-
+                    SafeArticle.addArticleFile(currentArticle);
                 }
             }
         });
 
         //Probe
-        for (int i = 0; i < 20; i++) {
-            wlAddArticle("Article " + i);
-            watchListArticles.add(new Article("Article " + i));
-        }
+        wlAddArticle("IBM");
+        watchListArticles.add(new Article("IBM"));
+
     }
 
     /**
      * @param articleName Name des aktuell angezeigten Artikels
      */
     public void wlAddArticle(String articleName) {
-        //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann
+        //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann, aktuell sollte es in ser datei geschrieben werden
 
         //nicht hinzufuegen, falls der Artikel bereits enthalten ist
         for (Button b : watchListView.buttonList) {
@@ -229,18 +228,23 @@ public class Controller {
         }
         Button temp = new Button(articleName);
         temp.setOnAction(actionEvent -> {
-            /*Mothe aufrufen zur Anzeige des GRaphs*/
+            Article tempArticle = new Article(articleName);
+
+            //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
+            while (!tempArticle.setValues(courseUtils.currentArticle.getTimeSpan())) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
+            courseUtils.currentArticle = tempArticle;
+            courseUtils.showCourse();
             wlSafeCurrentArticle(articleName);
         });
         watchListView.buttonList.add(temp);
         watchListView.vBox.getChildren().add(temp);
-
-        /*
-
-        ArrayList<String> searchHelp = searchUtils.search(String.valueOf(searchView.searchBox.getValue()), shares);
-        searchView.showSearchResults(searchHelp);
-
-         */
     }
 
     /**

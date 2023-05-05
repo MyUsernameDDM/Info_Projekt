@@ -15,8 +15,7 @@ import java.util.ArrayList;
 
 public class CourseView {
     Group root = new Group();
-    double courseWidth;
-    double courseHeight;
+
     Rectangle backGround;
 
     ArrayList<Ellipse> points = new ArrayList<>();
@@ -25,9 +24,7 @@ public class CourseView {
 
     public CourseView() {
         //Background anpassen
-        courseWidth = 500;
-        courseHeight = 400;
-        backGround = new Rectangle(courseWidth, courseHeight);
+        backGround = new Rectangle(500, 400);
         backGround.setFill(Color.ALICEBLUE);
 
 

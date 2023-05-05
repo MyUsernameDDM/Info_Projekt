@@ -34,11 +34,9 @@ public class CourseUtils {
     /**
      * Methode setzt die Groesse der Kursanzeige passend
      */
-    public void adjustCourseSize(double newWidth, double newHight){
-        courseView.courseWidth = newWidth;
-        courseView.courseHeight = newHight;
-        courseView.backGround.setWidth(courseView.courseWidth);
-        courseView.backGround.setHeight(courseView.courseHeight);
+    public void adjustCourseSize(double newWidth, double newHeight){
+        courseView.backGround.setWidth(newWidth);
+        courseView.backGround.setHeight(newHeight);
 
         //alten Kurs loeschen
         courseView.root.getChildren().clear();
@@ -53,8 +51,7 @@ public class CourseUtils {
      * Die View wird so umgestellt, dass das angegebene Intervall angezeigt wird
      */
     public void changeShowInterval(TimeSpan interval) {
-        courseView.root.getChildren().clear();
-        courseView.root.getChildren().add(courseView.backGround);
+
         while(!(currentArticle.setValues(interval))){
             currentArticle.setValues(interval);
         }
@@ -75,6 +72,10 @@ public class CourseUtils {
     public void showCourse() {
         if (currentArticle == null || currentArticle.getValues() == null || currentArticle.getPointAmount() == 0)
             throw new IllegalArgumentException();
+        //Alten Kurs loeschen
+        courseView.root.getChildren().clear();
+        courseView.root.getChildren().add(courseView.backGround);
+
         Unit min = currentArticle.getValues().get(0);
         Unit max = currentArticle.getValues().get(0);
         if(courseState==courseStatus.chartCourse) {
@@ -99,12 +100,12 @@ public class CourseUtils {
         //anpassen an breite und höhe
         double diffMinMax = max.getHigh() - min.getLow();
 
-        double valueperPixelHeight = diffMinMax / courseView.courseHeight;//Wert der angibt, wie viel sich in der höhe pro pixel verändert
+        double valueperPixelHeight = diffMinMax / courseView.backGround.getHeight();//Wert der angibt, wie viel sich in der höhe pro pixel verändert
         long startTime = currentArticle.getValues().get(currentArticle.getPointAmount() - 1).getDate().getTime();
         long diffTime = currentArticle.getValues().get(0).getDate().getTime() - startTime;
         //wert, wie viel sich die Zeit verändert
         diffTime *= 1.23;
-        double valueperPixelWidth = diffTime / courseView.courseWidth;//wert, wie viel sich in der breite pro pixel verändert
+        double valueperPixelWidth = diffTime / courseView.backGround.getWidth();//wert, wie viel sich in der breite pro pixel verändert
         double candleStickWidth = courseView.backGround.getWidth() / (currentArticle.getPointAmount() * 2);//wert, wie groß der body der aktie sein kann
         //übergeben an setCandleStick
         if (courseState == courseStatus.chartCourse) {
@@ -122,7 +123,7 @@ public class CourseUtils {
             double startPosY = (currentArticle.getValues().get(i).getClose() - startHeight) / posy;
             double endPosX = (currentArticle.getValues().get(i + 1).getDate().getTime() - startTime) / posx;
             double endPosY = (currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
-            Line l = new Line(startPosX, courseView.courseHeight-startPosY, endPosX, courseView.courseHeight-endPosY);
+            Line l = new Line(startPosX, courseView.backGround.getHeight()-startPosY, endPosX, courseView.backGround.getHeight()-endPosY);
             if (rise) {
                 l.setStroke(Color.GREEN);
             } else {
@@ -147,7 +148,7 @@ public class CourseUtils {
         double candlePosYMin = ((Math.min(u.getClose(), u.getOpen()) - startHeight) / posy);
         Rectangle body = new Rectangle(width, Math.abs(candlePosy - candlePosYMin));
         body.setStroke(Color.BLACK);
-        body.setY(courseView.courseHeight - candlePosy);
+        body.setY(courseView.backGround.getHeight() - candlePosy);
         body.setX(candlePosx);
         if (u.getOpen() <= u.getClose()) {
             body.setFill(Color.GREEN);
@@ -155,8 +156,8 @@ public class CourseUtils {
             body.setFill(Color.RED);
         }
         double startEndX = candlePosx + width / 2;
-        Line topLine = new Line(startEndX, courseView.courseHeight - candlePosy, startEndX, courseView.courseHeight - ((u.getHigh() - startHeight) / posy));
-        Line bottomLine = new Line(startEndX, courseView.courseHeight - candlePosYMin, startEndX, courseView.courseHeight - ((u.getLow() - startHeight) / posy));
+        Line topLine = new Line(startEndX, courseView.backGround.getHeight() - candlePosy, startEndX, courseView.backGround.getHeight() - ((u.getHigh() - startHeight) / posy));
+        Line bottomLine = new Line(startEndX, courseView.backGround.getHeight() - candlePosYMin, startEndX, courseView.backGround.getHeight() - ((u.getLow() - startHeight) / posy));
         courseView.root.getChildren().addAll(body, topLine, bottomLine);
     }
 
