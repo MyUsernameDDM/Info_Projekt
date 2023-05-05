@@ -15,6 +15,7 @@ public class Article implements Serializable {
     private final String name;
     private int pointAmount = 0;
     private TimeSpan timeSpan;
+    private transient TimeSeriesResponse apiResponse = null;
 
 
     public ArrayList<Unit> getValues() {
@@ -83,8 +84,73 @@ public class Article implements Serializable {
             values = safe.getValues();
             return true;
         }
-
         pointAmount = 0;
+        apiResponse = getResponse(timeSpan);
+        if (apiResponse == null)
+            return false;
+        values = getValuesFromSpan(timeSpan, apiResponse);
+        pointAmount = values.size();
+        SafeArticle.addArticleFile(this);
+        Article[] otherTimeSpans = new Article[7];
+        int count = 0;
+        for (TimeSpan t : TimeSpan.values()) {
+            if (t != timeSpan) {
+                otherTimeSpans[count] = new Article(name);
+                boolean tsInOther = false;
+                int indexInOther = -1;
+                for (int i = 0; i < otherTimeSpans.length; ++i) {
+                    if (otherTimeSpans[i] != null) {
+                        if (t == TimeSpan.oneMonth || t == TimeSpan.threeMonths) {
+                            if (otherTimeSpans[i].getTimeSpan() == TimeSpan.oneMonth || otherTimeSpans[i].getTimeSpan() == TimeSpan.threeMonths) {
+                                tsInOther = true;
+                                indexInOther = i;
+                                break;
+                            }
+                        }
+                        if (t == TimeSpan.sixMonths || t == TimeSpan.yearToday || t == TimeSpan.year) {
+                            if (otherTimeSpans[i].getTimeSpan() == TimeSpan.sixMonths || otherTimeSpans[i].getTimeSpan() == TimeSpan.year || otherTimeSpans[i].getTimeSpan() == TimeSpan.yearToday) {
+                                tsInOther = true;
+                                indexInOther = i;
+                                break;
+                            }
+                        }
+                        if (t == TimeSpan.fiveYear || t == TimeSpan.max) {
+                            if (otherTimeSpans[i].getTimeSpan() == t) {
+                                tsInOther = true;
+                                indexInOther = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (t == TimeSpan.oneMonth && timeSpan == TimeSpan.threeMonths || t == TimeSpan.threeMonths && timeSpan == TimeSpan.oneMonth) {
+                    otherTimeSpans[count].setValues(getValuesFromSpan(t, apiResponse));
+                } else if (t == TimeSpan.sixMonths && (timeSpan == TimeSpan.year || timeSpan == TimeSpan.yearToday) || t == TimeSpan.year && (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday) || t == TimeSpan.yearToday && (timeSpan == TimeSpan.year || timeSpan == TimeSpan.sixMonths)) {
+                    otherTimeSpans[count].setValues(getValuesFromSpan(t, apiResponse));
+                } else if ((t == TimeSpan.fiveYear && timeSpan == TimeSpan.max) || (t == TimeSpan.max && timeSpan == TimeSpan.fiveYear)) {
+                    otherTimeSpans[count].setValues(getValuesFromSpan(t, apiResponse));
+                } else if (tsInOther && (t == TimeSpan.oneMonth || t == TimeSpan.threeMonths)) {
+                    otherTimeSpans[count].setValues(getValuesFromSpan(t, otherTimeSpans[indexInOther].getApiResponse()));
+                } else if (tsInOther && (t == TimeSpan.sixMonths || t == TimeSpan.yearToday || t == TimeSpan.year)) {
+                    otherTimeSpans[count].setValues(getValuesFromSpan(t, otherTimeSpans[indexInOther].getApiResponse()));
+                } else if (tsInOther && (t == TimeSpan.fiveYear || t == TimeSpan.max)) {
+                    otherTimeSpans[count].setValues(getValuesFromSpan(t, otherTimeSpans[indexInOther].getApiResponse()));
+                } else {
+                    otherTimeSpans[count].setApiResponse(getResponse(t));
+                    if (otherTimeSpans[count].getApiResponse() == null)
+                        break;
+                    otherTimeSpans[count].setValues(getValuesFromSpan(t, otherTimeSpans[count].getApiResponse()));
+                }
+                otherTimeSpans[count].setPointAmount(otherTimeSpans[count].getValues().size());
+                otherTimeSpans[count].setTimeSpan(t);
+                SafeArticle.addArticleFile(otherTimeSpans[count]);
+                count++;
+            }
+        }
+        return true;
+    }
+
+    private TimeSeriesResponse getResponse(TimeSpan timeSpan) {
         TimeSeriesResponse response = null;
         if (timeSpan == TimeSpan.day) {
             response = AlphaVantage.api().timeSeries().intraday().forSymbol(name).fetchSync();
@@ -95,19 +161,21 @@ public class Article implements Serializable {
         if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year) {
             response = AlphaVantage.api().timeSeries().weekly().forSymbol(name).fetchSync();
         }
-        if (timeSpan == TimeSpan.fiveYear) {
-            response = AlphaVantage.api().timeSeries().monthly().forSymbol(name).fetchSync();
-        }
-        if (timeSpan == TimeSpan.max) {// max benötigt 3 api calls. so umschreiben, dass man weekly nimmt und dann wenn zu viele werte sind in monthly umrechenne
+        if (timeSpan == TimeSpan.fiveYear || timeSpan == TimeSpan.max) {
             response = AlphaVantage.api().timeSeries().monthly().forSymbol(name).fetchSync();
         }
         if (response == null || response.getStockUnits() == null || response.getStockUnits().size() == 0)//wenn zu viele api calls gemacht wurden.
         {
-            return false;
+            return null;
         }
+        return response;
+    }
+
+    private ArrayList<Unit> getValuesFromSpan(TimeSpan timeSpan, TimeSeriesResponse response) {
+        ArrayList<Unit> values = new ArrayList<>();
         String first = response.getStockUnits().get(0).getDate();
         Date dStart = convStringToDate(first);
-        int count=0;
+        int count = 0;
         for (StockUnit u : response.getStockUnits()) {
             if (timeSpan == TimeSpan.oneMonth && diffDate(dStart, convStringToDate(u.getDate())) >= 30)
                 break;
@@ -121,15 +189,25 @@ public class Article implements Serializable {
                 break;
             if (timeSpan == TimeSpan.fiveYear && diffDate(dStart, convStringToDate(u.getDate())) >= 365 * 5)
                 break;
-            if (timeSpan == TimeSpan.max && count%4==0)//alle 4 monate
+            if (timeSpan == TimeSpan.max && count % 4 == 0)//alle 4 monate
                 values.add(new Unit(u));
             if (timeSpan != TimeSpan.max)
                 values.add(new Unit(u));
             count++;
         }
-        pointAmount = values.size();
-        SafeArticle.addArticleFile(this);
-        return true;
+        return values;
+    }
+
+    public void setValues(ArrayList<Unit> values) {
+        this.values = values;
+    }
+
+    public void setPointAmount(int pointAmount) {
+        this.pointAmount = pointAmount;
+    }
+
+    public void setTimeSpan(TimeSpan timeSpan) {
+        this.timeSpan = timeSpan;
     }
 
     public TimeSpan getTimeSpan() {
@@ -140,5 +218,12 @@ public class Article implements Serializable {
         return pointAmount;
     }
 
+    public TimeSeriesResponse getApiResponse() {
+        return apiResponse;
+    }
+
+    public void setApiResponse(TimeSeriesResponse apiResponse) {
+        this.apiResponse = apiResponse;
+    }
 }
 
