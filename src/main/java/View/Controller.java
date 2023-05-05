@@ -5,6 +5,8 @@ import MainModel.Main;
 import MainModel.SafeArticle;
 import MainModel.TimeSpan;
 import Utils.SearchUtils;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -41,6 +43,7 @@ public class Controller {
     }
 
     public Controller() {
+        setGroundView();
         setWatchList();
         setSearchList();
         setCourseView();
@@ -48,7 +51,10 @@ public class Controller {
         menuButtonsListener();
         timeButtonListener();
         modeSceneChanger();
+        setWindowAdjustment();
+    }
 
+    private void setGroundView() {
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
             int finalI = i;
@@ -81,8 +87,35 @@ public class Controller {
                 }
             });
         }
+        groundView.window.setPrefWidth(groundView.scene.getWidth());
+        groundView.window.setPrefHeight(groundView.scene.getHeight());
+
+    }
 
 
+    protected void setWindowAdjustment() {
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                double newSceneWidth = groundView.scene.getWidth();
+                double newSceneHeight = groundView.scene.getHeight();
+
+                //Hintergrund
+                groundView.window.setPrefWidth(newSceneWidth);
+                groundView.window.setPrefHeight(newSceneHeight);
+
+                double widthRatio = newSceneWidth / groundView.oldSceneWidth;
+                double heightRatio = newSceneHeight / groundView.oldSceneHeight;
+
+                courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+                groundView.oldSceneWidth = newSceneWidth;
+                groundView.oldSceneHeight = newSceneHeight;
+
+            }
+        };
+
+        groundView.scene.heightProperty().addListener(changeListener);
+        groundView.scene.widthProperty().addListener(changeListener);
     }
 
     /**
@@ -104,6 +137,8 @@ public class Controller {
         //courseUtils.showNormalCourse();
         courseUtils.showCourse();
         groundView.window.setCenter(courseView.root);
+
+        courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
 
 
         //Handler für den Button zum Veraendern der Ansicht
@@ -181,6 +216,8 @@ public class Controller {
      * @param articleName Name des aktuell angezeigten Artikels
      */
     public void wlAddArticle(String articleName) {
+        //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann
+
         //nicht hinzufuegen, falls der Artikel bereits enthalten ist
         for (Button b : watchListView.buttonList) {
             String name = b.getText();
@@ -244,8 +281,6 @@ public class Controller {
             }
             watchListArticles.remove(watchLCurrentArticle);
         }
-
-
     }
 
 

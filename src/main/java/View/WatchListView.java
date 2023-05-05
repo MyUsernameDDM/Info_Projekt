@@ -7,6 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.time.chrono.IsoChronology;
 import java.util.ArrayList;
 
 public class WatchListView {
@@ -23,9 +24,12 @@ public class WatchListView {
         this.controller = controller;
         setButtons();
         setTitel();
+
+        scrollPane.prefHeight(Integer.MAX_VALUE);
         scrollPane.setContent(vBox);
+
         wlRoot.getChildren().addAll(titel,addButton, removeButton, scrollPane);
-        wlRoot.setPrefWidth(500);
+        wlRoot.setPrefWidth(200);
     }
 
     public void setTitel(){

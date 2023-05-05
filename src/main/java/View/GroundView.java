@@ -20,8 +20,8 @@ import java.util.Objects;
 public class GroundView {
     private int sceneWith = 800;
     private int sceneHeight = 500;
-    private double old_width = sceneWith;
-    private double old_height = sceneHeight;
+    double oldSceneWidth = sceneWith;
+    double oldSceneHeight = sceneHeight;
 
     Group root = new Group();
     BorderPane window = new BorderPane();
@@ -33,8 +33,6 @@ public class GroundView {
     Button modeButton = new Button();
     Button wallet = new Button();
 
-
-    Rectangle graph = new Rectangle();
     Button simulationModeButton = new Button();
     Button changeStateButton = new Button("Normal");
     HBox timeBox = new HBox();
@@ -62,7 +60,6 @@ public class GroundView {
         window.setTop(menu);
         window.getTop().setStyle("-fx-background-color: #3f6cc9;");
         window.setBottom(timeBox);
-        window.setCenter(graph);
         root.getChildren().add(window);
     }
 
@@ -94,6 +91,7 @@ public class GroundView {
         menu.getChildren().addAll(modeButton, wallet);
         menu.setMargin(wallet, new Insets(1,1,1,1));
         menu.setMargin(modeButton, new Insets(1, 1, 1, 1));
+        menu.setPrefHeight(70);
 
 
         changeStateButton.setPrefWidth(60);
@@ -101,6 +99,7 @@ public class GroundView {
         changeStateButton.getStyleClass().add("buttonTime");
         timeBox.getChildren().add(changeStateButton);
         timeBox.setMargin(changeStateButton, new Insets(2, 2, 2, 2));
+        timeBox.setPrefHeight(40);
 
         for (int i = 0; i < timeButtons.length; i++){
             timeButtons[i] = new Button();
@@ -114,11 +113,6 @@ public class GroundView {
 
         timeButtons[6].setPrefWidth(60);
 
-
-        graph.setHeight(300);
-        graph.setWidth(300);
-        graph.setFill(Color.GREEN);
-
         simulationModeButton.setText("Mode");
         simulationModeButton.setLayoutY(200);
         simulationModeButton.setLayoutX(200);
@@ -129,23 +123,12 @@ public class GroundView {
         for (int i = 0; i < timeButtons.length; i++){
             infoView.showInfoView(timeButtons[i]);
         }
-        //vielleicht dech tim Controller mochn, dass man theoretisch lei des in der Mitte unpasst
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                graph.setX(graph.getX() / old_width * scene.getWidth());
-                graph.setY(graph.getY() / old_height * scene.getHeight());
 
-                old_width = scene.getWidth();
-                old_height = scene.getHeight();
-                /*olls ungepasst werden*/
-            }
-        };
+
 
 
         scene = new Scene(root, sceneWith, sceneHeight);
-        scene.heightProperty().addListener(changeListener);
-        scene.widthProperty().addListener(changeListener);
+
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("ProgramStyle.css")).toExternalForm());
     }
 

@@ -32,38 +32,20 @@ public class CourseUtils {
     }
 
     /**
-     * Die Methode showNormalCourse setzt den View so, dass der normale Kurs angezeigt wird
+     * Methode setzt die Groesse der Kursanzeige passend
      */
-    public void showNormalCourse() {
-        if (currentArticle == null || currentArticle.getValues() == null || currentArticle.getPointAmount() == 0)
-            throw new IllegalArgumentException();
-        Unit min = currentArticle.getValues().get(0);
-        Unit max = currentArticle.getValues().get(0);
-        for (Unit u : currentArticle.getValues()) {
-            if (Math.max(u.getClose(), u.getOpen()) > Math.max(max.getClose(), max.getOpen())) {
-                max = u;
-            }
-            if (Math.min(u.getClose(), u.getOpen()) < Math.min(u.getOpen(), min.getClose())) {
-                min = u;
-            }
-        }
+    public void adjustCourseSize(double newWidth, double newHight){
+        courseView.courseWidth = newWidth;
+        courseView.courseHeight = newHight;
+        courseView.backGround.setWidth(courseView.courseWidth);
+        courseView.backGround.setHeight(courseView.courseHeight);
 
-        int pointAmount = currentArticle.getPointAmount();
-        double sectionWidth = courseView.courseWidth / pointAmount;
-        double pointX = 0;
-        for (int i = currentArticle.getPointAmount() - 1; i >= 0; i--) {
-            Unit u = currentArticle.getValues().get(i);
-            Ellipse temp = new Ellipse(2, 2);
-            temp.setCenterX(pointX);
-            temp.setCenterY(courseView.courseHeight - u.getClose() * courseView.courseHeight / max.getClose());
-            temp.setOnDragDetected(mouseEvent -> {
-                InfoView infoView = new InfoView();
-                /*Hier sollte der Wert dann gezeigt werden im Infoview*/
-            });
-            courseView.points.add(temp);
-            courseView.root.getChildren().add(temp);
-            pointX += sectionWidth;
-        }
+        //alten Kurs loeschen
+        courseView.root.getChildren().clear();
+        courseView.root.getChildren().add(courseView.backGround);
+
+        showCourse();
+
     }
 
 
