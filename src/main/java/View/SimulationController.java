@@ -2,8 +2,10 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 import static MainModel.Main.mode;
 
@@ -28,7 +30,7 @@ public class SimulationController extends Controller {
     /**
      * Methode die aufgerufen wird, um in den RealtimeModus zu schalten
      */
-    @Override
+    //@Override
     public void changeMode() { // Simulation - Realtime
         mode = Main.status.realtime;
     }
@@ -95,5 +97,17 @@ public class SimulationController extends Controller {
             simulation.walletArticles.remove(watchLCurrentArticle);
         }
     }
+
+    public void modeSceneChanger(){
+        groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                changeMode();
+            }
+        });{
+        }
+    }
+
+
 
 }

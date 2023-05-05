@@ -3,13 +3,15 @@
 .buttonTime{
     -fx-background-color: #e0e0e0;
     -fx-background-radius: 10;
+    -fx-border-radius: 10;
     -fx-text-alignment: center;
     -fx-border-color: #858383;
 }
 
-.buttonTimeHover{
+.buttonTimeClicked{
     -fx-background-color: #858383;
     -fx-background-radius: 10;
+    -fx-border-radius: 10;
     -fx-text-alignment: center;
     -fx-border-color: #858383;
 }
@@ -44,15 +46,10 @@
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-font-family: 'Anton', sans-serif;
-    -fx-background-color: #1752be;
-    -fx-border-color: #1752be;
+    -fx-background-color: #3f6cc9;
+    -fx-border-color: #3f6cc9;
 }
 
-.menuButtonHover{
-
-
-
-}
 
 
 

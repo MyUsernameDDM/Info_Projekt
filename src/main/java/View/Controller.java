@@ -46,6 +46,8 @@ public class Controller {
         setCourseView();
         setAddAndRemoveArticle();
         menuButtonsListener();
+        timeButtonListener();
+        modeSceneChanger();
 
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
@@ -250,7 +252,7 @@ public class Controller {
     /**
      * Wechsel auf den SimulationController und somit auf den SimulationMode
      */
-    public void changeMode() {
+    public void changeModeSimulation() {
         mode = Main.status.simulation;
     }
 
@@ -299,14 +301,14 @@ public class Controller {
     }
 
     public void menuButtonsListener(){
-        groundView.simulationMode.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        groundView.modeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 groundView.simulationModeHover(true);
             }
         });
 
-        groundView.simulationMode.setOnMouseExited(new EventHandler<MouseEvent>() {
+        groundView.modeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 groundView.simulationModeHover(false);
@@ -326,9 +328,52 @@ public class Controller {
                 groundView.walletHover(true);
             }
         });
-
-
-
     }
+
+    public void timeButtonListener(){
+        for(int i = 0; i < groundView.timeButtons.length; i++){
+            int finalI = i;
+            groundView.timeButtons[i].setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    groundView.timeButtonsHover(finalI, true);
+                }
+            });
+        }
+
+        for(int i = 0; i < groundView.timeButtons.length; i++){
+            int finalI = i;
+            groundView.timeButtons[i].setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    groundView.timeButtonsHover(finalI, false);
+                }
+            });
+        }
+
+        for(int i = 0; i < groundView.timeButtons.length; i++){
+            int finalI = i;
+            groundView.timeButtons[i].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    groundView.timeButtonsOnMouseClicked(finalI);
+                }
+            });
+        }
+    }
+
+    public void modeSceneChanger(){
+        groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                changeModeSimulation();
+            }
+        });{
+
+        }
+    }
+
+
+
 
 }
