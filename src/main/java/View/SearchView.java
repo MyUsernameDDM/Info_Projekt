@@ -1,27 +1,28 @@
 package View;
 
+import MainModel.MatchUnits;
+import MainModel.Matching;
+import Utils.SearchUtils;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class SearchView {
+public class SearchView extends Thread {
     Controller controller;
     VBox root = new VBox();
     HBox inputBox = new HBox();
 
+
     ScrollPane outputSearchView = new ScrollPane();
-    VBox vBoxSearchResults = new VBox();
     TextField searchInputTextField = new TextField();
     Button searchButton = new Button();
 
-    ComboBox<Button> searchBox = new ComboBox<>();
-
     ArrayList<String> searchResult = new ArrayList<>();
+    VBox recommendsBox = new VBox();
 
+    private final Label[] recommends = new Label[10];
     //GroundView groundView = new GroundView(controller);
 
 
@@ -40,52 +41,98 @@ public class SearchView {
     /**
      * Methode zum Setzen der Elemente der SearchView
      */
-    public void setButtonsSearchView(){
-        searchBox.setEditable(true);
-        searchBox.setPrefHeight(30);
-        searchBox.setPrefWidth(150);
+    public void setButtonsSearchView() {
+        outputSearchView.setVisible(false);
+
+        searchInputTextField.setPrefHeight(30);
+        searchInputTextField.setPrefWidth(150);
 
         searchButton.setText("Search");
         searchButton.setPrefHeight(30);
         searchButton.setPrefWidth(60);
-    }
-
-
-    /**
-     * Methode um Suchergebnisse anzuzeigen
-     * @param resultStr ArrayList wo alle Ergenisse Übergeben werden, die dann angezeigt werden
-     */
-    public void showSearchResults(String[] resultStr){
-        //searchResult = resultStr;
-        for(String str : searchResult){
-            Button tmp = new Button();
-            tmp.setText(str);
-            tmp.setMaxWidth(100);
-            tmp.setPrefHeight(30);
-            vBoxSearchResults.getChildren().add(tmp);
+        for (int i = 0; i < 10; ++i) {
+            recommends[i] = new Label();
         }
-        outputSearchView.setPrefWidth(searchButton.getWidth());
-        outputSearchView.setPrefHeight(100);
-        outputSearchView.setContent(vBoxSearchResults);
-        outputSearchView.setVisible(true);
-        //root.getChildren().add(outputSearchView);
+        if (root.getChildren().size() == 0)
+            root.getChildren().addAll(searchInputTextField, searchButton, outputSearchView);
     }
 
+
+
+
+
+    /*
+
+        /**
+         * Methode um Suchergebnisse anzuzeigen
+         * @param resultStr ArrayList wo alle Ergenisse Übergeben werden, die dann angezeigt werden
+
+        public void showSearchResults(String[] resultStr){
+            //searchResult = resultStr;
+            for(String str : searchResult){
+                Button tmp = new Button();
+                tmp.setText(str);
+                tmp.setMaxWidth(100);
+                tmp.setPrefHeight(30);
+                vBoxSearchResults.getChildren().add(tmp);
+            }
+            outputSearchView.setPrefWidth(searchButton.getWidth());
+            outputSearchView.setPrefHeight(100);
+            outputSearchView.setContent(vBoxSearchResults);
+            outputSearchView.setVisible(true);
+            //root.getChildren().add(outputSearchView);
+        }*/
+
+    public void showSearchResults(Controller controller) {
+        System.out.println("test");
+        outputSearchView.setVisible(true);
+        outputSearchView.setLayoutX(searchInputTextField.getLayoutX());
+        outputSearchView.setLayoutY(searchInputTextField.getLayoutY() + searchInputTextField.getHeight());
+        MatchUnits[] result = Matching.getMatchings(searchInputTextField.getText());
+        if (result == null) {
+            return;
+        }
+        int count = 0;
+        if (recommendsBox.getChildren().size() > 0)
+            recommendsBox.getChildren().clear();
+        for (int i = 9; i >= 0; --i) {
+            if (result[i] == null)
+                continue;
+            recommends[count].setText(result[i].getName());
+            int finalCount = count;
+            int finalI = i;
+            recommends[count].setOnMouseClicked(e -> {
+                SearchUtils.labelclicked(result[finalI], controller, this);
+            });
+            recommendsBox.getChildren().add(recommends[count]);
+            count++;
+        }
+        outputSearchView.setContent(recommendsBox);
+
+
+    }
+
+    public void clearSearching() {
+        searchInputTextField.setText("");
+        outputSearchView.setVisible(false);
+    }
 
     /**
      * Methode um den Namen der vorgeschlagenen Aktien zurückgibt
+     *
      * @return Name von Aktien
      */
-    public ArrayList<String> getSearchResult(){
+    public ArrayList<String> getSearchResult() {
         return searchResult;
     }
 
 
     /**
      * Methode um den Inhalt des Input Search Textfeld zurückzugeben
+     *
      * @return Inhalt des Textfeldes
      */
-    public String getInputText(){
+    public String getInputText() {
         return searchInputTextField.getText();
     }
 

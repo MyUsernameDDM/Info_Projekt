@@ -2,7 +2,6 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
-import MainModel.SafeArticle;
 import MainModel.TimeSpan;
 import Utils.SearchUtils;
 import javafx.event.ActionEvent;
@@ -43,7 +42,7 @@ public class Controller {
     public Controller() {
         setWatchList();
         setSearchList();
-        setCourseView();
+        setCourseView("IBM");
         setAddAndRemoveArticle();
         menuButtonsListener();
 
@@ -86,15 +85,17 @@ public class Controller {
     /**
      * Methode fuegt die CourseView an den GroundView an
      */
-    private void setCourseView() {
-        Article testArticle = new Article("IBM");
-        while (!testArticle.setValues(TimeSpan.max)) {
+    public void setCourseView(String str) {
+        System.out.println(str);
+        Article testArticle = new Article(str);
+        int count=0;
+        while (!testArticle.setValues(TimeSpan.max) && count<20) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
-
+            count++;
         }
         //SafeArticle.clearFile();
         courseUtils.setCurrentArticle(testArticle);
@@ -108,9 +109,7 @@ public class Controller {
         groundView.changeStateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (courseUtils.courseView.root.getChildren().size() > 1) {
-                    courseUtils.courseView.root.getChildren().subList(1, courseUtils.courseView.root.getChildren().size()).clear();
-                }
+
                 if (groundView.changeStateButton.getText().equals("Normal")) {
                     groundView.changeStateButton.setText("Charts");
                     courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
@@ -126,16 +125,19 @@ public class Controller {
 
     private void setSearchList() {
         groundView.window.setLeft(searchView.root);
-        searchView.outputSearchView.setLayoutY(100);
-        searchView.outputSearchView.setVisible(false);
         groundView.root.getChildren().add(searchView.outputSearchView);
-
+        Controller thisController= this;
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                String[] help = SearchUtils.search(String.valueOf(searchView.searchBox.getValue()));
+                searchView.showSearchResults(thisController);
+
+                /*
+                String[] help = searchUtils.search(String.valueOf(searchView.searchBox.getValue()));
                 searchView.showSearchResults(help);
 
+
+                 */
                 /*
                 ArrayList<String> searchHelp = Article.matching (statische Methode);
                 ArrayList<String> searchHelp = searchUtils.search(, shares);
@@ -298,7 +300,7 @@ public class Controller {
         });
     }
 
-    public void menuButtonsListener(){
+    public void menuButtonsListener() {
         groundView.simulationMode.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -326,7 +328,6 @@ public class Controller {
                 groundView.walletHover(true);
             }
         });
-
 
 
     }

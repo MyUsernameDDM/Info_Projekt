@@ -6,17 +6,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Matching extends Thread {
-    private final String str;
+public class Matching  {
 
-    public Matching(String s) {
-        str = s;
-    }
 
-    public matchUnits[] matches = new matchUnits[10];
 
-    @Override
-    public void run() {
+    public static MatchUnits[] getMatchings (String str) {
+        MatchUnits[] matches= new MatchUnits[10];
         try {
             URL url = new URL("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + str + "&apikey=" + "QESJBL81ZZ99LAQX");
             HttpURLConnection con;
@@ -28,7 +23,7 @@ public class Matching extends Thread {
             while (count < 2) {
                 input = in.readLine();
                 if (input == null)
-                    return;
+                    return null;
                 if (input.contains("{")) {
                     count++;
                 }
@@ -46,7 +41,7 @@ public class Matching extends Thread {
                     data[i] = input;
                 }
 
-                matches[j] = new matchUnits(data);
+                matches[j] = new MatchUnits(data);
                 while (true) {
                     input = in.readLine();
                     if (input == null)
@@ -61,8 +56,7 @@ public class Matching extends Thread {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-    }
-    public matchUnits[] getMatches(){
         return matches;
     }
+
 }

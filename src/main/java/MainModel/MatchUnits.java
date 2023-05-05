@@ -1,6 +1,6 @@
 package MainModel;
 
-public class matchUnits {
+public class MatchUnits {
     private final String symbol;
     private final String name;
     private final String type;
@@ -10,7 +10,7 @@ public class matchUnits {
     private final String timeZone;
     private final String currency;
 
-    public matchUnits(String[] values) {
+    public MatchUnits(String[] values) {
         if (values.length != 9) {
             throw new IllegalArgumentException();
         }
@@ -24,24 +24,36 @@ public class matchUnits {
         currency = values[7];
     }
 
-    public String getSymbol() {
-        return symbol;
+    private String getOnlyData(String str){
+        StringBuilder ret = new StringBuilder();
+        int amountMarks = 0;
+        for (int i = 0; i < str.length(); ++i) {
+            if (amountMarks == 3 && str.charAt(i) != '"')
+                ret.append(str.charAt(i));
+            if (str.charAt(i) == '"')
+                amountMarks++;
+            if (amountMarks == 4)
+                return ret.toString();
+        }
+        return ret.toString();
     }
-
+    public String getSymbol() {
+        return getOnlyData(symbol);
+    }
     public String getName() {
-        return name;
+        return getOnlyData(name);
     }
 
     public String getType() {
-        return type;
+        return getOnlyData(type);
     }
 
     public String getRegion() {
-        return region;
+        return getOnlyData(region);
     }
 
     public String getMarketOpen() {
-        return marketOpen;
+        return getOnlyData(marketOpen);
     }
 
     public String getMarketClose() {
@@ -55,4 +67,6 @@ public class matchUnits {
     public String getCurrency() {
         return currency;
     }
+
+
 }

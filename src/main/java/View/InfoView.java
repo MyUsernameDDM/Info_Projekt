@@ -15,7 +15,7 @@ public class InfoView {
     public void showInfoView(Button button){
         Tooltip t = new Tooltip();
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> {
-            Article art=new Article(button.getText()); //Platzhalter
+            Article art=new Article("ibm"); //Platzhalter
             if(art.setValues(TimeSpan.day)){
                 ArrayList<Unit> values = art.getValues();
                 String highPrice = Double.toString(values.get(0).getHigh());

@@ -88,6 +88,9 @@ public class CourseUtils {
     public void showCourse() {
         if (currentArticle == null || currentArticle.getValues() == null || currentArticle.getPointAmount() == 0)
             throw new IllegalArgumentException();
+        if (courseView.root.getChildren().size() > 1) {
+            courseView.root.getChildren().subList(1, courseView.root.getChildren().size()).clear();
+        }
         Unit min = currentArticle.getValues().get(0);
         Unit max = currentArticle.getValues().get(0);
         if(courseState==courseStatus.chartCourse) {
