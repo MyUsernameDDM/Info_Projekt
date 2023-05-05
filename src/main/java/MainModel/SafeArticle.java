@@ -11,10 +11,11 @@ public class SafeArticle {
             e.printStackTrace();
         }
     }
+
     public static Article getArticleFromFile(String name, TimeSpan ts) {
         String nameFile = "ArtSafe.ser";
-        File f= new File(nameFile);
-        if(f.length()==0)
+        File f = new File(nameFile);
+        if (f.length() == 0)
             return null;
         try (FileInputStream fileIn = new FileInputStream(nameFile);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
@@ -38,12 +39,6 @@ public class SafeArticle {
         String name = "ArtSafe.ser";
         File f = new File(name);
         try {
-            if (f.length() == 0) {
-                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
-                out.writeObject(new Article[]{newArticle});
-                out.close();
-                return;
-            }
             FileInputStream fileIn = new FileInputStream(f);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             Object obj = in.readObject();
@@ -67,6 +62,14 @@ public class SafeArticle {
             out.close();
             fileOut.close();
 
+        } catch (EOFException ef) {
+            try {
+                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
+                out.writeObject(new Article[]{newArticle});
+                out.close();
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

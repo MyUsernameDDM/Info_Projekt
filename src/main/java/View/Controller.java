@@ -122,7 +122,6 @@ public class Controller {
      * Methode fuegt die CourseView an den GroundView an
      */
     public void setCourseView(String str) {
-        System.out.println(str);
         Article testArticle = new Article(str);
         int count=0;
         currentArticle = testArticle;
