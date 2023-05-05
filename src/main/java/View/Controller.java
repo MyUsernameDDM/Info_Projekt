@@ -123,6 +123,8 @@ public class Controller {
      */
     private void setCourseView() {
         Article testArticle = new Article("IBM");
+        currentArticle = testArticle;
+        courseUtils.setCurrentArticle(testArticle);
         while (!testArticle.setValues(TimeSpan.max)) {
             try {
                 Thread.sleep(500);

@@ -53,6 +53,12 @@ public class CourseUtils {
      * Die View wird so umgestellt, dass das angegebene Intervall angezeigt wird
      */
     public void changeShowInterval(TimeSpan interval) {
+        courseView.root.getChildren().clear();
+        courseView.root.getChildren().add(courseView.backGround);
+        while(!(currentArticle.setValues(interval))){
+            currentArticle.setValues(interval);
+        }
+        showCourse();
         /*
         //enum übergeben, damit es gesetzt wird
         System.out.println("timeButtonsTest");
@@ -61,7 +67,6 @@ public class CourseUtils {
             courseView.points.add(new Circle(20));
         }
          */
-
     }
 
     /**
