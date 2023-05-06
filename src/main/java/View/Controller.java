@@ -28,6 +28,7 @@ public class Controller {
     TimeSpan currentTimeSpan = TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
     SafeArticle safeArticle = new SafeArticle();
+    InfoView infoView= new InfoView();
 
     public GroundView getGroundView() {
         return groundView;
@@ -191,7 +192,7 @@ public class Controller {
      * Methode, die die Liste aus Artikelvorschlaegen anzeigt
      */
     public void showSearchResults() {
-        if(searchView.searchInputTextField.getText().equals("")){
+        if (searchView.searchInputTextField.getText().equals("")) {
             return;
         }
 
@@ -208,7 +209,7 @@ public class Controller {
             searchView.recommendsBox.getChildren().clear();
         }
         for (int i = 0; i < 10; ++i) {
-            if (result[i] == null){
+            if (result[i] == null) {
                 continue;
             }
 
@@ -220,8 +221,6 @@ public class Controller {
             searchView.recommendsBox.getChildren().add(searchView.recommends[count]);
             count++;
         }
-
-
         searchView.outputSearchView.setContent(searchView.recommendsBox);
         searchView.outputSearchView.setFitToWidth(true);
         searchView.outputSearchView.prefWidthProperty().bind(searchView.getWidthButton().prefWidthProperty());

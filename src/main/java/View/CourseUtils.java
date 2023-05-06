@@ -4,6 +4,7 @@ import MainModel.Article;
 import MainModel.TimeSpan;
 import MainModel.Unit;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
@@ -20,7 +21,7 @@ public class CourseUtils {
     courseStatus courseState;
 
     CourseView courseView;
-    
+
     public CourseUtils(courseStatus courseState, CourseView courseView, Controller controller) {
         this.courseState = courseState;
         this.courseView = courseView;
@@ -138,11 +139,15 @@ public class CourseUtils {
             double endPosX = (controller.currentArticle.getValues().get(i + 1).getDate().getTime() - startTime) / posx;
             double endPosY = (controller.currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
             Line l = new Line(startPosX, courseView.backGround.getHeight() - startPosY, endPosX, courseView.backGround.getHeight() - endPosY);
+            controller.courseView.points.add(new Ellipse(startPosX, startPosY, 5, 5));
+
+
             if (rise) {
                 l.setStroke(Color.GREEN);
             } else {
                 l.setStroke(Color.RED);
             }
+            controller.infoView.showChartInfoView(l, controller.currentArticle.getValues().get(i));
             courseView.root.getChildren().add(l);
         }
     }
@@ -169,6 +174,7 @@ public class CourseUtils {
         } else {
             body.setFill(Color.RED);
         }
+        controller.infoView.showChartInfoView(body, u);
         double startEndX = candlePosx + width / 2;
         Line topLine = new Line(startEndX, courseView.backGround.getHeight() - candlePosy, startEndX, courseView.backGround.getHeight() - ((u.getHigh() - startHeight) / posy));
         Line bottomLine = new Line(startEndX, courseView.backGround.getHeight() - candlePosYMin, startEndX, courseView.backGround.getHeight() - ((u.getLow() - startHeight) / posy));
