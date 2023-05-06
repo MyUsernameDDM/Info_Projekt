@@ -63,33 +63,28 @@ public class Controller {
                     switch (groundView.timeButtons[finalI].getText()) {
                         case "1D":
                             currentTimeSpan = TimeSpan.day;
-                            courseUtils.changeShowInterval(TimeSpan.day);
                             break;
                         case "1M":
                             currentTimeSpan = oneMonth;
-                            courseUtils.changeShowInterval(TimeSpan.oneMonth);
+
                             break;
                         case "3M":
                             currentTimeSpan = threeMonths;
-                            courseUtils.changeShowInterval(TimeSpan.threeMonths);
                             break;
                         case "6M":
                             currentTimeSpan = sixMonths;
-                            courseUtils.changeShowInterval(TimeSpan.sixMonths);
                             break;
                         case "1Y":
                             currentTimeSpan = year;
-                            courseUtils.changeShowInterval(TimeSpan.year);
                             break;
                         case "5Y":
                             currentTimeSpan = fiveYear;
-                            courseUtils.changeShowInterval(TimeSpan.fiveYear);
                             break;
                         case "MAX":
                             currentTimeSpan = max;
-                            courseUtils.changeShowInterval(max);
                             break;
                     }
+                    courseUtils.displayCourse(currentArticle.getName(), currentArticle.getSymbol());
                 }
             });
             groundView.root.setOnMouseClicked(e -> {
@@ -131,7 +126,6 @@ public class Controller {
      * Methode fuegt die CourseView an den GroundView an
      */
     public void setCourseView() {
-
         safeArticle.setSafedArticles();
 
         courseUtils.displayCourse("IBM", "IBM");
@@ -243,8 +237,6 @@ public class Controller {
             public void handle(ActionEvent actionEvent) {
                 if (currentArticle != null) {
                     wlAddArticle();
-                    safeArticle = new SafeArticle();
-                    safeArticle.addArticleFile(currentArticle);
                 }
             }
         });

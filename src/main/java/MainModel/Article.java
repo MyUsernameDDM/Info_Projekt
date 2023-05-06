@@ -30,7 +30,7 @@ public class Article implements Serializable {
         this.symbol = symbol;
         Config cfg = Config.builder().key("QESJBL81ZZ99LAQX").timeOut(10).build();
         AlphaVantage.api().init(cfg);
-        this.safeArticle=safeArticle;
+        this.safeArticle = safeArticle;
     }
 
 
@@ -38,7 +38,7 @@ public class Article implements Serializable {
         return name;
     }
 
-    public String getSymbol(){
+    public String getSymbol() {
         return symbol;
     }
 
@@ -84,7 +84,7 @@ public class Article implements Serializable {
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
     public boolean setValues(TimeSpan timeSpan) {
-        if(safeArticle.getSafedArticles()!=null) {
+        if (safeArticle.getSafedArticles() != null) {
             for (Article a : safeArticle.getSafedArticles()) {
                 if (a.getSymbol().equals(symbol) && timeSpan == a.getTimeSpan()) {
                     pointAmount = a.getPointAmount();
@@ -102,11 +102,15 @@ public class Article implements Serializable {
             return false;
         values = getValuesFromSpan(timeSpan, apiResponse);
         pointAmount = values.size();
-        SafeArticle.addArticleFile(this);
+        if (pointAmount != 0) {
+            SafeArticle.addArticleFile(this);
+            safeArticle.addArticleToSafe(this);
+        }
         addOtherTimeSpansToFile();
         return true;
     }
-    private void addOtherTimeSpansToFile(){
+
+    private void addOtherTimeSpansToFile() {
         Article[] otherTimeSpans = new Article[7];
         int count = 0;
         for (TimeSpan t : TimeSpan.values()) {
@@ -159,7 +163,10 @@ public class Article implements Serializable {
                 }
                 otherTimeSpans[count].setPointAmount(otherTimeSpans[count].getValues().size());
                 otherTimeSpans[count].setTimeSpan(t);
-                SafeArticle.addArticleFile(otherTimeSpans[count]);
+                if (otherTimeSpans[count].getPointAmount() != 0 && otherTimeSpans[count] != null) {
+                    SafeArticle.addArticleFile(otherTimeSpans[count]);
+                    safeArticle.addArticleToSafe(otherTimeSpans[count]);
+                }
                 count++;
             }
         }

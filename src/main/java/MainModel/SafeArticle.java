@@ -1,11 +1,15 @@
 package MainModel;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SafeArticle {
-    private Article[] safedArticles;
+    private ArrayList<Article> safedArticles;
+
+    public SafeArticle() {
+        safedArticles = new ArrayList<>();
+    }
 
     public static void clearFile() {
         try (FileOutputStream fileOut = new FileOutputStream("ArtSafe.ser", false)) {
@@ -44,13 +48,12 @@ public class SafeArticle {
             safedArticles = null;
         try (FileInputStream fileIn = new FileInputStream(nameFile);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            safedArticles = (Article[]) in.readObject();
+            safedArticles.addAll(Arrays.asList((Article[]) in.readObject()));
         } catch (EOFException e) {
             safedArticles = null;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        safedArticles = null;
     }
 
     public static void addArticleFile(Article newArticle) {
@@ -95,7 +98,14 @@ public class SafeArticle {
         }
     }
 
-    public Article[] getSafedArticles() {
+    public void addArticleToSafe(Article art) {
+        if (safedArticles == null)
+            safedArticles = new ArrayList<>();
+        if (art.getPointAmount() != 0)
+            safedArticles.add(art);
+    }
+
+    public ArrayList<Article> getSafedArticles() {
         return safedArticles;
     }
 }

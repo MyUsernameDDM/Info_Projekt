@@ -1,7 +1,6 @@
 package View;
 
 import MainModel.Article;
-import MainModel.MatchUnits;
 import MainModel.TimeSpan;
 import MainModel.Unit;
 import javafx.scene.paint.Color;
@@ -57,17 +56,16 @@ public class CourseUtils {
     }
 
 
-
     public void displayCourse(String articleName, String symbol) {
         Article article = new Article(articleName, symbol, controller.safeArticle);
-        controller.currentArticle = article;
-        while (!article.setValues(TimeSpan.max)) {
+        while (!article.setValues(controller.currentTimeSpan)) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
         }
+        controller.currentArticle = article;
         courseState = CourseUtils.courseStatus.normalCourse;
         showCourse();
     }
@@ -89,11 +87,13 @@ public class CourseUtils {
         Unit max = controller.currentArticle.getValues().get(0);
         if (courseState == courseStatus.chartCourse) {
             for (Unit u : controller.currentArticle.getValues()) {
-                if (u.getHigh() > max.getHigh()) {
-                    max = u;
-                }
-                if (min.getLow() > u.getLow()) {
-                    min = u;
+                if (u != null) {
+                    if (u.getHigh() > max.getHigh()) {
+                        max = u;
+                    }
+                    if (min.getLow() > u.getLow()) {
+                        min = u;
+                    }
                 }
             }
         } else {
