@@ -1,17 +1,12 @@
 package View;
 
-import MainModel.Article;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.util.Objects;
 
@@ -120,7 +115,7 @@ public class GroundView {
         InfoView infoView = new InfoView();
 
         for (int i = 0; i < timeButtons.length; i++){
-            infoView.showInfoView(timeButtons[i]);
+            //infoView.showInfoView(timeButtons[i]);
         }
 
 

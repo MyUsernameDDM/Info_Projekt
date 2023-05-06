@@ -86,7 +86,7 @@
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-font-family: 'Anton', sans-serif;
-    -fx-background-color: #228b22;
+    -fx-background-color: #90ee90;
     -fx-border-color: #226b22;
     -fx-border-width: 1.75px;
 }
@@ -97,7 +97,7 @@
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-font-family: 'Anton', sans-serif;
-    -fx-background-color: #b23002;
+    -fx-background-color: #ffb6c1;
     -fx-border-color: #b20222;
     -fx-border-width: 1.75px;
 }
@@ -108,8 +108,8 @@
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-font-family: 'Anton', sans-serif;
-    -fx-background-color: #ffa500;
-    -fx-border-color: #ff8500;
+    -fx-background-color: #d3d3d3;
+    -fx-border-color: #778899;
     -fx-border-width: 1.75px;
 }
 
@@ -122,7 +122,27 @@
     -fx-border-width: 1px;
 }
 
+.cancelButton{
+    -fx-alignment: center;
+    -fx-font-size: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #ffb6c1;
+    -fx-border-color: #b20222;
+    -fx-border-width: 1.75px;
+}
 
+.confirmBuyButton{
+   -fx-alignment: center;
+   -fx-font-size: 10px;
+   -fx-background-radius: 10px;
+   -fx-border-radius: 10px;
+   -fx-font-family: 'Anton', sans-serif;
+   -fx-background-color: #90ee90;
+   -fx-border-color: #226b22;
+   -fx-border-width: 1.75px;
+}
 
 
 

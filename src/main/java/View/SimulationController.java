@@ -2,13 +2,18 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 import static MainModel.Main.mode;
 
@@ -17,12 +22,30 @@ public class SimulationController extends Controller {
     WalletView walletView = new WalletView(this);
     Article walletCurrentArticle = null; // Aktueller Artikle
 
+    Timeline timeline;
+    static Label labelAv = new Label();
     public SimulationController() {
         super();
         setWalletView();
         courseUtils.adjustCourseSize(
                 groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(),
                 groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+
+
+
+        timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
+            System.out.println("Update");
+
+            labelAv.setText(String.valueOf(Simulation.moneyAv)); // Update A. M.
+
+            for (int i = 0; i < walletView.buttonList.size(); i++){
+                //simulation.moneyInv *=
+            }
+            //System.out.println(walletView.buttonList.size());
+
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
 
     }
 

@@ -24,38 +24,25 @@ public class WalletView{
 
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Wallet");
-    Button sellButton = new Button("Verkaufen");
-    Button sellAllButton = new Button("Alle verkaufen");
-    Button buyButton = new Button("Kaufen");
-
+    Button sellButton = new Button("SELL");
+    Button sellAllButton = new Button("SELL EVERYTHING");
+    Button buyButton = new Button("BUY");
     Rectangle buySettings = new Rectangle(230, 50);
     TextField textFieldUserAmount = new TextField("0");
 
-    boolean open = false;
+    Label moneyAv = new Label();
 
-    Label labelAv = new Label();
+    boolean open = false;
     public WalletView(SimulationController controller) {
 
-        buyButton.setOnAction(event -> {
-            System.out.println("Test");
-            controller.walletSafeCurrentArticle("IBM");
-            //controller.walletAddArticle();
-            //simulation.walletArticles.add(controller.currentArticle);
-            //controller.walletAddArticle(controller.currentArticle.getName());
-        });
-
-        sellAllButton.setOnAction(event -> {
-            controller.walletRemoveCurrentArticle();
-        });
-
-
         this.controller = controller;
+
         buyButton.setPrefWidth(100);
         sellButton.setPrefWidth(100);
         sellAllButton.setPrefWidth(210);
-
-        Button money = new Button(String.valueOf(Simulation.moneyInc));
-        Button confirmBuyButton = new Button("BUY");
+        moneyAv.setText(String.valueOf(Simulation.moneyAv));
+        Button money = new Button(String.valueOf(Simulation.moneyInv));
+        Button confirmBuyButton = new Button("CONFIRM");
         Button confirmCancelButton = new Button("CANCEL");
 
         money.setStyle("-fx-background-color: #ffffff;");
@@ -69,7 +56,7 @@ public class WalletView{
 
         money.setOnAction(event -> {
             if (isAv == true){
-                money.setText(String.valueOf(Simulation.moneyInc));
+                money.setText(String.valueOf(Simulation.moneyInv));
                 isAv = false;
             } else {
                 money.setText("*****");
@@ -89,13 +76,13 @@ public class WalletView{
                 buySettings.setHeight(75);
 
                 window.getChildren().add(buySettings);
-
+                confirmCancelButton.getStyleClass().add("cancelButton");
+                confirmBuyButton.getStyleClass().add("confirmBuyButton");
 
                 HBox barConfirm = new HBox(confirmBuyButton, confirmCancelButton);
 
                 window.setTop(new Label("Enter Amount:"));
-                labelAv.setText(String.valueOf(simulation.moneyAv));
-                VBox labelTextfieldVbox = new VBox(labelAv, textFieldUserAmount);
+                VBox labelTextfieldVbox = new VBox(textFieldUserAmount);
                 window.setCenter(labelTextfieldVbox);
                 window.setBottom(barConfirm);
 
@@ -105,11 +92,14 @@ public class WalletView{
                     System.out.println("BUY:");
                     vBox.getChildren().remove(window);
 
-                    simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
-                    simulation.moneyInc += Integer.valueOf(textFieldUserAmount.getText());
-                    System.out.println(simulation.moneyAv);
+                    if (Simulation.moneyAv >= 0 && Integer.valueOf(textFieldUserAmount.getText()) <= Simulation.moneyAv) {
+                        Simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
+                        Simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
 
-                    controller.walletAddArticle(controller.currentArticle.getName() + " : " + textFieldUserAmount.getText());
+                        System.out.println(Simulation.moneyAv);
+                        controller.walletAddArticle(controller.currentArticle.getName() + " : " + textFieldUserAmount.getText());
+                        controller.walletSafeCurrentArticle(controller.currentArticle.getName());
+                    }
 
                     open = false;
                 });
@@ -122,8 +112,6 @@ public class WalletView{
 
                 open = true;
             }
-
-
         });
 
         sellButton.setOnAction(event -> {
@@ -131,14 +119,19 @@ public class WalletView{
             controller.walletRemoveCurrentArticle();
         });
 
+        sellAllButton.setOnAction(event -> {
+            System.out.println("Sell all");
+        });
+
         hBox.setMargin(buyButton, new Insets(10, 10, 10, 10));
         hBox.setMargin(sellButton, new Insets(10, 10, 10, 10));
 
-        VBox vBox1 = new VBox(money, hBox, sellAllButton);
+        VBox upperwallervbox = new VBox(money, SimulationController.labelAv, hBox, sellAllButton);
 
-        vBox1.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
+        upperwallervbox.setMargin(SimulationController.labelAv, new Insets(5,5,5,10));
+        upperwallervbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
-        walletRoot.getChildren().addAll(vBox1, vBox);
+        walletRoot.getChildren().addAll(upperwallervbox, vBox);
         walletRoot.setPrefWidth(230);
     }
 }
