@@ -3,6 +3,7 @@ package View;
 import MainModel.MatchUnits;
 import Utils.SearchUtils;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ public class SearchView extends Thread {
         //GroundView.menu.getChildren().addAll(searchBox, searchButton);
         //root.getChildren().addAll(searchBox, searchButton);
     }
+    public void clearScrollPane(){
+        outputSearchView.setVisible(false);
+    }
 
     /**
      * Methode zum Setzen der Elemente der SearchView
@@ -53,37 +57,12 @@ public class SearchView extends Thread {
             root.getChildren().addAll(searchInputTextField, searchButton);
     }
 
-
-
-
-
-    /*
-
-        /**
-         * Methode um Suchergebnisse anzuzeigen
-         * @param resultStr ArrayList wo alle Ergenisse Übergeben werden, die dann angezeigt werden
-
-        public void showSearchResults(String[] resultStr){
-            //searchResult = resultStr;
-            for(String str : searchResult){
-                Button tmp = new Button();
-                tmp.setText(str);
-                tmp.setMaxWidth(100);
-                tmp.setPrefHeight(30);
-                vBoxSearchResults.getChildren().add(tmp);
-            }
-            outputSearchView.setPrefWidth(searchButton.getWidth());
-            outputSearchView.setPrefHeight(100);
-            outputSearchView.setContent(vBoxSearchResults);
-            outputSearchView.setVisible(true);
-            //root.getChildren().add(outputSearchView);
-        }*/
-
     public void showSearchResults(Controller controller) {
         outputSearchView.setVisible(true);
         outputSearchView.setLayoutX(searchInputTextField.getLayoutX());
         outputSearchView.setLayoutY(searchInputTextField.getLayoutY() + searchInputTextField.getHeight());
-        MatchUnits[] result = SearchUtils.getMatchings(searchInputTextField.getText());
+        SearchUtils searchUtils = new SearchUtils();
+        MatchUnits[] result = searchUtils.getMatchings(searchInputTextField.getText());
         if (result == null) {
             return;
         }
@@ -95,9 +74,6 @@ public class SearchView extends Thread {
                 continue;
             recommends[count].setText(result[i].getName());
             int finalI = i;
-            recommends[count].setOnMouseClicked(e -> {
-                SearchUtils.labelclicked(result[finalI], controller, this);
-            });
             recommendsBox.getChildren().add(recommends[count]);
             count++;
         }

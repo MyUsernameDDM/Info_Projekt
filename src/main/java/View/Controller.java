@@ -25,7 +25,6 @@ public class Controller {
     Article currentArticle;
     CourseView courseView = new CourseView();
     CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle, this);
-    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
     TimeSpan currentTimeSpan=TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
 
@@ -92,6 +91,9 @@ public class Controller {
                     }
                 }
             });
+            groundView.root.setOnMouseClicked(e->{
+                searchView.clearScrollPane();
+            });
         }
         groundView.window.setPrefWidth(groundView.scene.getWidth());
         groundView.window.setPrefHeight(groundView.scene.getHeight());
@@ -127,24 +129,8 @@ public class Controller {
     /**
      * Methode fuegt die CourseView an den GroundView an
      */
-    public void setCourseView(String str) {
-        System.out.println(currentTimeSpan);
-        Article testArticle = new Article(str);
-        currentArticle = testArticle;
-        courseUtils.setCurrentArticle(testArticle);
-        while (!testArticle.setValues(currentTimeSpan)) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        //SafeArticle.clearFile();
-        courseUtils.setCurrentArticle(testArticle);
-        courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
-        //courseUtils.showNormalCourse();
-        courseUtils.showCourse();
     public void setCourseView() {
+
         courseUtils.displayCourse("IBM");
 
         groundView.window.setCenter(courseView.root);
@@ -219,7 +205,6 @@ public class Controller {
             if (result[i] == null)
                 continue;
             searchView.recommends[count].setText(result[i].getName());
-            int finalCount = count;
             int finalI = i;
             searchView.recommends[count].setOnMouseClicked(e -> {
                 SearchUtils.buttonClicked(result[finalI], courseUtils, searchView);

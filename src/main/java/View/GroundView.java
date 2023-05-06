@@ -1,18 +1,12 @@
 package View;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.util.Objects;
 
@@ -26,7 +20,6 @@ public class GroundView {
     Group root = new Group();
     BorderPane window = new BorderPane();
     Scene scene;
-
 
     //Menu erstellen
     HBox menu = new HBox();

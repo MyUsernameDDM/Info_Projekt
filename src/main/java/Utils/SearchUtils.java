@@ -1,7 +1,6 @@
 package Utils;
 
 import MainModel.MatchUnits;
-import View.Controller;
 import View.CourseUtils;
 import View.SearchView;
 
@@ -12,12 +11,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SearchUtils extends Thread{
-
     public static void buttonClicked(MatchUnits result, CourseUtils courseUtils, SearchView searchView){
         courseUtils.displayCourse(result.getSymbol());
         searchView.clearSearching();
     }
-    public static MatchUnits[] getMatchings (String str) {
+    public MatchUnits[] getMatchings (String str) {
         MatchUnits[] matches= new MatchUnits[10];
         try {
             URL url = new URL("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + str + "&apikey=" + "QESJBL81ZZ99LAQX");

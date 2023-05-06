@@ -92,6 +92,10 @@ public class Article implements Serializable {
         values = getValuesFromSpan(timeSpan, apiResponse);
         pointAmount = values.size();
         safeArticle.addArticleFile(this);
+        addOtherTimeSpansToFile();
+        return true;
+    }
+    private void addOtherTimeSpansToFile(){
         Article[] otherTimeSpans = new Article[7];
         int count = 0;
         for (TimeSpan t : TimeSpan.values()) {
@@ -148,7 +152,6 @@ public class Article implements Serializable {
                 count++;
             }
         }
-        return true;
     }
 
     private TimeSeriesResponse getResponse(TimeSpan timeSpan) {
