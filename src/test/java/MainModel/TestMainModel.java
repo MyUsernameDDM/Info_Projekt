@@ -29,14 +29,15 @@ public class TestMainModel {
     }
     @Test
     public void testSafe(){
+        SafeArticle safeArticle= new SafeArticle();
         Article article1= new Article("IBM");
         article1.setValues(TimeSpan.oneMonth);
-        SafeArticle.addArticleFile(article1);
+        safeArticle.addArticleFile(article1);
         article1.setValues(TimeSpan.threeMonths);
-        SafeArticle.addArticleFile(article1);
+        safeArticle.addArticleFile(article1);
         article1.setValues(TimeSpan.sixMonths);
-        SafeArticle.addArticleFile(article1);
-        Article art=SafeArticle.getArticleFromFile("IBM", TimeSpan.oneMonth);
+        safeArticle.addArticleFile(article1);
+        Article art=safeArticle.getArticleFromFile("IBM", TimeSpan.oneMonth);
     }
 
 }

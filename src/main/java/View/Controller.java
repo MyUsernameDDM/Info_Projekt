@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import static MainModel.Main.mode;
 import static MainModel.Main.status;
-import static MainModel.TimeSpan.max;
+import static MainModel.TimeSpan.*;
 
 public class Controller {
     GroundView groundView = new GroundView(this);
@@ -28,6 +28,7 @@ public class Controller {
     Article currentArticle;
     CourseView courseView = new CourseView();
     CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
+    TimeSpan currentTimeSpan=TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
 
     public GroundView getGroundView() {
@@ -63,24 +64,31 @@ public class Controller {
                 public void handle(ActionEvent actionEvent) {
                     switch (groundView.timeButtons[finalI].getText()) {
                         case "1D":
+                            currentTimeSpan=TimeSpan.day;
                             courseUtils.changeShowInterval(TimeSpan.day);
                             break;
                         case "1M":
+                            currentTimeSpan=oneMonth;
                             courseUtils.changeShowInterval(TimeSpan.oneMonth);
                             break;
                         case "3M":
+                            currentTimeSpan=threeMonths;
                             courseUtils.changeShowInterval(TimeSpan.threeMonths);
                             break;
                         case "6M":
+                            currentTimeSpan=sixMonths;
                             courseUtils.changeShowInterval(TimeSpan.sixMonths);
                             break;
                         case "1Y":
+                            currentTimeSpan=year;
                             courseUtils.changeShowInterval(TimeSpan.year);
                             break;
                         case "5Y":
+                            currentTimeSpan=fiveYear;
                             courseUtils.changeShowInterval(TimeSpan.fiveYear);
                             break;
                         case "MAX":
+                            currentTimeSpan=max;
                             courseUtils.changeShowInterval(max);
                             break;
                     }
@@ -122,17 +130,16 @@ public class Controller {
      * Methode fuegt die CourseView an den GroundView an
      */
     public void setCourseView(String str) {
+        System.out.println(currentTimeSpan);
         Article testArticle = new Article(str);
-        int count=0;
         currentArticle = testArticle;
         courseUtils.setCurrentArticle(testArticle);
-        while (!testArticle.setValues(TimeSpan.max)) {
+        while (!testArticle.setValues(currentTimeSpan)) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
-            count++;
         }
         //SafeArticle.clearFile();
         courseUtils.setCurrentArticle(testArticle);
@@ -204,7 +211,8 @@ public class Controller {
             public void handle(ActionEvent actionEvent) {
                 if (currentArticle != null) {
                     wlAddArticle(currentArticle.getName());
-                    SafeArticle.addArticleFile(currentArticle);
+                    SafeArticle safeArticle= new SafeArticle();
+                    safeArticle.addArticleFile(currentArticle);
                 }
             }
         });

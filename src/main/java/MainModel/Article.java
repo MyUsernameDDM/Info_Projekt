@@ -16,6 +16,7 @@ public class Article implements Serializable {
     private int pointAmount = 0;
     private TimeSpan timeSpan;
     private transient TimeSeriesResponse apiResponse = null;
+    private transient final SafeArticle safeArticle=new SafeArticle();
 
 
     public ArrayList<Unit> getValues() {
@@ -76,7 +77,7 @@ public class Article implements Serializable {
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
     public boolean setValues(TimeSpan timeSpan) {
-        Article safe = SafeArticle.getArticleFromFile(name, timeSpan);
+        Article safe = safeArticle.getArticleFromFile(name, timeSpan);
         this.timeSpan = timeSpan;
         values.clear();
         if (safe != null) {
@@ -90,7 +91,7 @@ public class Article implements Serializable {
             return false;
         values = getValuesFromSpan(timeSpan, apiResponse);
         pointAmount = values.size();
-        SafeArticle.addArticleFile(this);
+        safeArticle.addArticleFile(this);
         Article[] otherTimeSpans = new Article[7];
         int count = 0;
         for (TimeSpan t : TimeSpan.values()) {
@@ -143,7 +144,7 @@ public class Article implements Serializable {
                 }
                 otherTimeSpans[count].setPointAmount(otherTimeSpans[count].getValues().size());
                 otherTimeSpans[count].setTimeSpan(t);
-                SafeArticle.addArticleFile(otherTimeSpans[count]);
+                safeArticle.addArticleFile(otherTimeSpans[count]);
                 count++;
             }
         }

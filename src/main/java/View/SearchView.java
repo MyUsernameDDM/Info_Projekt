@@ -1,10 +1,8 @@
 package View;
 
 import MainModel.MatchUnits;
-import MainModel.Matching;
 import Utils.SearchUtils;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -12,13 +10,9 @@ import java.util.ArrayList;
 public class SearchView extends Thread {
     Controller controller;
     VBox root = new VBox();
-    HBox inputBox = new HBox();
-
-
     ScrollPane outputSearchView = new ScrollPane();
     TextField searchInputTextField = new TextField();
     Button searchButton = new Button();
-
     ArrayList<String> searchResult = new ArrayList<>();
     VBox recommendsBox = new VBox();
 
@@ -84,11 +78,10 @@ public class SearchView extends Thread {
         }*/
 
     public void showSearchResults(Controller controller) {
-        System.out.println("test");
         outputSearchView.setVisible(true);
         outputSearchView.setLayoutX(searchInputTextField.getLayoutX());
         outputSearchView.setLayoutY(searchInputTextField.getLayoutY() + searchInputTextField.getHeight());
-        MatchUnits[] result = Matching.getMatchings(searchInputTextField.getText());
+        MatchUnits[] result = SearchUtils.getMatchings(searchInputTextField.getText());
         if (result == null) {
             return;
         }
@@ -99,7 +92,6 @@ public class SearchView extends Thread {
             if (result[i] == null)
                 continue;
             recommends[count].setText(result[i].getName());
-            int finalCount = count;
             int finalI = i;
             recommends[count].setOnMouseClicked(e -> {
                 SearchUtils.labelclicked(result[finalI], controller, this);
@@ -108,8 +100,6 @@ public class SearchView extends Thread {
             count++;
         }
         outputSearchView.setContent(recommendsBox);
-
-
     }
 
     public void clearSearching() {

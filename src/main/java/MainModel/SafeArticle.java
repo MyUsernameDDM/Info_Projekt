@@ -3,7 +3,7 @@ package MainModel;
 import java.io.*;
 
 public class SafeArticle {
-    public static void clearFile(){
+    public void clearFile(){
         try (FileOutputStream fileOut = new FileOutputStream("ArtSafe.ser", false)) {
             // Write an empty byte array to the file to clear its contents
             fileOut.write(new byte[0]);
@@ -12,7 +12,7 @@ public class SafeArticle {
         }
     }
 
-    public static Article getArticleFromFile(String name, TimeSpan ts) {
+    public Article getArticleFromFile(String name, TimeSpan ts) {
         String nameFile = "ArtSafe.ser";
         File f = new File(nameFile);
         if (f.length() == 0)
@@ -33,7 +33,7 @@ public class SafeArticle {
         return null;
     }
 
-    public static void addArticleFile(Article newArticle) {
+    public void addArticleFile(Article newArticle) {
         if (newArticle == null || newArticle.getValues() == null || newArticle.getValues().size() == 0)
             throw new IllegalArgumentException();
         String name = "ArtSafe.ser";
@@ -74,4 +74,5 @@ public class SafeArticle {
             e.printStackTrace();
         }
     }
+
 }
