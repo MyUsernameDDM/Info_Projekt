@@ -1,9 +1,13 @@
 package MainModel;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class SafeArticle {
-    public void clearFile(){
+    private Article[] safedArticles;
+
+    public static void clearFile() {
         try (FileOutputStream fileOut = new FileOutputStream("ArtSafe.ser", false)) {
             // Write an empty byte array to the file to clear its contents
             fileOut.write(new byte[0]);
@@ -12,7 +16,7 @@ public class SafeArticle {
         }
     }
 
-    public Article getArticleFromFile(String name, TimeSpan ts) {
+    public static Article getArticleFromFile(String name, TimeSpan ts) {
         String nameFile = "ArtSafe.ser";
         File f = new File(nameFile);
         if (f.length() == 0)
@@ -33,7 +37,23 @@ public class SafeArticle {
         return null;
     }
 
-    public void addArticleFile(Article newArticle) {
+    public void setSafedArticles() {
+        String nameFile = "ArtSafe.ser";
+        File f = new File(nameFile);
+        if (f.length() == 0)
+            safedArticles = null;
+        try (FileInputStream fileIn = new FileInputStream(nameFile);
+             ObjectInputStream in = new ObjectInputStream(fileIn)) {
+            safedArticles = (Article[]) in.readObject();
+        } catch (EOFException e) {
+            safedArticles = null;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        safedArticles = null;
+    }
+
+    public static void addArticleFile(Article newArticle) {
         if (newArticle == null || newArticle.getValues() == null || newArticle.getValues().size() == 0)
             throw new IllegalArgumentException();
         String name = "ArtSafe.ser";
@@ -75,4 +95,7 @@ public class SafeArticle {
         }
     }
 
+    public Article[] getSafedArticles() {
+        return safedArticles;
+    }
 }

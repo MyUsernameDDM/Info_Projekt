@@ -1,6 +1,7 @@
 package View;
 
 import MainModel.Article;
+import MainModel.SafeArticle;
 import MainModel.TimeSpan;
 import MainModel.Unit;
 import javafx.scene.paint.Color;
@@ -63,7 +64,7 @@ public class CourseUtils {
 
 
     public void displayCourse(String articleName) {
-        Article article = new Article(articleName);
+        Article article = new Article(articleName, controller.safeArticle);
         controller.currentArticle = article;
         setCurrentArticle(article);
         while (!article.setValues(TimeSpan.max)) {

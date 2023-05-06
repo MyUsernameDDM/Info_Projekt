@@ -1,5 +1,6 @@
 package MainModel;
 
+import Utils.SearchUtils;
 import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
@@ -16,7 +17,7 @@ public class Article implements Serializable {
     private int pointAmount = 0;
     private TimeSpan timeSpan;
     private transient TimeSeriesResponse apiResponse = null;
-    private transient final SafeArticle safeArticle=new SafeArticle();
+    private final transient SafeArticle safeArticle;
 
 
     public ArrayList<Unit> getValues() {
@@ -24,10 +25,11 @@ public class Article implements Serializable {
     }
 
 
-    public Article(String str) {
+    public Article(String str, SafeArticle safeArticle) {
         this.name = str;
         Config cfg = Config.builder().key("QESJBL81ZZ99LAQX").timeOut(10).build();
         AlphaVantage.api().init(cfg);
+        this.safeArticle=safeArticle;
     }
 
 
@@ -77,21 +79,25 @@ public class Article implements Serializable {
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
     public boolean setValues(TimeSpan timeSpan) {
-        Article safe = safeArticle.getArticleFromFile(name, timeSpan);
+        if(safeArticle.getSafedArticles()!=null) {
+            for (Article a : safeArticle.getSafedArticles()) {
+                if (a.getName().equals(name) && timeSpan == a.getTimeSpan()) {
+                    pointAmount = a.getPointAmount();
+                    values = a.getValues();
+                    return true;
+                }
+            }
+        }
         this.timeSpan = timeSpan;
         values.clear();
-        if (safe != null) {
-            pointAmount = safe.getPointAmount();
-            values = safe.getValues();
-            return true;
-        }
+
         pointAmount = 0;
         apiResponse = getResponse(timeSpan);
         if (apiResponse == null)
             return false;
         values = getValuesFromSpan(timeSpan, apiResponse);
         pointAmount = values.size();
-        safeArticle.addArticleFile(this);
+        SafeArticle.addArticleFile(this);
         addOtherTimeSpansToFile();
         return true;
     }
@@ -100,7 +106,7 @@ public class Article implements Serializable {
         int count = 0;
         for (TimeSpan t : TimeSpan.values()) {
             if (t != timeSpan) {
-                otherTimeSpans[count] = new Article(name);
+                otherTimeSpans[count] = new Article(name, safeArticle);
                 boolean tsInOther = false;
                 int indexInOther = -1;
                 for (int i = 0; i < otherTimeSpans.length; ++i) {
@@ -148,7 +154,7 @@ public class Article implements Serializable {
                 }
                 otherTimeSpans[count].setPointAmount(otherTimeSpans[count].getValues().size());
                 otherTimeSpans[count].setTimeSpan(t);
-                safeArticle.addArticleFile(otherTimeSpans[count]);
+                SafeArticle.addArticleFile(otherTimeSpans[count]);
                 count++;
             }
         }

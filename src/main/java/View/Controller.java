@@ -25,8 +25,9 @@ public class Controller {
     Article currentArticle;
     CourseView courseView = new CourseView();
     CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle, this);
-    TimeSpan currentTimeSpan=TimeSpan.max;
+    TimeSpan currentTimeSpan = TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
+    SafeArticle safeArticle = new SafeArticle();
 
     public GroundView getGroundView() {
         return groundView;
@@ -61,37 +62,37 @@ public class Controller {
                 public void handle(ActionEvent actionEvent) {
                     switch (groundView.timeButtons[finalI].getText()) {
                         case "1D":
-                            currentTimeSpan=TimeSpan.day;
+                            currentTimeSpan = TimeSpan.day;
                             courseUtils.changeShowInterval(TimeSpan.day);
                             break;
                         case "1M":
-                            currentTimeSpan=oneMonth;
+                            currentTimeSpan = oneMonth;
                             courseUtils.changeShowInterval(TimeSpan.oneMonth);
                             break;
                         case "3M":
-                            currentTimeSpan=threeMonths;
+                            currentTimeSpan = threeMonths;
                             courseUtils.changeShowInterval(TimeSpan.threeMonths);
                             break;
                         case "6M":
-                            currentTimeSpan=sixMonths;
+                            currentTimeSpan = sixMonths;
                             courseUtils.changeShowInterval(TimeSpan.sixMonths);
                             break;
                         case "1Y":
-                            currentTimeSpan=year;
+                            currentTimeSpan = year;
                             courseUtils.changeShowInterval(TimeSpan.year);
                             break;
                         case "5Y":
-                            currentTimeSpan=fiveYear;
+                            currentTimeSpan = fiveYear;
                             courseUtils.changeShowInterval(TimeSpan.fiveYear);
                             break;
                         case "MAX":
-                            currentTimeSpan=max;
+                            currentTimeSpan = max;
                             courseUtils.changeShowInterval(max);
                             break;
                     }
                 }
             });
-            groundView.root.setOnMouseClicked(e->{
+            groundView.root.setOnMouseClicked(e -> {
                 searchView.clearScrollPane();
             });
         }
@@ -131,6 +132,7 @@ public class Controller {
      */
     public void setCourseView() {
 
+        safeArticle.setSafedArticles();
         courseUtils.displayCourse("IBM");
 
         groundView.window.setCenter(courseView.root);
@@ -166,7 +168,7 @@ public class Controller {
 
         //SearchView: Eingabefeld und Search-Button in das Menu einfuegen
         groundView.menu.getChildren().addAll(searchView.root);
-        Controller thisController= this;
+        Controller thisController = this;
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -231,7 +233,7 @@ public class Controller {
             public void handle(ActionEvent actionEvent) {
                 if (currentArticle != null) {
                     wlAddArticle(currentArticle.getName());
-                    SafeArticle safeArticle= new SafeArticle();
+                    safeArticle = new SafeArticle();
                     safeArticle.addArticleFile(currentArticle);
                 }
             }
@@ -239,7 +241,7 @@ public class Controller {
 
         //Probe
         wlAddArticle("IBM");
-        watchListArticles.add(new Article("IBM"));
+        watchListArticles.add(new Article("IBM", safeArticle));
 
     }
 
@@ -258,7 +260,7 @@ public class Controller {
         }
         Button temp = new Button(articleName);
         temp.setOnAction(actionEvent -> {
-            Article tempArticle = new Article(articleName);
+            Article tempArticle = new Article(articleName, safeArticle);
 
             //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
             while (!tempArticle.setValues(courseUtils.currentArticle.getTimeSpan())) {
@@ -371,7 +373,7 @@ public class Controller {
         });
     }
 
-    public void menuButtonsListener(){
+    public void menuButtonsListener() {
         groundView.modeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -401,8 +403,8 @@ public class Controller {
         });
     }
 
-    public void timeButtonListener(){
-        for(int i = 0; i < groundView.timeButtons.length; i++){
+    public void timeButtonListener() {
+        for (int i = 0; i < groundView.timeButtons.length; i++) {
             int finalI = i;
             groundView.timeButtons[i].setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
@@ -412,7 +414,7 @@ public class Controller {
             });
         }
 
-        for(int i = 0; i < groundView.timeButtons.length; i++){
+        for (int i = 0; i < groundView.timeButtons.length; i++) {
             int finalI = i;
             groundView.timeButtons[i].setOnMouseExited(new EventHandler<MouseEvent>() {
                 @Override
@@ -422,7 +424,7 @@ public class Controller {
             });
         }
 
-        for(int i = 0; i < groundView.timeButtons.length; i++){
+        for (int i = 0; i < groundView.timeButtons.length; i++) {
             int finalI = i;
             groundView.timeButtons[i].setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -433,18 +435,17 @@ public class Controller {
         }
     }
 
-    public void modeSceneChanger(){
+    public void modeSceneChanger() {
         groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 changeModeSimulation();
             }
-        });{
+        });
+        {
 
         }
     }
-
-
 
 
 }
