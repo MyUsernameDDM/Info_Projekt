@@ -190,9 +190,9 @@ public class Controller {
     }
 
     public void showSearchResults() {
-        System.out.println("test");
         searchView.outputSearchView.setVisible(true);
-        searchView.outputSearchView.setLayoutX(searchView.searchInputTextField.getLayoutX());
+        searchView.outputSearchView.setMaxHeight(100);
+        searchView.outputSearchView.setLayoutX(searchView.root.getLayoutX());
         searchView.outputSearchView.setLayoutY(searchView.searchInputTextField.getLayoutY() + searchView.searchInputTextField.getHeight());
         MatchUnits[] result = searchUtils.getMatchings(searchView.searchInputTextField.getText());
         if (result == null) {
