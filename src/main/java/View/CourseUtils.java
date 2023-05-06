@@ -1,7 +1,7 @@
 package View;
 
 import MainModel.Article;
-import MainModel.SafeArticle;
+import MainModel.MatchUnits;
 import MainModel.TimeSpan;
 import MainModel.Unit;
 import javafx.scene.paint.Color;
@@ -21,16 +21,11 @@ public class CourseUtils {
     courseStatus courseState;
 
     CourseView courseView;
-    Article currentArticle;
-
-    public void setCurrentArticle(Article currentArticle) {
-        this.currentArticle = currentArticle;
-    }
-
-    public CourseUtils(courseStatus courseState, CourseView courseView, Article currentArticle, Controller controller) {
+    
+    public CourseUtils(courseStatus courseState, CourseView courseView, Controller controller) {
         this.courseState = courseState;
         this.courseView = courseView;
-        this.currentArticle = currentArticle;
+
         this.controller = controller;
     }
 
@@ -55,18 +50,17 @@ public class CourseUtils {
      */
     public void changeShowInterval(TimeSpan interval) {
 
-        while (!(currentArticle.setValues(interval))) {
-            currentArticle.setValues(interval);
+        while (!(controller.currentArticle.setValues(interval))) {
+            controller.currentArticle.setValues(interval);
         }
         showCourse();
     }
 
 
 
-    public void displayCourse(String articleName) {
-        Article article = new Article(articleName, controller.safeArticle);
+    public void displayCourse(String articleName, String symbol) {
+        Article article = new Article(articleName, symbol, controller.safeArticle);
         controller.currentArticle = article;
-        setCurrentArticle(article);
         while (!article.setValues(TimeSpan.max)) {
             try {
                 Thread.sleep(500);
@@ -74,7 +68,6 @@ public class CourseUtils {
                 System.out.println(e.getMessage());
             }
         }
-        setCurrentArticle(article);
         courseState = CourseUtils.courseStatus.normalCourse;
         showCourse();
     }
@@ -83,19 +76,19 @@ public class CourseUtils {
      * Die Methode showChartCourse setzt den View so, dass der Kurs mit den Charts angezeigt wird
      */
     public void showCourse() {
-        if (currentArticle == null || currentArticle.getValues() == null || currentArticle.getPointAmount() == 0)
+        if (controller.currentArticle == null || controller.currentArticle.getValues() == null || controller.currentArticle.getPointAmount() == 0)
             throw new IllegalArgumentException();
         //Alten Kurs loeschen
         courseView.root.getChildren().clear();
         courseView.root.getChildren().addAll(courseView.backGround, courseView.articleNameLabel);
 
         //Artikelname setzen
-        courseView.articleNameLabel.setText(currentArticle.getName());
+        courseView.articleNameLabel.setText(controller.currentArticle.getName());
 
-        Unit min = currentArticle.getValues().get(0);
-        Unit max = currentArticle.getValues().get(0);
+        Unit min = controller.currentArticle.getValues().get(0);
+        Unit max = controller.currentArticle.getValues().get(0);
         if (courseState == courseStatus.chartCourse) {
-            for (Unit u : currentArticle.getValues()) {
+            for (Unit u : controller.currentArticle.getValues()) {
                 if (u.getHigh() > max.getHigh()) {
                     max = u;
                 }
@@ -104,7 +97,7 @@ public class CourseUtils {
                 }
             }
         } else {
-            for (Unit u : currentArticle.getValues()) {
+            for (Unit u : controller.currentArticle.getValues()) {
                 if (u.getClose() > max.getClose()) {
                     max = u;
                 }
@@ -117,11 +110,11 @@ public class CourseUtils {
         double diffMinMax = max.getHigh() - min.getLow();
 
         double valueperPixelHeight = diffMinMax / courseView.backGround.getHeight();//Wert der angibt, wie viel sich in der höhe pro pixel verändert
-        long startTime = currentArticle.getValues().get(currentArticle.getPointAmount() - 1).getDate().getTime();
-        long diffTime = currentArticle.getValues().get(0).getDate().getTime() - startTime;
+        long startTime = controller.currentArticle.getValues().get(controller.currentArticle.getPointAmount() - 1).getDate().getTime();
+        long diffTime = controller.currentArticle.getValues().get(0).getDate().getTime() - startTime;
         //wert, wie viel sich die Zeit verändert
         //diffTime *= 1.23;
-        double candleStickWidth = courseView.backGround.getWidth() / (currentArticle.getPointAmount() * 2);//wert, wie groß der body der aktie sein kann
+        double candleStickWidth = courseView.backGround.getWidth() / (controller.currentArticle.getPointAmount() * 2);//wert, wie groß der body der aktie sein kann
         double valueperPixelWidth;//wert, wie viel sich in der breite pro pixel verändert
         if (courseState == courseStatus.chartCourse)
             valueperPixelWidth = diffTime / (courseView.backGround.getWidth() - candleStickWidth);
@@ -130,20 +123,20 @@ public class CourseUtils {
 
         //übergeben an setCandleStick
         if (courseState == courseStatus.chartCourse) {
-            for (Unit u : currentArticle.getValues()) {
+            for (Unit u : controller.currentArticle.getValues()) {
                 setCandleStick(u, valueperPixelWidth, valueperPixelHeight, candleStickWidth, min.getLow(), startTime);
             }
         } else {
-            setNormalView(valueperPixelWidth, valueperPixelHeight, min.getLow(), startTime, currentArticle.getValues().get(0).getClose() > currentArticle.getValues().get(currentArticle.getPointAmount() - 1).getClose());
+            setNormalView(valueperPixelWidth, valueperPixelHeight, min.getLow(), startTime, controller.currentArticle.getValues().get(0).getClose() > controller.currentArticle.getValues().get(controller.currentArticle.getPointAmount() - 1).getClose());
         }
     }
 
     private void setNormalView(double posx, double posy, double startHeight, long startTime, boolean rise) {
-        for (int i = 0; i < currentArticle.getPointAmount() - 1; ++i) {
-            double startPosX = (currentArticle.getValues().get(i).getDate().getTime() - startTime) / posx;
-            double startPosY = (currentArticle.getValues().get(i).getClose() - startHeight) / posy;
-            double endPosX = (currentArticle.getValues().get(i + 1).getDate().getTime() - startTime) / posx;
-            double endPosY = (currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
+        for (int i = 0; i < controller.currentArticle.getPointAmount() - 1; ++i) {
+            double startPosX = (controller.currentArticle.getValues().get(i).getDate().getTime() - startTime) / posx;
+            double startPosY = (controller.currentArticle.getValues().get(i).getClose() - startHeight) / posy;
+            double endPosX = (controller.currentArticle.getValues().get(i + 1).getDate().getTime() - startTime) / posx;
+            double endPosY = (controller.currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
             Line l = new Line(startPosX, courseView.backGround.getHeight() - startPosY, endPosX, courseView.backGround.getHeight() - endPosY);
             if (rise) {
                 l.setStroke(Color.GREEN);

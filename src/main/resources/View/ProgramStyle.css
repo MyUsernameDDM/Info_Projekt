@@ -54,6 +54,22 @@
     -fx-background-color: #3f6cc9;
     -fx-border-color: #3f6cc9;
 }
+.searchMenuElements{
+    -fx-alignment: center;
+    -fx-font-size: 15px;
+    -fx-background-radius: 15;
+    -fx-background-color: #82a4ee;
+    -fx-border-color: #061a44;
+    -fx-border-radius: 15;
+}
+.searchListElements{
+    -fx-alignment: center;
+    -fx-font-size: 15px;
+    -fx-background-radius: 15;
+    -fx-background-color: #82a4ee;
+    -fx-border-color: #061a44;
+    -fx-border-radius: 15;
+}
 
 
 

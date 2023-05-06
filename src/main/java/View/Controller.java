@@ -24,7 +24,7 @@ public class Controller {
     Article watchLCurrentArticle = null;
     Article currentArticle;
     CourseView courseView = new CourseView();
-    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle, this);
+    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, this);
     TimeSpan currentTimeSpan = TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
     SafeArticle safeArticle = new SafeArticle();
@@ -133,7 +133,9 @@ public class Controller {
     public void setCourseView() {
 
         safeArticle.setSafedArticles();
-        courseUtils.displayCourse("IBM");
+
+        courseUtils.displayCourse("IBM", "IBM");
+        groundView.timeButtons[6].getStyleClass().add("buttonTimeClicked");
 
         groundView.window.setCenter(courseView.root);
 
@@ -191,7 +193,13 @@ public class Controller {
         });
     }
 
+    /**
+     * Methode, die die Liste aus Artikelvorschlaegen anzeigt
+     */
     public void showSearchResults() {
+        if(searchView.searchInputTextField.getText().equals("")){
+            return;
+        }
         searchView.outputSearchView.setVisible(true);
         searchView.outputSearchView.setMaxHeight(100);
         searchView.outputSearchView.setLayoutX(searchView.root.getLayoutX());
@@ -204,8 +212,10 @@ public class Controller {
         if (searchView.recommendsBox.getChildren().size() > 0)
             searchView.recommendsBox.getChildren().clear();
         for (int i = 9; i >= 0; --i) {
-            if (result[i] == null)
+            if (result[i] == null){
                 continue;
+            }
+
             searchView.recommends[count].setText(result[i].getName());
             int finalI = i;
             searchView.recommends[count].setOnMouseClicked(e -> {
@@ -232,51 +242,48 @@ public class Controller {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (currentArticle != null) {
-                    wlAddArticle(currentArticle.getName());
+                    wlAddArticle();
                     safeArticle = new SafeArticle();
                     safeArticle.addArticleFile(currentArticle);
                 }
             }
         });
 
-        //Probe
-        wlAddArticle("IBM");
-        watchListArticles.add(new Article("IBM", safeArticle));
-
     }
 
     /**
-     * @param articleName Name des aktuell angezeigten Artikels
+     *
      */
-    public void wlAddArticle(String articleName) {
+    public void wlAddArticle() {
         //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann, aktuell sollte es in ser datei geschrieben werden
 
         //nicht hinzufuegen, falls der Artikel bereits enthalten ist
         for (Button b : watchListView.buttonList) {
             String name = b.getText();
-            if (name.equals(articleName)) {
+            if (name.equals(currentArticle.getName())) {
                 return;
             }
         }
-        Button temp = new Button(articleName);
-        temp.setOnAction(actionEvent -> {
-            Article tempArticle = new Article(articleName, safeArticle);
 
+        //Article tempArticle = new Article(article.getName(), article.getSymbol(), safeArticle);
+        watchListArticles.add(currentArticle);
+
+        Button temp = new Button(currentArticle.getName());
+        watchListView.buttonList.add(temp);
+        watchListView.vBox.getChildren().add(temp);
+
+        temp.setOnAction(actionEvent -> {
             //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
-            while (!tempArticle.setValues(courseUtils.currentArticle.getTimeSpan())) {
+            while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     System.out.println(e.getMessage());
                 }
-
             }
-            courseUtils.currentArticle = tempArticle;
             courseUtils.showCourse();
-            wlSafeCurrentArticle(articleName);
+            wlSafeCurrentArticle(currentArticle.getName());
         });
-        watchListView.buttonList.add(temp);
-        watchListView.vBox.getChildren().add(temp);
     }
 
     /**

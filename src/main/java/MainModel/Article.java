@@ -1,6 +1,5 @@
 package MainModel;
 
-import Utils.SearchUtils;
 import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
@@ -14,6 +13,7 @@ import java.util.Date;
 public class Article implements Serializable {
     private ArrayList<Unit> values = new ArrayList<>();
     private final String name;
+    private final String symbol;
     private int pointAmount = 0;
     private TimeSpan timeSpan;
     private transient TimeSeriesResponse apiResponse = null;
@@ -25,8 +25,9 @@ public class Article implements Serializable {
     }
 
 
-    public Article(String str, SafeArticle safeArticle) {
-        this.name = str;
+    public Article(String name, String symbol, SafeArticle safeArticle) {
+        this.name = name;
+        this.symbol = symbol;
         Config cfg = Config.builder().key("QESJBL81ZZ99LAQX").timeOut(10).build();
         AlphaVantage.api().init(cfg);
         this.safeArticle=safeArticle;
@@ -35,6 +36,10 @@ public class Article implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getSymbol(){
+        return symbol;
     }
 
     /**
@@ -81,7 +86,7 @@ public class Article implements Serializable {
     public boolean setValues(TimeSpan timeSpan) {
         if(safeArticle.getSafedArticles()!=null) {
             for (Article a : safeArticle.getSafedArticles()) {
-                if (a.getName().equals(name) && timeSpan == a.getTimeSpan()) {
+                if (a.getSymbol().equals(symbol) && timeSpan == a.getTimeSpan()) {
                     pointAmount = a.getPointAmount();
                     values = a.getValues();
                     return true;
@@ -106,7 +111,7 @@ public class Article implements Serializable {
         int count = 0;
         for (TimeSpan t : TimeSpan.values()) {
             if (t != timeSpan) {
-                otherTimeSpans[count] = new Article(name, safeArticle);
+                otherTimeSpans[count] = new Article(name, symbol, safeArticle);
                 boolean tsInOther = false;
                 int indexInOther = -1;
                 for (int i = 0; i < otherTimeSpans.length; ++i) {
@@ -163,16 +168,16 @@ public class Article implements Serializable {
     private TimeSeriesResponse getResponse(TimeSpan timeSpan) {
         TimeSeriesResponse response = null;
         if (timeSpan == TimeSpan.day) {
-            response = AlphaVantage.api().timeSeries().intraday().forSymbol(name).fetchSync();
+            response = AlphaVantage.api().timeSeries().intraday().forSymbol(symbol).fetchSync();
         }
         if (timeSpan == TimeSpan.oneMonth || timeSpan == TimeSpan.threeMonths) {
-            response = AlphaVantage.api().timeSeries().daily().adjusted().forSymbol(name).fetchSync();
+            response = AlphaVantage.api().timeSeries().daily().adjusted().forSymbol(symbol).fetchSync();
         }
         if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year) {
-            response = AlphaVantage.api().timeSeries().weekly().forSymbol(name).fetchSync();
+            response = AlphaVantage.api().timeSeries().weekly().forSymbol(symbol).fetchSync();
         }
         if (timeSpan == TimeSpan.fiveYear || timeSpan == TimeSpan.max) {
-            response = AlphaVantage.api().timeSeries().monthly().forSymbol(name).fetchSync();
+            response = AlphaVantage.api().timeSeries().monthly().forSymbol(symbol).fetchSync();
         }
         if (response == null || response.getStockUnits() == null || response.getStockUnits().size() == 0)//wenn zu viele api calls gemacht wurden.
         {

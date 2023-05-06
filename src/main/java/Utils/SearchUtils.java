@@ -17,7 +17,7 @@ public class SearchUtils extends Thread{
 
 
     public static void buttonClicked(MatchUnits result, CourseUtils courseUtils, SearchView searchView){
-        courseUtils.displayCourse(result.getSymbol());
+        courseUtils.displayCourse(result.getName(), result.getSymbol());
         searchView.clearSearching();
     }
     public MatchUnits[] getMatchings (String str) {
