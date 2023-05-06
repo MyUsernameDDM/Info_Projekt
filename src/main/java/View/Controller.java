@@ -194,7 +194,8 @@ public class Controller {
         if(searchView.searchInputTextField.getText().equals("")){
             return;
         }
-        searchView.outputSearchView.setVisible(true);
+
+
         searchView.outputSearchView.setMaxHeight(100);
         searchView.outputSearchView.setLayoutX(searchView.root.getLayoutX());
         searchView.outputSearchView.setLayoutY(searchView.searchInputTextField.getLayoutY() + searchView.searchInputTextField.getHeight());
@@ -203,9 +204,10 @@ public class Controller {
             return;
         }
         int count = 0;
-        if (searchView.recommendsBox.getChildren().size() > 0)
+        if (searchView.recommendsBox.getChildren().size() > 0) {
             searchView.recommendsBox.getChildren().clear();
-        for (int i = 9; i >= 0; --i) {
+        }
+        for (int i = 0; i < 10; ++i) {
             if (result[i] == null){
                 continue;
             }
@@ -218,7 +220,12 @@ public class Controller {
             searchView.recommendsBox.getChildren().add(searchView.recommends[count]);
             count++;
         }
+
+
         searchView.outputSearchView.setContent(searchView.recommendsBox);
+        searchView.outputSearchView.setFitToWidth(true);
+        searchView.outputSearchView.prefWidthProperty().bind(searchView.getWidthButton().prefWidthProperty());
+        searchView.outputSearchView.setVisible(true);
     }
 
 

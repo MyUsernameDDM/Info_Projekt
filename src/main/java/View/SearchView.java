@@ -55,7 +55,6 @@ public class SearchView extends Thread {
         outputSearchView.setVisible(false);
 
         searchInputTextField.setPrefHeight(30);
-        searchInputTextField.setPrefWidth(150);
 
         searchButton.setText("Search");
         searchButton.setPrefHeight(30);
@@ -65,6 +64,18 @@ public class SearchView extends Thread {
         }
         if (root.getChildren().size() == 0)
             root.getChildren().addAll(searchInputTextField, searchButton);
+    }
+    public Button getWidthButton(){
+        Button button = null;
+        int maxLength = 0;
+        for (Button b : recommends) {
+            if (b.getText().length() > maxLength) {
+                maxLength = b.getText().length();
+                button = b;
+            }
+            b.setEllipsisString("");
+        }
+        return button;
     }
 
     public void clearSearching() {
