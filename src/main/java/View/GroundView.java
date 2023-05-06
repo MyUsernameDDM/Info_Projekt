@@ -3,11 +3,15 @@ package View;
 import MainModel.Article;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.Objects;
 
@@ -22,6 +26,7 @@ public class GroundView {
     BorderPane window = new BorderPane();
     Scene scene;
 
+
     //Menu erstellen
     HBox menu = new HBox();
     Button modeButton = new Button();
@@ -35,8 +40,16 @@ public class GroundView {
     Controller controller;
 
     //Button Array für die Zeitspanne
-    Button[] timeButtons = new Button[7];
-    String[] timeButtonsName = {"1D", "1M", "3M", "6M", "1Y", "5Y", "MAX"};
+    Button[]timeButtons = new Button[7];
+    String[]timeButtonsName = {
+            "1D",
+            "1M",
+            "3M",
+            "6M",
+            "1Y",
+            "5Y",
+            "MAX"
+    };
 
 
     public GroundView(Controller controller) {
@@ -60,7 +73,7 @@ public class GroundView {
     /**
      * Methode um die GroundView grafisch darzustellen
      */
-    public void displayGraphic() {
+    public void displayGraphic(){
         //Menu
         wallet.setText("WALLET");
         wallet.getStyleClass().add("menuButton");
@@ -75,7 +88,7 @@ public class GroundView {
         modeButton.setTextFill(Color.WHITE);
 
         menu.getChildren().addAll(modeButton, wallet);
-        menu.setMargin(wallet, new Insets(1, 1, 1, 1));
+        menu.setMargin(wallet, new Insets(1,1,1,1));
         menu.setMargin(modeButton, new Insets(1, 1, 1, 1));
         menu.setPrefHeight(70);
 
@@ -87,14 +100,14 @@ public class GroundView {
         timeBox.setMargin(changeStateButton, new Insets(2, 2, 2, 2));
         timeBox.setPrefHeight(40);
 
-        for (int i = 0; i < timeButtons.length; i++) {
+        for (int i = 0; i < timeButtons.length; i++){
             timeButtons[i] = new Button();
             timeButtons[i].setText(timeButtonsName[i]);
             timeButtons[i].getStyleClass().add("buttonTime");
             timeButtons[i].setPrefHeight(40);
             timeButtons[i].setPrefWidth(40);
             timeBox.getChildren().add(timeButtons[i]);
-            timeBox.setMargin(timeButtons[i], new Insets(2, 2, 2, 2));
+            timeBox.setMargin(timeButtons[i], new Insets(2,2,2,2));
         }
 
         timeButtons[6].setPrefWidth(60);
@@ -103,11 +116,14 @@ public class GroundView {
         simulationModeButton.setLayoutY(200);
         simulationModeButton.setLayoutX(200);
 
+
         InfoView infoView = new InfoView();
 
-        for (int i = 0; i < timeButtons.length; i++) {
-            infoView.showInfoView(timeButtons[i], controller);
+        for (int i = 0; i < timeButtons.length; i++){
+            infoView.showInfoView(timeButtons[i]);
         }
+
+
 
 
         scene = new Scene(root, sceneWith, sceneHeight);
@@ -116,32 +132,32 @@ public class GroundView {
     }
 
 
-    public void simulationModeHover(Boolean status) {
-        if (status) {
+    public void simulationModeHover(Boolean status){
+        if(status){
             modeButton.setTextFill(Color.LIGHTBLUE);
         } else {
             modeButton.setTextFill(Color.WHITE);
         }
     }
 
-    public void walletHover(Boolean status) {
-        if (status) {
+    public void walletHover(Boolean status){
+        if(status){
             wallet.setTextFill(Color.LIGHTBLUE);
         } else {
             wallet.setTextFill(Color.WHITE);
         }
     }
 
-    public void timeButtonsHover(int i, Boolean status) {
-        if (status) {
+    public void timeButtonsHover(int i, Boolean status){
+        if(status){
             timeButtons[i].setTextFill(Color.RED);
         } else {
             timeButtons[i].setTextFill(Color.BLACK);
         }
     }
 
-    public void timeButtonsOnMouseClicked(int i) {
-        for (int u = 0; u < timeButtons.length; u++) {
+    public void timeButtonsOnMouseClicked(int i){
+        for(int u = 0; u < timeButtons.length; u++) {
             timeButtons[u].getStyleClass().remove("buttonTimeClicked");
             timeButtons[u].getStyleClass().add("buttonTime");
         }

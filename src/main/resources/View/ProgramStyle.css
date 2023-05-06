@@ -71,6 +71,56 @@
     -fx-border-radius: 15;
 }
 
+.moneyButton{
+    -fx-alignment: center;
+    -fx-font-size: 25px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #3f6cc9;
+}
+
+.buyButton{
+    -fx-alignment: center;
+    -fx-font-size: 15px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #228b22;
+    -fx-border-color: #226b22;
+    -fx-border-width: 1.75px;
+}
+
+.sellButton{
+    -fx-alignment: center;
+    -fx-font-size: 15px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #b23002;
+    -fx-border-color: #b20222;
+    -fx-border-width: 1.75px;
+}
+
+.sellAllButton{
+    -fx-alignment: center;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #ffa500;
+    -fx-border-color: #ff8500;
+    -fx-border-width: 1.75px;
+}
+
+.walletArticle{
+    -fx-font-size: 12px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #FFFFFF;
+    -fx-border-radius: 5px;
+    -fx-border-color: #1f262e;
+    -fx-border-width: 1px;
+}
 
 
 

@@ -9,5 +9,6 @@ import java.util.ArrayList;
  */
 public class Simulation {
     ArrayList<Article> walletArticles = new ArrayList<>();
-
+    static int moneyInc = 0;
+    static int moneyAv = 1000;
 }

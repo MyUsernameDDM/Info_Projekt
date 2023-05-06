@@ -27,7 +27,6 @@ public class Main extends Application {
 
         stage.setTitle("Aktienkurs");
 
-
         mode = status.realtime;
         Controller realtimeController = new Controller();
         SimulationController simulationController = new SimulationController();

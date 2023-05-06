@@ -5,6 +5,7 @@ import MainModel.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -116,6 +117,11 @@ public class SimulationController extends Controller {
             wlSafeCurrentArticle(articleName);
         });
         walletView.buttonList.add(temp);
+
+        temp.getStyleClass().add("walletArticle");
+        temp.setPrefWidth(210);
+        walletView.vBox.setMargin(temp, new Insets(2, 2, 2, 10));
+
         walletView.vBox.getChildren().add(temp);
     }
 
@@ -144,7 +150,6 @@ public class SimulationController extends Controller {
         });{
         }
     }
-
 
 
 }
