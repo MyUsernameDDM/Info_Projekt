@@ -1,9 +1,6 @@
 package View;
 
-import MainModel.Article;
-import MainModel.Main;
-import MainModel.SafeArticle;
-import MainModel.TimeSpan;
+import MainModel.*;
 import Utils.SearchUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,6 +24,7 @@ public class Controller {
     Article watchLCurrentArticle = null;
     Article currentArticle;
     CourseView courseView = new CourseView();
+    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle, this);
     CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, currentArticle);
     TimeSpan currentTimeSpan=TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
@@ -47,7 +45,7 @@ public class Controller {
         setGroundView();
         setWatchList();
         setSearchList();
-        setCourseView("IBM");
+        setCourseView();
         setAddAndRemoveArticle();
         menuButtonsListener();
         timeButtonListener();
@@ -146,6 +144,9 @@ public class Controller {
         courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
         //courseUtils.showNormalCourse();
         courseUtils.showCourse();
+    public void setCourseView() {
+        courseUtils.displayCourse("IBM");
+
         groundView.window.setCenter(courseView.root);
 
         courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
@@ -169,14 +170,21 @@ public class Controller {
         });
     }
 
+    public void setCurrentArticle(Article currentArticle) {
+        this.currentArticle = currentArticle;
+    }
+
     private void setSearchList() {
         groundView.window.setLeft(searchView.root);
         groundView.root.getChildren().add(searchView.outputSearchView);
+
+        //SearchView: Eingabefeld und Search-Button in das Menu einfuegen
+        groundView.menu.getChildren().addAll(searchView.root);
         Controller thisController= this;
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                searchView.showSearchResults(thisController);
+                showSearchResults();
 
                 /*
                 String[] help = searchUtils.search(String.valueOf(searchView.searchBox.getValue()));
@@ -193,6 +201,33 @@ public class Controller {
                  */
             }
         });
+    }
+
+    public void showSearchResults() {
+        System.out.println("test");
+        searchView.outputSearchView.setVisible(true);
+        searchView.outputSearchView.setLayoutX(searchView.searchInputTextField.getLayoutX());
+        searchView.outputSearchView.setLayoutY(searchView.searchInputTextField.getLayoutY() + searchView.searchInputTextField.getHeight());
+        MatchUnits[] result = searchUtils.getMatchings(searchView.searchInputTextField.getText());
+        if (result == null) {
+            return;
+        }
+        int count = 0;
+        if (searchView.recommendsBox.getChildren().size() > 0)
+            searchView.recommendsBox.getChildren().clear();
+        for (int i = 9; i >= 0; --i) {
+            if (result[i] == null)
+                continue;
+            searchView.recommends[count].setText(result[i].getName());
+            int finalCount = count;
+            int finalI = i;
+            searchView.recommends[count].setOnMouseClicked(e -> {
+                SearchUtils.buttonClicked(result[finalI], courseUtils, searchView);
+            });
+            searchView.recommendsBox.getChildren().add(searchView.recommends[count]);
+            count++;
+        }
+        searchView.outputSearchView.setContent(searchView.recommendsBox);
     }
 
 

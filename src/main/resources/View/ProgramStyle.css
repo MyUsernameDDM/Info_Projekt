@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
+#courseArticleName{
+    -fx-text-fill: rgba(0, 0, 0, 0.75);
+    -fx-font-size: 14px;
+}
+
 .buttonTime{
     -fx-background-color: #e0e0e0;
     -fx-background-radius: 10;

@@ -9,14 +9,16 @@ import java.util.ArrayList;
 
 public class SearchView extends Thread {
     Controller controller;
-    VBox root = new VBox();
+    HBox root = new HBox();
+
     ScrollPane outputSearchView = new ScrollPane();
     TextField searchInputTextField = new TextField();
     Button searchButton = new Button();
+
     ArrayList<String> searchResult = new ArrayList<>();
     VBox recommendsBox = new VBox();
 
-    private final Label[] recommends = new Label[10];
+    final Button[] recommends = new Button[10];
     //GroundView groundView = new GroundView(controller);
 
 
@@ -45,10 +47,10 @@ public class SearchView extends Thread {
         searchButton.setPrefHeight(30);
         searchButton.setPrefWidth(60);
         for (int i = 0; i < 10; ++i) {
-            recommends[i] = new Label();
+            recommends[i] = new Button();
         }
         if (root.getChildren().size() == 0)
-            root.getChildren().addAll(searchInputTextField, searchButton, outputSearchView);
+            root.getChildren().addAll(searchInputTextField, searchButton);
     }
 
 

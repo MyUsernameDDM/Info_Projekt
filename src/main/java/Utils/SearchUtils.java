@@ -2,6 +2,7 @@ package Utils;
 
 import MainModel.MatchUnits;
 import View.Controller;
+import View.CourseUtils;
 import View.SearchView;
 
 import java.io.BufferedReader;
@@ -12,9 +13,8 @@ import java.net.URL;
 
 public class SearchUtils extends Thread{
 
-
-    public static void labelclicked(MatchUnits result, Controller controller,SearchView searchView){
-        controller.setCourseView(result.getSymbol());
+    public static void buttonClicked(MatchUnits result, CourseUtils courseUtils, SearchView searchView){
+        courseUtils.displayCourse(result.getSymbol());
         searchView.clearSearching();
     }
     public static MatchUnits[] getMatchings (String str) {
