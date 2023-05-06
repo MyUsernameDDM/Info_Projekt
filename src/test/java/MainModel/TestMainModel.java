@@ -1,5 +1,6 @@
 package MainModel;
 
+import View.Controller;
 import View.CourseUtils;
 import View.CourseView;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ public class TestMainModel {
         while(!art.setValues(TimeSpan.oneMonth))
             Thread.sleep(5000);
         CourseView cv= new CourseView();
-        CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.chartCourse, cv, art);
+        CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.chartCourse, cv, art, new Controller());
         courseUtils.setCurrentArticle(art);
         courseUtils.showCourse();
     }

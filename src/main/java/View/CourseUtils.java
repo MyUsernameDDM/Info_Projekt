@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 
 public class CourseUtils {
     public enum courseStatus {normalCourse, chartCourse}
+    Controller controller;
 
 
     /**
@@ -25,10 +26,11 @@ public class CourseUtils {
         this.currentArticle = currentArticle;
     }
 
-    public CourseUtils(courseStatus courseState, CourseView courseView, Article currentArticle) {
+    public CourseUtils(courseStatus courseState, CourseView courseView, Article currentArticle, Controller controller) {
         this.courseState = courseState;
         this.courseView = courseView;
         this.currentArticle = currentArticle;
+        this.controller = controller;
     }
 
     /**
@@ -56,15 +58,27 @@ public class CourseUtils {
             currentArticle.setValues(interval);
         }
         showCourse();
-        /*
-        //enum übergeben, damit es gesetzt wird
-        System.out.println("timeButtonsTest");
-        int pointAmount = currentArticle.getPointAmount();
-        for (int i = 0; i < pointAmount; i++) {
-            courseView.points.add(new Circle(20));
-        }
-         */
+    }
 
+
+    /**
+     *
+     * @param articleName
+     */
+    public void displayCourse(String articleName){
+        Article article = new Article(articleName);
+        controller.currentArticle = article;
+        setCurrentArticle(article);
+        while (!article.setValues(TimeSpan.max)) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        setCurrentArticle(article);
+        courseState = CourseUtils.courseStatus.normalCourse;
+        showCourse();
     }
 
     /**
@@ -75,7 +89,10 @@ public class CourseUtils {
             throw new IllegalArgumentException();
         //Alten Kurs loeschen
         courseView.root.getChildren().clear();
-        courseView.root.getChildren().add(courseView.backGround);
+        courseView.root.getChildren().addAll(courseView.backGround, courseView.articleNameLabel);
+
+        //Artikelname setzen
+        courseView.articleNameLabel.setText(currentArticle.getName());
 
         Unit min = currentArticle.getValues().get(0);
         Unit max = currentArticle.getValues().get(0);

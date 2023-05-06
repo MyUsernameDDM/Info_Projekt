@@ -4,6 +4,7 @@ import MainModel.Article;
 import MainModel.Unit;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
@@ -17,6 +18,7 @@ public class CourseView {
     Group root = new Group();
 
     Rectangle backGround;
+    Label articleNameLabel = new Label();
 
     ArrayList<Ellipse> points = new ArrayList<>();
     ArrayList<Chart> charts = new ArrayList<>();
@@ -26,9 +28,11 @@ public class CourseView {
         //Background anpassen
         backGround = new Rectangle(500, 400);
         backGround.setFill(Color.ALICEBLUE);
+        articleNameLabel.setId("courseArticleName");
+        articleNameLabel.setLayoutX(10);
+        articleNameLabel.setLayoutY(10);
 
-
-        root.getChildren().add(backGround);
+        root.getChildren().addAll(backGround, articleNameLabel);
     }
 
 

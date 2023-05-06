@@ -11,9 +11,7 @@ import java.util.ArrayList;
 
 public class SearchView extends Thread {
     Controller controller;
-    VBox root = new VBox();
-    HBox inputBox = new HBox();
-
+    HBox root = new HBox();
 
     ScrollPane outputSearchView = new ScrollPane();
     TextField searchInputTextField = new TextField();
@@ -22,7 +20,7 @@ public class SearchView extends Thread {
     ArrayList<String> searchResult = new ArrayList<>();
     VBox recommendsBox = new VBox();
 
-    private final Label[] recommends = new Label[10];
+    final Button[] recommends = new Button[10];
     //GroundView groundView = new GroundView(controller);
 
 
@@ -51,10 +49,10 @@ public class SearchView extends Thread {
         searchButton.setPrefHeight(30);
         searchButton.setPrefWidth(60);
         for (int i = 0; i < 10; ++i) {
-            recommends[i] = new Label();
+            recommends[i] = new Button();
         }
         if (root.getChildren().size() == 0)
-            root.getChildren().addAll(searchInputTextField, searchButton, outputSearchView);
+            root.getChildren().addAll(searchInputTextField, searchButton);
     }
 
 
@@ -83,34 +81,6 @@ public class SearchView extends Thread {
             //root.getChildren().add(outputSearchView);
         }*/
 
-    public void showSearchResults(Controller controller) {
-        System.out.println("test");
-        outputSearchView.setVisible(true);
-        outputSearchView.setLayoutX(searchInputTextField.getLayoutX());
-        outputSearchView.setLayoutY(searchInputTextField.getLayoutY() + searchInputTextField.getHeight());
-        MatchUnits[] result = Matching.getMatchings(searchInputTextField.getText());
-        if (result == null) {
-            return;
-        }
-        int count = 0;
-        if (recommendsBox.getChildren().size() > 0)
-            recommendsBox.getChildren().clear();
-        for (int i = 9; i >= 0; --i) {
-            if (result[i] == null)
-                continue;
-            recommends[count].setText(result[i].getName());
-            int finalCount = count;
-            int finalI = i;
-            recommends[count].setOnMouseClicked(e -> {
-                SearchUtils.labelclicked(result[finalI], controller, this);
-            });
-            recommendsBox.getChildren().add(recommends[count]);
-            count++;
-        }
-        outputSearchView.setContent(recommendsBox);
-
-
-    }
 
     public void clearSearching() {
         searchInputTextField.setText("");
