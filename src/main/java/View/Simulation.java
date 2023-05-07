@@ -12,3 +12,4 @@ public class Simulation {
     static int moneyInv = 0;
     static int moneyAv = 1000;
 }
+

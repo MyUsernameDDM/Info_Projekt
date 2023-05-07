@@ -8,12 +8,13 @@ import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
 
 import static MainModel.Main.mode;
 
@@ -21,7 +22,8 @@ public class SimulationController extends Controller {
     Simulation simulation = new Simulation();
     WalletView walletView = new WalletView(this);
     Article walletCurrentArticle = null; // Aktueller Artikle
-
+    ArrayList<Article> walletListArticles = new ArrayList<>();
+    ArrayList<Button> walletnList = new ArrayList<>();
     Timeline timeline;
     static Label labelAv = new Label();
     public SimulationController() {
@@ -34,11 +36,11 @@ public class SimulationController extends Controller {
 
 
         timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
-            System.out.println("Update");
+            //System.out.println("Update");
 
             labelAv.setText(String.valueOf(Simulation.moneyAv)); // Update A. M.
 
-            for (int i = 0; i < walletView.buttonList.size(); i++){
+            for (int i = 0; i < walletnList.size(); i++){
                 //simulation.moneyInv *=
             }
             //System.out.println(walletView.buttonList.size());
@@ -77,7 +79,7 @@ public class SimulationController extends Controller {
                 double heightRatio = newSceneHeight / groundView.oldSceneHeight;
 
                 //folgende Zeile ist zum normalen Controller unterschiedlich
-                courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+                //courseUtils.adjustCourseSize(groundView.scene.getWidth() - SimulationController.this.walletView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
                 groundView.oldSceneWidth = newSceneWidth;
                 groundView.oldSceneHeight = newSceneHeight;
 
@@ -100,23 +102,58 @@ public class SimulationController extends Controller {
         groundView.window.setLeft(walletView.walletRoot);
     }
 
-    public void walletSafeCurrentArticle(String articleName){ // CurrentArticle Umändern
+    public void walletAddArticle() {
+        //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann, aktuell sollte es in ser datei geschrieben werden
+
+        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
+        for (Button b : walletnList) {
+            String name = b.getText();
+            if (name.equals(currentArticle.getName())) {
+                return;
+            }
+        }
+
+        //Article tempArticle = new Article(article.getName(), article.getSymbol(), safeArticle);
+        walletListArticles.add(currentArticle);
+
+        Button temp = new Button(currentArticle.getName());
+        walletnList.add(temp);
+        walletView.vBox.getChildren().add(temp);
+
+        temp.setOnAction(actionEvent -> {
+            //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
+            while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            courseUtils.showCourse();
+            walletSafeCurrentArticle(currentArticle.getName());
+        });
+    }
+
+    /**
+     * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
+     */
+    public void walletSafeCurrentArticle(String articleName) {
         //vorher ausgewählten Button wieder zuruecksetzen
         if (walletCurrentArticle != null) {
-            for (int i = 0; i < walletView.buttonList.size(); i++) {
-                if (walletCurrentArticle.getName().equals(walletView.buttonList.get(i).getText())) {
-                    walletView.buttonList.get(i).setStyle("");
+            for (int i = 0; i < walletnList.size(); i++) {
+                if (walletCurrentArticle.getName().equals(walletnList.get(i).getText())) {
+                    walletnList.get(i).setStyle("");
                 }
             }
         }
 
         //neuen Artikel als aktuellen Artikel erstellen
-        for (Article article : simulation.walletArticles) {
+        for (Article article : walletListArticles) {
             if (articleName.equals(article.getName())) {
                 walletCurrentArticle = article;
-                for (int i = 0; i < walletView.buttonList.size(); i++) {
-                    if (articleName.equals(walletView.buttonList.get(i).getText())) {
-                        setButtonStyle(walletView.buttonList.get(i));
+                for (int i = 0; i < walletnList.size(); i++) {
+                    if (articleName.equals(walletnList.get(i).getText())) {
+                        setButtonStyle(walletnList.get(i));
                     }
                 }
             }
@@ -124,45 +161,21 @@ public class SimulationController extends Controller {
     }
 
     /**
-     * @param articleName Name des aktuell angezeigten Artikels
+     * Die Methode löscht das aktuell ausgewählte Element der Watchlist aus dieser
      */
-    public void walletAddArticle(String articleName) { // Kaufen
-        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
-        for (Button b : walletView.buttonList) {
-            String name = b.getText();
-            if (name.equals(articleName)) {
-                return;
-            }
-        }
-        Button temp = new Button(articleName);
-        temp.setOnAction(actionEvent -> {
-            /*Mothe aufrufen zur Anzeige des GRaphs*/
-            wlSafeCurrentArticle(articleName);
-        });
-        walletView.buttonList.add(temp);
-
-        temp.getStyleClass().add("walletArticle");
-        temp.setPrefWidth(210);
-        walletView.vBox.setMargin(temp, new Insets(2, 2, 2, 10));
-
-        walletView.vBox.getChildren().add(temp);
-    }
-
-    /**
-     * Die Methode löscht das aktuell ausgewählte Element dem Wallet aus dieser
-     */
-    public void walletRemoveCurrentArticle() { // Verkaufen
-        if(walletCurrentArticle != null){
-            for (Button b : walletView.buttonList) {
+    public void walletRemoveCurrentArticle() {
+        if (walletCurrentArticle != null) {
+            for (Button b : walletnList) {
                 if (b.getText().equals(walletCurrentArticle.getName())) {
                     walletView.vBox.getChildren().remove(b);
-                    walletView.buttonList.remove(b);
+                    walletnList.remove(b);
                     return;
                 }
             }
-            simulation.walletArticles.remove(watchLCurrentArticle);
+            walletListArticles.remove(walletCurrentArticle);
         }
     }
+
 
     public void modeSceneChanger(){
         groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -176,3 +189,4 @@ public class SimulationController extends Controller {
 
 
 }
+

@@ -21,7 +21,6 @@ public class WalletView{
     VBox walletRoot = new VBox();
     ScrollPane scrollPane = new ScrollPane();
     VBox vBox = new VBox();
-
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Wallet");
     Button sellButton = new Button("SELL");
@@ -97,8 +96,8 @@ public class WalletView{
                         Simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
 
                         System.out.println(Simulation.moneyAv);
-                        controller.walletAddArticle(controller.currentArticle.getName() + " : " + textFieldUserAmount.getText());
-                        controller.walletSafeCurrentArticle(controller.currentArticle.getName());
+                        //  + " : " + textFieldUserAmount.getText()
+                        controller.walletAddArticle();
                     }
 
                     open = false;
@@ -115,7 +114,6 @@ public class WalletView{
         });
 
         sellButton.setOnAction(event -> {
-            controller.walletSafeCurrentArticle(controller.currentArticle.getName());
             controller.walletRemoveCurrentArticle();
         });
 

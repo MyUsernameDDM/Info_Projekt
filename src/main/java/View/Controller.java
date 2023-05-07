@@ -22,6 +22,7 @@ public class Controller {
     WatchListView watchListView = new WatchListView(this);
     ArrayList<Article> watchListArticles = new ArrayList<>();
     Article watchLCurrentArticle = null;
+
     Article currentArticle;
     CourseView courseView = new CourseView();
     CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, this);
@@ -233,6 +234,7 @@ public class Controller {
      */
     private void setWatchList() {
         groundView.window.setRight(watchListView.wlRoot);
+
         watchListView.removeButton.setOnAction(actionEvent -> {
             wlRemoveCurrentArticle();
         });
@@ -325,6 +327,7 @@ public class Controller {
             watchListArticles.remove(watchLCurrentArticle);
         }
     }
+
 
 
     /**
