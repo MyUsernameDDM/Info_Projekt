@@ -11,8 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.util.ArrayList;
-
 public class WalletView{
 
     boolean isAv = true;
@@ -21,8 +19,8 @@ public class WalletView{
     VBox walletRoot = new VBox();
     ScrollPane scrollPane = new ScrollPane();
     VBox vBox = new VBox();
-    ArrayList<Button> buttonList = new ArrayList<>();
-    Label titel = new Label("Wallet");
+
+    VBox confirmWindow = new VBox();
     Button sellButton = new Button("SELL");
     Button sellAllButton = new Button("SELL EVERYTHING");
     Button buyButton = new Button("BUY");
@@ -79,24 +77,25 @@ public class WalletView{
                 confirmBuyButton.getStyleClass().add("confirmBuyButton");
 
                 HBox barConfirm = new HBox(confirmBuyButton, confirmCancelButton);
+                barConfirm.setMargin(confirmWindow, new Insets(10, 10, 10, 10));
+                barConfirm.setMargin(confirmCancelButton, new Insets(10, 10, 10, 10));
 
                 window.setTop(new Label("Enter Amount:"));
                 VBox labelTextfieldVbox = new VBox(textFieldUserAmount);
                 window.setCenter(labelTextfieldVbox);
                 window.setBottom(barConfirm);
 
-                vBox.getChildren().add(window);
+                confirmWindow.getChildren().add(window);
 
                 confirmBuyButton.setOnAction(event1 -> {
                     System.out.println("BUY:");
-                    vBox.getChildren().remove(window);
+                    confirmWindow.getChildren().remove(window);
 
                     if (Simulation.moneyAv >= 0 && Integer.valueOf(textFieldUserAmount.getText()) <= Simulation.moneyAv) {
                         Simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
                         Simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
 
                         System.out.println(Simulation.moneyAv);
-                        //  + " : " + textFieldUserAmount.getText()
                         controller.walletAddArticle();
                     }
 
@@ -121,15 +120,22 @@ public class WalletView{
             System.out.println("Sell all");
         });
 
+
         hBox.setMargin(buyButton, new Insets(10, 10, 10, 10));
         hBox.setMargin(sellButton, new Insets(10, 10, 10, 10));
 
-        VBox upperwallervbox = new VBox(money, SimulationController.labelAv, hBox, sellAllButton);
+        VBox upperwallervbox = new VBox(money, SimulationController.labelAv, hBox, sellAllButton, confirmWindow);
 
         upperwallervbox.setMargin(SimulationController.labelAv, new Insets(5,5,5,10));
         upperwallervbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
-        walletRoot.getChildren().addAll(upperwallervbox, vBox);
+        scrollPane.prefHeight(500);
+        scrollPane.setHmin(500);
+        scrollPane.setMaxWidth(230);
+        scrollPane.setContent(vBox);
+
+
+        walletRoot.getChildren().addAll(upperwallervbox, scrollPane);
         walletRoot.setPrefWidth(230);
     }
 }

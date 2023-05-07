@@ -8,10 +8,12 @@ import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class SimulationController extends Controller {
     WalletView walletView = new WalletView(this);
     Article walletCurrentArticle = null; // Aktueller Artikle
     ArrayList<Article> walletListArticles = new ArrayList<>();
-    ArrayList<Button> walletnList = new ArrayList<>();
+    ArrayList<Button> walletList = new ArrayList<>();
     Timeline timeline;
     static Label labelAv = new Label();
     public SimulationController() {
@@ -40,7 +42,7 @@ public class SimulationController extends Controller {
 
             labelAv.setText(String.valueOf(Simulation.moneyAv)); // Update A. M.
 
-            for (int i = 0; i < walletnList.size(); i++){
+            for (int i = 0; i < walletList.size(); i++){
                 //simulation.moneyInv *=
             }
             //System.out.println(walletView.buttonList.size());
@@ -103,21 +105,16 @@ public class SimulationController extends Controller {
     }
 
     public void walletAddArticle() {
-        //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann, aktuell sollte es in ser datei geschrieben werden
-
-        //nicht hinzufuegen, falls der Artikel bereits enthalten ist
-        for (Button b : walletnList) {
-            String name = b.getText();
-            if (name.equals(currentArticle.getName())) {
-                return;
-            }
-        }
-
-        //Article tempArticle = new Article(article.getName(), article.getSymbol(), safeArticle);
         walletListArticles.add(currentArticle);
 
         Button temp = new Button(currentArticle.getName());
-        walletnList.add(temp);
+        temp.setPrefWidth(210);
+        temp.getStyleClass().add("walletArticle");
+
+        walletList.add(temp);
+
+        VBox.setMargin(temp, new Insets(5, 5, 5, 10));
+
         walletView.vBox.getChildren().add(temp);
 
         temp.setOnAction(actionEvent -> {
@@ -140,9 +137,9 @@ public class SimulationController extends Controller {
     public void walletSafeCurrentArticle(String articleName) {
         //vorher ausgewählten Button wieder zuruecksetzen
         if (walletCurrentArticle != null) {
-            for (int i = 0; i < walletnList.size(); i++) {
-                if (walletCurrentArticle.getName().equals(walletnList.get(i).getText())) {
-                    walletnList.get(i).setStyle("");
+            for (int i = 0; i < walletList.size(); i++) {
+                if (walletCurrentArticle.getName().equals(walletList.get(i).getText())) {
+                    walletList.get(i).setStyle("");
                 }
             }
         }
@@ -151,9 +148,9 @@ public class SimulationController extends Controller {
         for (Article article : walletListArticles) {
             if (articleName.equals(article.getName())) {
                 walletCurrentArticle = article;
-                for (int i = 0; i < walletnList.size(); i++) {
-                    if (articleName.equals(walletnList.get(i).getText())) {
-                        setButtonStyle(walletnList.get(i));
+                for (int i = 0; i < walletList.size(); i++) {
+                    if (articleName.equals(walletList.get(i).getText())) {
+                        setButtonStyle(walletList.get(i));
                     }
                 }
             }
@@ -165,10 +162,10 @@ public class SimulationController extends Controller {
      */
     public void walletRemoveCurrentArticle() {
         if (walletCurrentArticle != null) {
-            for (Button b : walletnList) {
+            for (Button b : walletList) {
                 if (b.getText().equals(walletCurrentArticle.getName())) {
                     walletView.vBox.getChildren().remove(b);
-                    walletnList.remove(b);
+                    walletList.remove(b);
                     return;
                 }
             }
