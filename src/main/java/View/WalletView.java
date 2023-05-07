@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -80,7 +81,7 @@ public class WalletView{
 
                 HBox barConfirm = new HBox(confirmBuyButton, confirmCancelButton);
                 VBox labelTextfieldVbox = new VBox(textFieldUserAmount);
-                textFieldUserAmount.setPrefWidth(180);
+                textFieldUserAmount.setPrefWidth(170);
                 textFieldUserAmount.setMaxWidth(200);
 
                 window.setTop(note);
@@ -137,8 +138,9 @@ public class WalletView{
 
         scrollPane.prefHeight(500);
         scrollPane.setHmin(500);
-        scrollPane.setMaxWidth(230);
+        scrollPane.setMaxWidth(240);
         scrollPane.setContent(vBox);
+        scrollPane.setBackground(Background.fill(Color.WHITE));
 
         VBox.setMargin(scrollPane, new Insets(5,5,5,10));
 

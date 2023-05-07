@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -112,12 +113,11 @@ public class SimulationController extends Controller {
     public void walletAddArticle(int money) {
 
         Text priceArticle = new Text(String.valueOf(money));
+        Text currency = new Text("€");
         priceArticle.getStyleClass().add("priceArticle");
-
+        currency.getStyleClass().add("priceArticle");
 
         walletListArticles.add(currentArticle);
-
-
 
         Button temp = new Button(currentArticle.getName());
         temp.setPrefWidth(180);
@@ -126,8 +126,10 @@ public class SimulationController extends Controller {
         walletList.add(temp);
 
         VBox.setMargin(temp, new Insets(5, 5, 5, 10));
-
-        HBox addArticle = new HBox(temp, priceArticle);
+        HBox.setMargin(priceArticle, new Insets(5, 5, 5, 10));
+        HBox.setMargin(currency, new Insets(5, 5, 5, 10));
+        HBox addArticle = new HBox(temp, priceArticle, currency);
+        addArticle.setAlignment(Pos.CENTER);
 
         addArticle.getStyleClass().add("frameHBox");
 
