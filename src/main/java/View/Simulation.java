@@ -11,5 +11,6 @@ public class Simulation {
     ArrayList<Article> walletArticles = new ArrayList<>();
     static int moneyInv = 0;
     static int moneyAv = 1000;
+    static int openShares = 0;
 }
 

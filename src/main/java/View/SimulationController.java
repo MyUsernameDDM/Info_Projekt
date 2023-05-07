@@ -9,11 +9,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -28,6 +31,8 @@ public class SimulationController extends Controller {
     ArrayList<Button> walletList = new ArrayList<>();
     Timeline timeline;
     static Label labelAv = new Label();
+
+
     public SimulationController() {
         super();
         setWalletView();
@@ -104,18 +109,29 @@ public class SimulationController extends Controller {
         groundView.window.setLeft(walletView.walletRoot);
     }
 
-    public void walletAddArticle() {
+    public void walletAddArticle(int money) {
+
+        Text priceArticle = new Text(String.valueOf(money));
+        priceArticle.getStyleClass().add("priceArticle");
+
+
         walletListArticles.add(currentArticle);
 
+
+
         Button temp = new Button(currentArticle.getName());
-        temp.setPrefWidth(210);
+        temp.setPrefWidth(180);
         temp.getStyleClass().add("walletArticle");
 
         walletList.add(temp);
 
         VBox.setMargin(temp, new Insets(5, 5, 5, 10));
 
-        walletView.vBox.getChildren().add(temp);
+        HBox addArticle = new HBox(temp, priceArticle);
+
+        addArticle.getStyleClass().add("frameHBox");
+
+        walletView.vBox.getChildren().add(addArticle);
 
         temp.setOnAction(actionEvent -> {
             //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
@@ -129,6 +145,8 @@ public class SimulationController extends Controller {
             courseUtils.showCourse();
             walletSafeCurrentArticle(currentArticle.getName());
         });
+
+        Simulation.openShares += 1;
     }
 
     /**
@@ -162,16 +180,30 @@ public class SimulationController extends Controller {
      */
     public void walletRemoveCurrentArticle() {
         if (walletCurrentArticle != null) {
-            for (Button b : walletList) {
-                if (b.getText().equals(walletCurrentArticle.getName())) {
-                    walletView.vBox.getChildren().remove(b);
-                    walletList.remove(b);
-                    return;
+            for (Node node : walletView.vBox.getChildren()) {
+                if (node instanceof HBox) {
+                    HBox hbox = (HBox) node;
+                    Button b = (Button) hbox.getChildren().get(0);
+                    if (b.getText().equals(walletCurrentArticle.getName())) {
+                        walletView.vBox.getChildren().remove(hbox);
+                        walletList.remove(hbox);
+
+                        // get the price Text node and print its text content
+                        Text priceText = (Text) hbox.getChildren().get(1);
+                        String price = priceText.getText();
+                        System.out.println("Removed article: " + walletCurrentArticle.getName() + ", price: " + price);
+
+                        Simulation.openShares -= 1;
+                        Simulation.moneyAv += Double.valueOf(price);
+
+                        break;
+                    }
                 }
             }
             walletListArticles.remove(walletCurrentArticle);
         }
     }
+
 
 
     public void modeSceneChanger(){

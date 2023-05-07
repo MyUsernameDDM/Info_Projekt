@@ -29,6 +29,8 @@ public class WalletView{
 
     Label moneyAv = new Label();
 
+    Label note = new Label("Enter Amount:");
+
     boolean open = false;
     public WalletView(SimulationController controller) {
 
@@ -69,34 +71,38 @@ public class WalletView{
                 BorderPane window = new BorderPane();
 
                 buySettings.setFill(Color.WHITESMOKE);
-                buySettings.setWidth(230);
-                buySettings.setHeight(75);
-
+                buySettings.setWidth(270);
+                buySettings.setHeight(100);
                 window.getChildren().add(buySettings);
+
                 confirmCancelButton.getStyleClass().add("cancelButton");
                 confirmBuyButton.getStyleClass().add("confirmBuyButton");
 
                 HBox barConfirm = new HBox(confirmBuyButton, confirmCancelButton);
-                barConfirm.setMargin(confirmWindow, new Insets(10, 10, 10, 10));
-                barConfirm.setMargin(confirmCancelButton, new Insets(10, 10, 10, 10));
-
-                window.setTop(new Label("Enter Amount:"));
                 VBox labelTextfieldVbox = new VBox(textFieldUserAmount);
+                textFieldUserAmount.setPrefWidth(180);
+                textFieldUserAmount.setMaxWidth(200);
+
+                window.setTop(note);
                 window.setCenter(labelTextfieldVbox);
                 window.setBottom(barConfirm);
+
+                barConfirm.setMargin(confirmBuyButton, new Insets(5, 5, 5, 10));
+                barConfirm.setMargin(confirmCancelButton, new Insets(5, 5, 5, 10));
+                window.setMargin(note, new Insets(5,5,5,10));
+                window.setMargin(labelTextfieldVbox, new Insets(5,5,5,10));
+                window.setMargin(textFieldUserAmount, new Insets(5,5,5,10));
 
                 confirmWindow.getChildren().add(window);
 
                 confirmBuyButton.setOnAction(event1 -> {
-                    System.out.println("BUY:");
                     confirmWindow.getChildren().remove(window);
 
                     if (Simulation.moneyAv >= 0 && Integer.valueOf(textFieldUserAmount.getText()) <= Simulation.moneyAv) {
                         Simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
                         Simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
 
-                        System.out.println(Simulation.moneyAv);
-                        controller.walletAddArticle();
+                        controller.walletAddArticle(Integer.valueOf(textFieldUserAmount.getText()));
                     }
 
                     open = false;
@@ -134,8 +140,10 @@ public class WalletView{
         scrollPane.setMaxWidth(230);
         scrollPane.setContent(vBox);
 
+        VBox.setMargin(scrollPane, new Insets(5,5,5,10));
+
 
         walletRoot.getChildren().addAll(upperwallervbox, scrollPane);
-        walletRoot.setPrefWidth(230);
+        walletRoot.setPrefWidth(270);
     }
 }
