@@ -20,9 +20,7 @@ public class InfoView {
             } else {
                 Unit lastUnit = controller.currentArticle.getValues().get(0);
                 if (lastUnit != null) {
-                    String highPrice = Double.toString(lastUnit.getHigh());
-                    String lowPrice = Double.toString(lastUnit.getLow());
-                    t.setText("Name: " + button.getText() + "\n" + "High: " + highPrice + "\n" + "Low: " + lowPrice);
+                    t.setText("Name: " + button.getText() + "\n" + "High: " + lastUnit.getHigh() + "\n" + "Low: " + lastUnit.getLow());
                 }
             }
             Tooltip.install(button, t);
@@ -31,8 +29,6 @@ public class InfoView {
         Duration.millis(500);
         timeline.play();
     }
-
-
 
     public void showChartInfoView(Node node, Unit unit) {
         Tooltip t = new Tooltip();
@@ -47,7 +43,7 @@ public class InfoView {
                 Date date = cal.getTime();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = sdf.format(date);
-                t.setText("High: " + unit.getLow() + "\n" + "Low: " + unit.getHigh() + "\n" + "Open: " + unit.getOpen()
+                t.setText("Low: " + unit.getLow() + "\n" + "High: " + unit.getHigh() + "\n" + "Open: " + unit.getOpen()
                         + "\n" + "Close: " + unit.getClose() + "\n" + "Volume: " + unit.getVolume() + "\n" + "Time: " + formattedDate);
             }
 

@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import static MainModel.Main.mode;
 
 public class SimulationController extends Controller {
+
+    InfoView infoView = new InfoView();
     Simulation simulation = new Simulation();
     WalletView walletView = new WalletView(this);
     Article walletCurrentArticle = null; // Aktueller Artikle
@@ -32,7 +34,6 @@ public class SimulationController extends Controller {
     ArrayList<Button> walletList = new ArrayList<>();
     Timeline timeline;
     static Label labelAv = new Label();
-
 
     public SimulationController() {
         super();
@@ -122,6 +123,8 @@ public class SimulationController extends Controller {
         Button temp = new Button(currentArticle.getName());
         temp.setPrefWidth(180);
         temp.getStyleClass().add("walletArticle");
+
+        infoView.showInfoView(temp, walletView.controller);
 
         walletList.add(temp);
 

@@ -54,6 +54,7 @@ public class WalletView{
         sellButton.getStyleClass().add("sellButton");
         sellAllButton.getStyleClass().add("sellAllButton");
 
+
         money.setOnAction(event -> {
             if (isAv == true){
                 money.setText(String.valueOf(Simulation.moneyInv));
