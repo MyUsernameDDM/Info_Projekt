@@ -255,7 +255,7 @@ public class Controller {
      *
      */
     public void wlAddArticle() {
-        //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann, aktuell sollte es in ser datei geschrieben werden
+        //todo Artikel selbst auch noch speichern in einer Liste, dass man schnell drauf zugreifen kann, aktuell sollte es in ser datei geschrieben werden; phillip beim bearbeiten
 
         //nicht hinzufuegen, falls der Artikel bereits enthalten ist
         for (Button b : watchListView.buttonList) {
@@ -269,6 +269,7 @@ public class Controller {
         watchListArticles.add(currentArticle);
 
         Button temp = new Button(currentArticle.getName());
+        temp.getStyleClass().add("buttonInList");
         watchListView.buttonList.add(temp);
         watchListView.vBox.getChildren().add(temp);
 

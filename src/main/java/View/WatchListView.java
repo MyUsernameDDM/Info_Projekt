@@ -25,7 +25,7 @@ public class WatchListView {
         setButtons();
         setTitel();
 
-        scrollPane.prefHeight(Integer.MAX_VALUE);
+        scrollPane.prefHeight(500);
         scrollPane.setContent(vBox);
 
         wlRoot.getChildren().addAll(titel,addButton, removeButton, scrollPane);
@@ -44,6 +44,7 @@ public class WatchListView {
         removeButton.setPrefWidth(150);
         removeButton.setPrefHeight(30);
         removeButton.getStyleClass().add("addAndRemoveButtonNormal");
+
 
         wlRoot.setMargin(addButton, new Insets(10, 10, 10, 10));
         wlRoot.setMargin(removeButton, new Insets(10, 10, 10, 10));

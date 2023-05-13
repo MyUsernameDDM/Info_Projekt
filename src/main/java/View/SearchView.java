@@ -29,10 +29,14 @@ public class SearchView extends Thread {
      */
     public SearchView(Controller controller) {
         this.controller = controller;
+        outputSearchView.setStyle("-fx-background-color: transparent");
+        recommendsBox.setStyle("-fx-background-radius-radius: 10");
+        recommendsBox.setStyle("-fx-border-radius: 10");
+        recommendsBox.setStyle("-fx-background-color: rgba(206,15,15,0.9)");
         setButtonsSearchView();
 
         //Styleklassen setzen
-        outputSearchView.getStyleClass().add("searchListElements");
+        //outputSearchView.getStyleClass().add("-searchScrollBar");
         searchInputTextField.getStyleClass().add("searchMenuElements");
         searchButton.getStyleClass().add("searchMenuElements");
 
@@ -61,6 +65,7 @@ public class SearchView extends Thread {
         searchButton.setPrefWidth(80);
         for (int i = 0; i < 10; ++i) {
             recommends[i] = new Button();
+            recommends[i].getStyleClass().add("buttonInList");
         }
         if (root.getChildren().size() == 0)
             root.getChildren().addAll(searchInputTextField, searchButton);

@@ -31,6 +31,7 @@ public class WalletView{
     Label moneyAv = new Label();
 
     Label note = new Label("Enter Amount:");
+    VBox upperwalletvbox = new VBox();
 
     boolean open = false;
     public WalletView(SimulationController controller) {
@@ -132,10 +133,11 @@ public class WalletView{
         hBox.setMargin(buyButton, new Insets(10, 10, 10, 10));
         hBox.setMargin(sellButton, new Insets(10, 10, 10, 10));
 
-        VBox upperwallervbox = new VBox(money, SimulationController.labelAv, hBox, sellAllButton, confirmWindow);
 
-        upperwallervbox.setMargin(SimulationController.labelAv, new Insets(5,5,5,10));
-        upperwallervbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
+        upperwalletvbox.getChildren().addAll(money, controller.labelAv, hBox, sellAllButton, confirmWindow);
+
+        upperwalletvbox.setMargin(controller.labelAv, new Insets(5,5,5,10));
+        upperwalletvbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
         scrollPane.prefHeight(500);
         scrollPane.setHmin(500);
@@ -146,7 +148,7 @@ public class WalletView{
         VBox.setMargin(scrollPane, new Insets(5,5,5,10));
 
 
-        walletRoot.getChildren().addAll(upperwallervbox, scrollPane);
+        walletRoot.getChildren().addAll(upperwalletvbox, scrollPane);
         walletRoot.setPrefWidth(270);
     }
 }

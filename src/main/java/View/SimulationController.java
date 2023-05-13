@@ -33,7 +33,9 @@ public class SimulationController extends Controller {
     ArrayList<Article> walletListArticles = new ArrayList<>();
     ArrayList<Button> walletList = new ArrayList<>();
     Timeline timeline;
-    static Label labelAv = new Label();
+    Label labelAv = new Label();
+
+
 
     public SimulationController() {
         super();
@@ -55,6 +57,7 @@ public class SimulationController extends Controller {
             //System.out.println(walletView.buttonList.size());
 
         }));
+        setWindowAdjustment();
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
@@ -66,6 +69,14 @@ public class SimulationController extends Controller {
 
     public Scene getScene(){
         return groundView.scene;
+    }
+
+    public void setSimulation(Simulation simulation) {
+        this.simulation = simulation;
+    }
+
+    public Simulation getSimulation() {
+        return simulation;
     }
 
     /**

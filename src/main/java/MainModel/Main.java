@@ -1,5 +1,6 @@
 package MainModel;
 
+import Utils.SimulationUtils;
 import View.Controller;
 import View.SimulationController;
 import javafx.animation.Animation;
@@ -30,16 +31,21 @@ public class Main extends Application {
         mode = status.realtime;
         Controller realtimeController = new Controller();
         SimulationController simulationController = new SimulationController();
+        SimulationUtils simulationUtils = new SimulationUtils(simulationController);
         Timeline run = new Timeline(new KeyFrame(new Duration(10), actionEvent -> {
             //System.out.println(mode.toString());
             if (mode == status.realtime){
                 scene = realtimeController.getScene();
+                stage.setWidth(simulationController.getScene().getWidth());
+                stage.setHeight(simulationController.getScene().getHeight());
                 stage.setTitle("Realtime");
                 stage.setScene(scene);
                 stage.show();
                 mode = status.standby;
             } else if(mode == status.simulation){
                 scene = simulationController.getScene();
+                stage.setWidth(realtimeController.getScene().getWidth());
+                stage.setHeight(realtimeController.getScene().getHeight());
                 stage.setTitle("Simulation");
                 stage.setScene(scene);
                 stage.show();
