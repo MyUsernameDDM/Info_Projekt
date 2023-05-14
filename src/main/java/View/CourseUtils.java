@@ -8,6 +8,8 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Date;
+
 
 public class CourseUtils {
     public enum courseStatus {normalCourse, chartCourse}
@@ -123,20 +125,29 @@ public class CourseUtils {
 
         //übergeben an setCandleStick
         if (courseState == courseStatus.chartCourse) {
+            int count=0;
             for (Unit u : controller.currentArticle.getValues()) {
-                setCandleStick(u, valueperPixelWidth, valueperPixelHeight, candleStickWidth, min.getLow(), startTime);
+                setCandleStick(u, valueperPixelWidth, valueperPixelHeight, candleStickWidth, min.getLow(), startTime,count);
+                count++;
             }
         } else {
-            setNormalView(valueperPixelWidth, valueperPixelHeight, min.getLow(), startTime, controller.currentArticle.getValues().get(0).getClose() > controller.currentArticle.getValues().get(controller.currentArticle.getPointAmount() - 1).getClose());
+            setNormalView(valueperPixelWidth, valueperPixelHeight, min.getLow(), controller.currentArticle.getValues().get(controller.currentArticle.getPointAmount() - 1).getDate(), controller.currentArticle.getValues().get(0).getClose() > controller.currentArticle.getValues().get(controller.currentArticle.getPointAmount() - 1).getClose());
         }
     }
 
-    private void setNormalView(double posx, double posy, double startHeight, long startTime, boolean rise) {
+    private void setNormalView(double posx, double posy, double startHeight, Date startTime, boolean rise) {
         for (int i = 0; i < controller.currentArticle.getPointAmount() - 1; ++i) {
-            double startPosX = (controller.currentArticle.getValues().get(i).getDate().getTime() - startTime) / posx;
+
+            double startPosX = (controller.currentArticle.getValues().get(i).getDate().getTime() - startTime.getTime()) / posx;
             double startPosY = (controller.currentArticle.getValues().get(i).getClose() - startHeight) / posy;
-            double endPosX = (controller.currentArticle.getValues().get(i + 1).getDate().getTime() - startTime) / posx;
+            double endPosX = (controller.currentArticle.getValues().get(i + 1).getDate().getTime() - startTime.getTime()) / posx;
             double endPosY = (controller.currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
+            if (controller.currentTimeSpan == TimeSpan.day) {
+                startPosX= courseView.backGround.getWidth()/controller.currentArticle.getPointAmount()*i;
+                startPosY = (controller.currentArticle.getValues().get(i).getClose() - startHeight) / posy;
+                endPosX = courseView.backGround.getWidth()/controller.currentArticle.getPointAmount()*(i+1);
+                endPosY = (controller.currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
+            }
             Line l = new Line(startPosX, courseView.backGround.getHeight() - startPosY, endPosX, courseView.backGround.getHeight() - endPosY);
             controller.courseView.points.add(new Ellipse(startPosX, startPosY, 5, 5));
 
@@ -160,9 +171,11 @@ public class CourseUtils {
      * @param width
      * @param startHeight
      */
-    private void setCandleStick(Unit u, double posx, double posy, double width, double startHeight, long startTime) {
+    private void setCandleStick(Unit u, double posx, double posy, double width, double startHeight, long startTime, int index) {
         double candlePosy = ((Math.max(u.getOpen(), u.getClose()) - startHeight) / posy);
         double candlePosx = (u.getDate().getTime() - startTime) / posx;
+        if(controller.currentTimeSpan == TimeSpan.day)
+            candlePosx=courseView.backGround.getWidth()/controller.currentArticle.getPointAmount()*index;
         double candlePosYMin = ((Math.min(u.getClose(), u.getOpen()) - startHeight) / posy);
         Rectangle body = new Rectangle(width, Math.abs(candlePosy - candlePosYMin));
         body.setStroke(Color.BLACK);
