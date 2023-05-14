@@ -4,6 +4,7 @@ module com.example.info_projekt {
     requires alphavantage.java;
     requires com.google.gson;
     requires okhttp3;
+    requires annotations;
 
 
     opens MainModel to javafx.fxml;

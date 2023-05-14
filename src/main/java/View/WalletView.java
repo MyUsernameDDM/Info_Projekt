@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.jetbrains.annotations.NotNull;
 
 public class WalletView{
 
@@ -24,9 +25,7 @@ public class WalletView{
     Button buyButton = new Button("BUY");
     Rectangle buySettings = new Rectangle(230, 50);
     TextField textFieldUserAmount = new TextField("0");
-
-    Label moneyAv = new Label();
-
+    Label moneyShow = new Label();
     Label note = new Label("Enter Amount:");
     VBox upperwalletvbox = new VBox();
     Label labelAv = new Label();
@@ -35,37 +34,19 @@ public class WalletView{
     Button newSimButton = new Button();
     Button loadSimButton = new Button();
     Button saveSimButton = new Button();
-
     boolean open = false;
     public WalletView(SimulationController controller) {
-        setSimulationElements();
 
         this.controller = controller;
 
-        buyButton.setPrefWidth(100);
-        sellButton.setPrefWidth(100);
-        sellAllButton.setPrefWidth(210);
-        moneyAv.setText(String.valueOf(Simulation.moneyAv));
-        Button money = new Button(String.valueOf(Simulation.moneyInv));
-        Button confirmBuyButton = new Button("CONFIRM");
-        Button confirmCancelButton = new Button("CANCEL");
+        windowSettingUp result = getWindowSettingUp();
 
-        money.setStyle("-fx-background-color: #ffffff;");
-        money.setPrefHeight(75);
-        money.setPrefWidth(230);
-        money.getStyleClass().add("moneyButton");
-
-        buyButton.getStyleClass().add("buyButton");
-        sellButton.getStyleClass().add("sellButton");
-        sellAllButton.getStyleClass().add("sellAllButton");
-
-
-        money.setOnAction(event -> {
+        result.money().setOnAction(event -> {
             if (isAv == true){
-                money.setText(String.valueOf(Simulation.moneyInv));
+                result.money().setText(String.valueOf(simulation.moneyInv));
                 isAv = false;
             } else {
-                money.setText("*****");
+                result.money().setText("*****");
                 isAv = true;
             }
         });
@@ -75,39 +56,14 @@ public class WalletView{
         buyButton.setOnAction(event -> {
 
             if (!open){
-                BorderPane window = new BorderPane();
+                BorderPane window = windowSettingDown(result.confirmBuyButton(), result.confirmCancelButton());
 
-                buySettings.setFill(Color.WHITESMOKE);
-                buySettings.setWidth(270);
-                buySettings.setHeight(100);
-                window.getChildren().add(buySettings);
-
-                confirmCancelButton.getStyleClass().add("cancelButton");
-                confirmBuyButton.getStyleClass().add("confirmBuyButton");
-
-                HBox barConfirm = new HBox(confirmBuyButton, confirmCancelButton);
-                VBox labelTextfieldVbox = new VBox(textFieldUserAmount);
-                textFieldUserAmount.setPrefWidth(170);
-                textFieldUserAmount.setMaxWidth(200);
-
-                window.setTop(note);
-                window.setCenter(labelTextfieldVbox);
-                window.setBottom(barConfirm);
-
-                barConfirm.setMargin(confirmBuyButton, new Insets(5, 5, 5, 10));
-                barConfirm.setMargin(confirmCancelButton, new Insets(5, 5, 5, 10));
-                window.setMargin(note, new Insets(5,5,5,10));
-                window.setMargin(labelTextfieldVbox, new Insets(5,5,5,10));
-                window.setMargin(textFieldUserAmount, new Insets(5,5,5,10));
-
-                confirmWindow.getChildren().add(window);
-
-                confirmBuyButton.setOnAction(event1 -> {
+                result.confirmBuyButton().setOnAction(event1 -> {
                     confirmWindow.getChildren().remove(window);
 
-                    if (Simulation.moneyAv >= 0 && Integer.valueOf(textFieldUserAmount.getText()) <= Simulation.moneyAv) {
-                        Simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
-                        Simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
+                    if (simulation.moneyAv > 0 && Integer.valueOf(textFieldUserAmount.getText()) <= simulation.moneyAv) {
+                        simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
+                        simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
 
                         controller.walletAddArticle(Integer.valueOf(textFieldUserAmount.getText()));
                     }
@@ -115,9 +71,9 @@ public class WalletView{
                     open = false;
                 });
 
-                confirmCancelButton.setOnAction(event1 -> {
-                    System.out.println("CANCEL");
-                    vBox.getChildren().remove(window);
+                result.confirmCancelButton().setOnAction(event1 -> {
+                    confirmWindow.getChildren().remove(window);
+
                     open = false;
                 });
 
@@ -129,19 +85,51 @@ public class WalletView{
             controller.walletRemoveCurrentArticle();
         });
 
-        sellAllButton.setOnAction(event -> {
-            System.out.println("Sell all");
+        sellAllButton.setOnAction(event -> { // nicht d.
+            //controller.sellAllButton(simulation.walletListArticles);
+            controller.walletRemoveAllArticles();
         });
 
+        VBox upperwallervbox = walletViewSetting(result.money(), hBox);
 
+        walletRoot.getChildren().addAll(upperwallervbox, scrollPane);
+        walletRoot.setPrefWidth(270);
+    }
+
+    @NotNull
+    private windowSettingUp getWindowSettingUp() {
+        buyButton.setPrefWidth(100);
+        sellButton.setPrefWidth(100);
+        sellAllButton.setPrefWidth(210);
+        moneyShow.setText(String.valueOf(simulation.moneyAv));
+        Button money = new Button(String.valueOf(simulation.moneyInv));
+        Button confirmBuyButton = new Button("CONFIRM");
+        Button confirmCancelButton = new Button("CANCEL");
+
+        money.setStyle("-fx-background-color: #ffffff;");
+        money.setPrefHeight(75);
+        money.setPrefWidth(230);
+        money.getStyleClass().add("moneyButton");
+
+        buyButton.getStyleClass().add("buyButton");
+        sellButton.getStyleClass().add("sellButton");
+        sellAllButton.getStyleClass().add("sellAllButton");
+        windowSettingUp result = new windowSettingUp(money, confirmBuyButton, confirmCancelButton);
+        return result;
+    }
+
+    private record windowSettingUp(Button money, Button confirmBuyButton, Button confirmCancelButton) {
+    }
+
+    @NotNull
+    private VBox walletViewSetting(Button money, HBox hBox) {
         hBox.setMargin(buyButton, new Insets(10, 10, 10, 10));
         hBox.setMargin(sellButton, new Insets(10, 10, 10, 10));
 
+        VBox upperwallervbox = new VBox(money, moneyShow, hBox, confirmWindow);
 
-        upperwalletvbox.getChildren().addAll(money, labelAv, hBox, sellAllButton, confirmWindow);
-
-
-        upperwalletvbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
+        upperwallervbox.setMargin(moneyShow, new Insets(5,5,5,10));
+        upperwallervbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
         scrollPane.prefHeight(500);
         scrollPane.setHmin(500);
@@ -150,10 +138,38 @@ public class WalletView{
         scrollPane.setBackground(Background.fill(Color.WHITE));
 
         VBox.setMargin(scrollPane, new Insets(5,5,5,10));
+        return upperwallervbox;
+    }
 
+    @NotNull
+    private BorderPane windowSettingDown(Button confirmBuyButton, Button confirmCancelButton) {
+        BorderPane window = new BorderPane();
 
-        walletRoot.getChildren().addAll(upperwalletvbox, scrollPane);
-        walletRoot.setPrefWidth(270);
+        buySettings.setFill(Color.WHITESMOKE);
+        buySettings.setWidth(270);
+        buySettings.setHeight(100);
+        window.getChildren().add(buySettings);
+
+        confirmCancelButton.getStyleClass().add("cancelButton");
+        confirmBuyButton.getStyleClass().add("confirmBuyButton");
+
+        HBox barConfirm = new HBox(confirmBuyButton, confirmCancelButton);
+        VBox labelTextfieldVbox = new VBox(textFieldUserAmount);
+        textFieldUserAmount.setPrefWidth(170);
+        textFieldUserAmount.setMaxWidth(200);
+
+        window.setTop(note);
+        window.setCenter(labelTextfieldVbox);
+        window.setBottom(barConfirm);
+
+        barConfirm.setMargin(confirmBuyButton, new Insets(5, 5, 5, 10));
+        barConfirm.setMargin(confirmCancelButton, new Insets(5, 5, 5, 10));
+        window.setMargin(note, new Insets(5,5,5,10));
+        window.setMargin(labelTextfieldVbox, new Insets(5,5,5,10));
+        window.setMargin(textFieldUserAmount, new Insets(5,5,5,10));
+
+        confirmWindow.getChildren().add(window);
+        return window;
     }
 
     /**
