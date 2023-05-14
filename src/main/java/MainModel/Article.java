@@ -1,13 +1,18 @@
 package MainModel;
 
 import com.crazzyghost.alphavantage.AlphaVantage;
+import com.crazzyghost.alphavantage.AlphaVantageException;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
 
-import java.io.Serializable;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
+import com.google.gson.stream.JsonReader;
+import okhttp3.Response;
 
 
 public class Article implements Serializable {
@@ -97,7 +102,11 @@ public class Article implements Serializable {
         values.clear();
 
         pointAmount = 0;
-        apiResponse = getResponse(timeSpan);
+        try {
+            apiResponse = getResponse(timeSpan);
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
         if (apiResponse == null)
             return false;
         values = getValuesFromSpan(timeSpan, apiResponse);
@@ -156,7 +165,11 @@ public class Article implements Serializable {
                 } else if (tsInOther && (t == TimeSpan.fiveYear || t == TimeSpan.max)) {
                     otherTimeSpans[count].setValues(getValuesFromSpan(t, otherTimeSpans[indexInOther].getApiResponse()));
                 } else {
-                    otherTimeSpans[count].setApiResponse(getResponse(t));
+                    try {
+                        otherTimeSpans[count].setApiResponse(getResponse(t));
+                    }catch(IOException ex){
+                        System.out.println(ex.getMessage());
+                    }
                     if (otherTimeSpans[count].getApiResponse() == null)
                         break;
                     otherTimeSpans[count].setValues(getValuesFromSpan(t, otherTimeSpans[count].getApiResponse()));
@@ -172,19 +185,74 @@ public class Article implements Serializable {
         }
     }
 
-    private TimeSeriesResponse getResponse(TimeSpan timeSpan) {
+    private TimeSeriesResponse getResponse(TimeSpan timeSpan) throws IOException {
         TimeSeriesResponse response = null;
         if (timeSpan == TimeSpan.day) {
-            response = AlphaVantage.api().timeSeries().intraday().forSymbol(symbol).fetchSync();
+            try {
+                response = AlphaVantage.api().timeSeries().intraday().forSymbol(symbol).fetchSync();
+            }catch(AlphaVantageException e){
+                Throwable cause = e.getCause();
+                if (cause instanceof HttpException) {
+                    HttpException httpException = (HttpException) cause;
+                    Response errorResponse = httpException.response();
+                    InputStream responseStream = errorResponse.body().byteStream();
+                    String responseString = new String(responseStream.readAllBytes(), StandardCharsets.UTF_8);
+                    JsonReader reader = new JsonReader(new StringReader(responseString));
+                    reader.setLenient(true);
+                }
+
+                response = AlphaVantage.api().timeSeries().intraday().forSymbol(symbol).fetchSync();
+
+            }
         }
         if (timeSpan == TimeSpan.oneMonth || timeSpan == TimeSpan.threeMonths) {
-            response = AlphaVantage.api().timeSeries().daily().adjusted().forSymbol(symbol).fetchSync();
+            try {
+                response = AlphaVantage.api().timeSeries().daily().adjusted().forSymbol(symbol).fetchSync();
+            }catch(AlphaVantageException e){
+                Throwable cause = e.getCause();
+                if (cause instanceof HttpException) {
+                    HttpException httpException = (HttpException) cause;
+                    Response errorResponse = httpException.response();
+                    InputStream responseStream = errorResponse.body().byteStream();
+                    String responseString = new String(responseStream.readAllBytes(), StandardCharsets.UTF_8);
+                    JsonReader reader = new JsonReader(new StringReader(responseString));
+                    reader.setLenient(true);
+                }
+                response = AlphaVantage.api().timeSeries().daily().adjusted().forSymbol(symbol).fetchSync();
+
+            }
         }
         if (timeSpan == TimeSpan.sixMonths || timeSpan == TimeSpan.yearToday || timeSpan == TimeSpan.year) {
-            response = AlphaVantage.api().timeSeries().weekly().forSymbol(symbol).fetchSync();
+            try {
+                response = AlphaVantage.api().timeSeries().weekly().forSymbol(symbol).fetchSync();
+            }catch (AlphaVantageException e){
+                Throwable cause = e.getCause();
+                if (cause instanceof HttpException) {
+                    HttpException httpException = (HttpException) cause;
+                    Response errorResponse = httpException.response();
+                    InputStream responseStream = errorResponse.body().byteStream();
+                    String responseString = new String(responseStream.readAllBytes(), StandardCharsets.UTF_8);
+                    JsonReader reader = new JsonReader(new StringReader(responseString));
+                    reader.setLenient(true);
+                }
+                response = AlphaVantage.api().timeSeries().weekly().forSymbol(symbol).fetchSync();
+            }
         }
         if (timeSpan == TimeSpan.fiveYear || timeSpan == TimeSpan.max) {
-            response = AlphaVantage.api().timeSeries().monthly().forSymbol(symbol).fetchSync();
+            try {
+                response = AlphaVantage.api().timeSeries().monthly().forSymbol(symbol).fetchSync();
+            }catch (AlphaVantageException e){
+                Throwable cause = e.getCause();
+                if (cause instanceof HttpException) {
+                    HttpException httpException = (HttpException) cause;
+                    Response errorResponse = httpException.response();
+                    InputStream responseStream = errorResponse.body().byteStream();
+                    String responseString = new String(responseStream.readAllBytes(), StandardCharsets.UTF_8);
+                    JsonReader reader = new JsonReader(new StringReader(responseString));
+                    reader.setLenient(true);
+                }
+                response = AlphaVantage.api().timeSeries().monthly().forSymbol(symbol).fetchSync();
+            }
         }
         if (response == null || response.getStockUnits() == null || response.getStockUnits().size() == 0)//wenn zu viele api calls gemacht wurden.
         {

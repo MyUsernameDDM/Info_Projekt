@@ -140,7 +140,7 @@ public class WalletView{
 
         upperwalletvbox.getChildren().addAll(money, labelAv, hBox, sellAllButton, confirmWindow);
 
-        upperwalletvbox.setMargin(labelAv, new Insets(5,5,5,10));
+
         upperwalletvbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
         scrollPane.prefHeight(500);

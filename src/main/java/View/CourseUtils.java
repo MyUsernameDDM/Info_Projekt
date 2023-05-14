@@ -67,7 +67,6 @@ public class CourseUtils {
             }
         }
         controller.currentArticle = article;
-        courseState = CourseUtils.courseStatus.normalCourse;
         showCourse();
     }
 
