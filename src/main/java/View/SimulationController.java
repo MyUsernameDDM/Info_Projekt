@@ -2,6 +2,7 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
+import MainModel.Unit;
 import Utils.SimulationUtils;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -18,8 +19,10 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -35,8 +38,7 @@ public class SimulationController extends Controller {
     ArrayList<Button> walletList = new ArrayList<>();
     Timeline timeline;
     SimulationUtils simulationUtils = new SimulationUtils(this);
-
-
+    int moneyInvest;
 
     public SimulationController() {
         super();
@@ -45,27 +47,6 @@ public class SimulationController extends Controller {
                 groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(),
                 groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
 
-
-
-        /*
-        timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
-            //System.out.println("Update");
-
-            labelAv.setText(String.valueOf(Simulation.moneyAv)); // Update A. M.
-
-            for (int i = 0; i < walletList.size(); i++){
-                //simulation.moneyInv *=
-            }
-            //System.out.println(walletView.buttonList.size());
-
-        }));
-
-
-        setWindowAdjustment();
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-
-         */
 
     }
 
@@ -108,8 +89,6 @@ public class SimulationController extends Controller {
                 courseUtils.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
                 groundView.oldSceneWidth = newSceneWidth;
                 groundView.oldSceneHeight = newSceneHeight;
-
-
             }
         };
 
@@ -157,30 +136,9 @@ public class SimulationController extends Controller {
 
     public void walletAddArticle(int money) {
 
-        Text priceArticle = new Text(String.valueOf(money));
-        Text currency = new Text("€");
-        priceArticle.getStyleClass().add("priceArticle");
-        currency.getStyleClass().add("priceArticle");
+        moneyInvest = money;
 
-        walletListArticles.add(currentArticle);
-
-        Button temp = new Button(currentArticle.getName());
-        temp.setPrefWidth(180);
-        temp.getStyleClass().add("walletArticle");
-
-        infoView.showInfoView(temp, walletView.controller);
-
-        walletList.add(temp);
-
-        VBox.setMargin(temp, new Insets(5, 5, 5, 10));
-        HBox.setMargin(priceArticle, new Insets(5, 5, 5, 10));
-        HBox.setMargin(currency, new Insets(5, 5, 5, 10));
-        HBox addArticle = new HBox(temp, priceArticle, currency);
-        addArticle.setAlignment(Pos.CENTER);
-
-        addArticle.getStyleClass().add("frameHBox");
-
-        walletView.vBox.getChildren().add(addArticle);
+        Button temp = simulationArticle(money);
 
         temp.setOnAction(actionEvent -> {
             //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
@@ -195,7 +153,69 @@ public class SimulationController extends Controller {
             walletSafeCurrentArticle(currentArticle.getName());
         });
 
-        Simulation.openShares += 1;
+        simulation.openShares += 1;
+        simulation.moneyAv -= moneyInvest;
+
+        timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
+            for (int i = 0; i < simulation.walletListArticles.size(); i++){
+                refreshArticle(i);
+            }
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    private void refreshArticle(int i) {
+        Article article = simulation.walletListArticles.get(i);
+        Unit lastUnit = article.getValues().get(article.getValues().size() - 1);
+
+        if (lastUnit.getClose() < moneyInvest){
+            simulation.cash.setFill(Color.GREEN);
+        } else {
+            simulation.cash.setFill(Color.RED);
+        }
+
+        double result = ((moneyInvest - (moneyInvest * simulation.fee)) / lastUnit.getClose());
+        String formattedResult = String.format("%.4f", result);
+        simulation.shares.setText(formattedResult);
+
+        double cashText = (result * lastUnit.getClose());
+        String formattedResult2 = String.format("%.2f", cashText);
+        simulation.cash.setText(formattedResult2);
+        simulation.priceArticle.setText(String.valueOf(lastUnit.getClose()));
+    }
+
+    @NotNull
+    private Button simulationArticle(int money) {
+
+        Button temp = new Button(currentArticle.getName());
+        temp.setPrefWidth(50);
+        temp.getStyleClass().add("walletArticle");
+
+        simulation.priceArticle = new Text(String.valueOf(money));
+        simulation.currency = new Text("€");
+        simulation.shares = new Text("0");
+        simulation.cash = new Text("0");
+        simulation.priceArticle.getStyleClass().add("priceArticle");
+        simulation.currency.getStyleClass().add("priceArticle");
+        simulation.shares.getStyleClass().add("priceArticle");
+        simulation.cash.getStyleClass().add("priceArticle");
+
+        simulation.walletListArticles.add(currentArticle);
+        infoView.showInfoView(temp, walletView.controller);
+        walletList.add(temp);
+
+        VBox.setMargin(temp, new Insets(5, 5, 5, 10));
+        HBox.setMargin(simulation.priceArticle, new Insets(5, 5, 5, 10));
+        HBox.setMargin(simulation.cash, new Insets(5, 5, 5, 5));
+        HBox.setMargin(simulation.currency, new Insets(5, 5, 5, 0));
+        HBox addArticle = new HBox(temp, simulation.priceArticle, simulation.shares, simulation.cash, simulation.currency);
+
+        addArticle.getStyleClass().add("frameHBox");
+        addArticle.setAlignment(Pos.CENTER);
+
+        walletView.vBox.getChildren().add(addArticle);
+        return temp;
     }
 
     /**
@@ -242,9 +262,9 @@ public class SimulationController extends Controller {
                         String price = priceText.getText();
                         System.out.println("Removed article: " + walletCurrentArticle.getName() + ", price: " + price);
 
-                        Simulation.openShares -= 1;
-                        Simulation.moneyAv += Double.valueOf(price);
-                        walletView.labelAv.setText(String.valueOf(Simulation.moneyAv));
+                        simulation.openShares -= 1;
+                        simulation.moneyAv += Double.valueOf(price);
+                        walletView.labelAv.setText(String.valueOf(simulation.moneyAv));
                         break;
                     }
                 }
@@ -252,8 +272,6 @@ public class SimulationController extends Controller {
             walletListArticles.remove(walletCurrentArticle);
         }
     }
-
-
 
     public void modeSceneChanger(){
         groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -265,6 +283,19 @@ public class SimulationController extends Controller {
         }
     }
 
+    public void walletRemoveAllArticles(){
+        // Lösche alle Artikel aus der View
+        walletView.vBox.getChildren().clear();
+        walletList.clear();
+        // Setze den aktuellen Artikel zurück
+        walletCurrentArticle = null;
+        // Lösche alle Artikel aus der Simulation
+        simulation.walletListArticles.clear();
+        simulation.openShares = 0;
+        simulation.moneyAv = 1000;
 
+        // Setze die Label zurück
+        simulation.labelAv.setText(String.valueOf(simulation.moneyAv));
+    }
 }
 
