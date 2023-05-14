@@ -33,7 +33,6 @@ public class SimulationController extends Controller {
     ArrayList<Article> walletListArticles = new ArrayList<>();
     ArrayList<Button> walletList = new ArrayList<>();
     Timeline timeline;
-    Label labelAv = new Label();
 
 
 
@@ -46,6 +45,7 @@ public class SimulationController extends Controller {
 
 
 
+        /*
         timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
             //System.out.println("Update");
 
@@ -57,9 +57,13 @@ public class SimulationController extends Controller {
             //System.out.println(walletView.buttonList.size());
 
         }));
+
+
         setWindowAdjustment();
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
+         */
 
     }
 
@@ -99,7 +103,7 @@ public class SimulationController extends Controller {
                 double heightRatio = newSceneHeight / groundView.oldSceneHeight;
 
                 //folgende Zeile ist zum normalen Controller unterschiedlich
-                //courseUtils.adjustCourseSize(groundView.scene.getWidth() - SimulationController.this.walletView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+                courseUtils.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
                 groundView.oldSceneWidth = newSceneWidth;
                 groundView.oldSceneHeight = newSceneHeight;
 
@@ -120,6 +124,10 @@ public class SimulationController extends Controller {
 
     private void setWalletView() {
         groundView.window.setLeft(walletView.walletRoot);
+        groundView.menu.getChildren().add(walletView.simulationCoverInMenu);
+        walletView.simulationCoverInMenu.setOnAction(actionEvent -> {
+
+        });
     }
 
     public void walletAddArticle(int money) {
@@ -192,7 +200,7 @@ public class SimulationController extends Controller {
     }
 
     /**
-     * Die Methode löscht das aktuell ausgewählte Element der Watchlist aus dieser
+     * Die Methode löscht das aktuell ausgewählte Element der Walletlist aus dieser
      */
     public void walletRemoveCurrentArticle() {
         if (walletCurrentArticle != null) {
@@ -211,7 +219,7 @@ public class SimulationController extends Controller {
 
                         Simulation.openShares -= 1;
                         Simulation.moneyAv += Double.valueOf(price);
-
+                        walletView.labelAv.setText(String.valueOf(Simulation.moneyAv));
                         break;
                     }
                 }

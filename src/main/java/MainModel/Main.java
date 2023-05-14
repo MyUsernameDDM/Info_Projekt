@@ -32,7 +32,7 @@ public class Main extends Application {
         Controller realtimeController = new Controller();
         SimulationController simulationController = new SimulationController();
         SimulationUtils simulationUtils = new SimulationUtils(simulationController);
-        Timeline run = new Timeline(new KeyFrame(new Duration(10), actionEvent -> {
+        Timeline run = new Timeline(new KeyFrame(new Duration(50), actionEvent -> {
             //System.out.println(mode.toString());
             if (mode == status.realtime){
                 scene = realtimeController.getScene();

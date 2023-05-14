@@ -1,10 +1,7 @@
 package View;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -32,9 +29,16 @@ public class WalletView{
 
     Label note = new Label("Enter Amount:");
     VBox upperwalletvbox = new VBox();
+    Label labelAv = new Label();
+    VBox simulationButtonVBox = new VBox();
+    Button simulationCoverInMenu = new Button("Simulation");
+    Button newSimButton = new Button();
+    Button loadSimButton = new Button();
+    Button saveSimButton = new Button();
 
     boolean open = false;
     public WalletView(SimulationController controller) {
+        setSimulationElements();
 
         this.controller = controller;
 
@@ -134,9 +138,9 @@ public class WalletView{
         hBox.setMargin(sellButton, new Insets(10, 10, 10, 10));
 
 
-        upperwalletvbox.getChildren().addAll(money, controller.labelAv, hBox, sellAllButton, confirmWindow);
+        upperwalletvbox.getChildren().addAll(money, labelAv, hBox, sellAllButton, confirmWindow);
 
-        upperwalletvbox.setMargin(controller.labelAv, new Insets(5,5,5,10));
+        upperwalletvbox.setMargin(labelAv, new Insets(5,5,5,10));
         upperwalletvbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
         scrollPane.prefHeight(500);
@@ -150,5 +154,28 @@ public class WalletView{
 
         walletRoot.getChildren().addAll(upperwalletvbox, scrollPane);
         walletRoot.setPrefWidth(270);
+    }
+
+    /**
+     * Methode, die eine Combobox mit Elementen befuellt, damit verschiedene Simulationen geladen werden koennen
+     */
+    private void setSimulationElements() {
+        simulationCoverInMenu.getStyleClass().add("menuButton");
+
+
+        simulationCoverInMenu.setPrefWidth(300);
+        simulationCoverInMenu.setPrefHeight(20);
+        simulationCoverInMenu.setTextFill(Color.WHITE);
+
+        simulationButtonVBox.getChildren().addAll(newSimButton,loadSimButton, saveSimButton);
+
+        newSimButton.setText("New");
+        newSimButton.getStyleClass().add("buttonInList");
+        loadSimButton.setText("Load");
+        loadSimButton.getStyleClass().add("buttonInList");
+        saveSimButton.setText("save");
+        saveSimButton.getStyleClass().add("buttonInList");
+
+
     }
 }

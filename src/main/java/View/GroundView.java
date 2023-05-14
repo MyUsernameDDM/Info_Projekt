@@ -25,8 +25,6 @@ public class GroundView {
     //Menu erstellen
     HBox menu = new HBox();
     Button modeButton = new Button();
-    Button wallet = new Button();
-
     Button simulationModeButton = new Button();
     Button changeStateButton = new Button("Normal");
     HBox timeBox = new HBox();
@@ -58,32 +56,20 @@ public class GroundView {
     }
 
 
-    /*
-
-    Alle größen setzen (Button, etc.)
-    Mingröße
-
-     */
 
     /**
      * Methode um die GroundView grafisch darzustellen
      */
     public void displayGraphic(){
         //Menu
-        wallet.setText("WALLET");
-        wallet.getStyleClass().add("menuButton");
-        wallet.setPrefWidth(150);
-        wallet.setPrefHeight(30);
-        wallet.setTextFill(Color.WHITE);
-
         modeButton.setText("MODE");
         modeButton.getStyleClass().add("menuButton");
         modeButton.setPrefWidth(150);
         modeButton.setPrefHeight(30);
         modeButton.setTextFill(Color.WHITE);
 
-        menu.getChildren().addAll(modeButton, wallet);
-        menu.setMargin(wallet, new Insets(1,1,1,1));
+
+        menu.getChildren().add(modeButton);
         menu.setMargin(modeButton, new Insets(1, 1, 1, 1));
         menu.setPrefHeight(70);
 
@@ -132,14 +118,6 @@ public class GroundView {
             modeButton.setTextFill(Color.LIGHTBLUE);
         } else {
             modeButton.setTextFill(Color.WHITE);
-        }
-    }
-
-    public void walletHover(Boolean status){
-        if(status){
-            wallet.setTextFill(Color.LIGHTBLUE);
-        } else {
-            wallet.setTextFill(Color.WHITE);
         }
     }
 

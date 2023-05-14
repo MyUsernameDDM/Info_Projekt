@@ -397,19 +397,6 @@ public class Controller {
             }
         });
 
-        groundView.wallet.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                groundView.walletHover(false);
-            }
-        });
-
-        groundView.wallet.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                groundView.walletHover(true);
-            }
-        });
     }
 
     public void timeButtonListener() {
