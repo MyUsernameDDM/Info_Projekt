@@ -54,4 +54,30 @@ public class SimulationUtils {
             }
         }
     }
+
+    public void saveCurrentSimulation(){
+        //aktuelle Simulation öffnen
+        FileChooser fileChooser = new FileChooser();
+
+        //automatisch .ser als Dateiendung vorschlagen
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Serialized objects (*.ser)", "*.ser");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try {
+                // Serialize Simulation in das File
+                FileOutputStream fileOut = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(controller.getSimulation());
+                out.close();
+                fileOut.close();
+
+                System.out.println("Object serialized and saved to file: " + file.getAbsolutePath());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }
