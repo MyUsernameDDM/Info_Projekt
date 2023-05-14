@@ -162,11 +162,6 @@ public class WalletView{
     private void setSimulationElements() {
         simulationCoverInMenu.getStyleClass().add("menuButton");
 
-
-        simulationCoverInMenu.setPrefWidth(300);
-        simulationCoverInMenu.setPrefHeight(20);
-        simulationCoverInMenu.setTextFill(Color.WHITE);
-
         simulationButtonVBox.getChildren().addAll(newSimButton,loadSimButton, saveSimButton);
 
         newSimButton.setText("New");
@@ -175,7 +170,9 @@ public class WalletView{
         loadSimButton.getStyleClass().add("buttonInList");
         saveSimButton.setText("save");
         saveSimButton.getStyleClass().add("buttonInList");
+    }
 
-
+    public void removeSimulationOptions() {
+        simulationButtonVBox.setVisible(false);
     }
 }

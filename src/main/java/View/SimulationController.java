@@ -2,6 +2,7 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
+import Utils.SimulationUtils;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -33,6 +34,7 @@ public class SimulationController extends Controller {
     ArrayList<Article> walletListArticles = new ArrayList<>();
     ArrayList<Button> walletList = new ArrayList<>();
     Timeline timeline;
+    SimulationUtils simulationUtils = new SimulationUtils(this);
 
 
 
@@ -107,6 +109,7 @@ public class SimulationController extends Controller {
                 groundView.oldSceneWidth = newSceneWidth;
                 groundView.oldSceneHeight = newSceneHeight;
 
+
             }
         };
 
@@ -123,10 +126,32 @@ public class SimulationController extends Controller {
     }
 
     private void setWalletView() {
-        groundView.window.setLeft(walletView.walletRoot);
-        groundView.menu.getChildren().add(walletView.simulationCoverInMenu);
-        walletView.simulationCoverInMenu.setOnAction(actionEvent -> {
+        //Liste für die Buttons anzeigen
+        groundView.root.getChildren().add(walletView.simulationButtonVBox);
+        walletView.simulationButtonVBox.setVisible(false);
 
+        groundView.menu.getChildren().add(walletView.simulationCoverInMenu);
+
+        groundView.window.setLeft(walletView.walletRoot);
+        walletView.simulationCoverInMenu.setOnAction(actionEvent -> {
+            walletView.simulationButtonVBox.setLayoutX(walletView.simulationCoverInMenu.getLayoutX() + 20);
+            walletView.simulationButtonVBox.setLayoutY(walletView.simulationCoverInMenu.getLayoutY() + walletView.simulationCoverInMenu.getHeight());
+            walletView.simulationButtonVBox.setVisible(true);
+        });
+
+        walletView.newSimButton.setOnAction(actionEvent -> {
+
+        });
+        walletView.loadSimButton.setOnAction(actionEvent -> {
+
+        });
+        walletView.saveSimButton.setOnAction(actionEvent -> {
+            simulationUtils.saveCurrentSimulation();
+        });
+
+        //wenn außerhalb geklickt, wird, dann soll die Liste weggehen
+        groundView.root.setOnMouseClicked(e -> {
+            walletView.removeSimulationOptions();
         });
     }
 
