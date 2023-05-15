@@ -169,19 +169,19 @@ public class SimulationController extends Controller {
         Unit lastUnit = article.getValues().get(article.getValues().size() - 1);
 
         if (lastUnit.getClose() < moneyInvest){
-            simulation.cash.setFill(Color.GREEN);
+            walletView.cash.setFill(Color.GREEN);
         } else {
-            simulation.cash.setFill(Color.RED);
+            walletView.cash.setFill(Color.RED);
         }
 
         double result = ((moneyInvest - (moneyInvest * simulation.fee)) / lastUnit.getClose());
         String formattedResult = String.format("%.4f", result);
-        simulation.shares.setText(formattedResult);
+        walletView.shares.setText(formattedResult);
 
         double cashText = (result * lastUnit.getClose());
         String formattedResult2 = String.format("%.2f", cashText);
-        simulation.cash.setText(formattedResult2);
-        simulation.priceArticle.setText(String.valueOf(lastUnit.getClose()));
+        walletView.cash.setText(formattedResult2);
+        walletView.priceArticle.setText(String.valueOf(lastUnit.getClose()));
     }
 
     @NotNull
@@ -191,24 +191,24 @@ public class SimulationController extends Controller {
         temp.setPrefWidth(50);
         temp.getStyleClass().add("walletArticle");
 
-        simulation.priceArticle = new Text(String.valueOf(money));
-        simulation.currency = new Text("€");
-        simulation.shares = new Text("0");
-        simulation.cash = new Text("0");
-        simulation.priceArticle.getStyleClass().add("priceArticle");
-        simulation.currency.getStyleClass().add("priceArticle");
-        simulation.shares.getStyleClass().add("priceArticle");
-        simulation.cash.getStyleClass().add("priceArticle");
+        walletView.priceArticle = new Text(String.valueOf(money));
+        walletView.currency = new Text("€");
+        walletView.shares = new Text("0");
+        walletView.cash = new Text("0");
+        walletView.priceArticle.getStyleClass().add("priceArticle");
+        walletView.currency.getStyleClass().add("priceArticle");
+        walletView.shares.getStyleClass().add("priceArticle");
+        walletView.cash.getStyleClass().add("priceArticle");
 
         simulation.walletListArticles.add(currentArticle);
         infoView.showInfoView(temp, walletView.controller);
         walletList.add(temp);
 
         VBox.setMargin(temp, new Insets(5, 5, 5, 10));
-        HBox.setMargin(simulation.priceArticle, new Insets(5, 5, 5, 10));
-        HBox.setMargin(simulation.cash, new Insets(5, 5, 5, 5));
-        HBox.setMargin(simulation.currency, new Insets(5, 5, 5, 0));
-        HBox addArticle = new HBox(temp, simulation.priceArticle, simulation.shares, simulation.cash, simulation.currency);
+        HBox.setMargin(walletView.priceArticle, new Insets(5, 5, 5, 10));
+        HBox.setMargin(walletView.cash, new Insets(5, 5, 5, 5));
+        HBox.setMargin(walletView.currency, new Insets(5, 5, 5, 0));
+        HBox addArticle = new HBox(temp, walletView.priceArticle, walletView.shares, walletView.cash, walletView.currency);
 
         addArticle.getStyleClass().add("frameHBox");
         addArticle.setAlignment(Pos.CENTER);
@@ -294,7 +294,7 @@ public class SimulationController extends Controller {
         simulation.moneyAv = 1000;
 
         // Setze die Label zurück
-        simulation.labelAv.setText(String.valueOf(simulation.moneyAv));
+        walletView.labelAv.setText(String.valueOf(simulation.moneyAv));
     }
 }
 
