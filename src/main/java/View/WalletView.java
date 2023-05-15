@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class WalletView{
@@ -35,6 +36,10 @@ public class WalletView{
     Button loadSimButton = new Button();
     Button saveSimButton = new Button();
     boolean open = false;
+    Text currency;
+    Text cash;
+    Text priceArticle;
+    Text shares;
     public WalletView(SimulationController controller) {
         setSimulationElements();
 

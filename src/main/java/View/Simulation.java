@@ -16,11 +16,6 @@ public class Simulation implements Serializable{
     int moneyInv = 0;
     int moneyAv = 1000;
     int openShares = 0;
-    Label labelAv = new Label();
-    Text currency;
-    Text cash;
-    Text priceArticle;
-    Text shares;
 }
 
 
