@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.Date;
 
 
-public class CourseUtils {
+public class CourseController {
     public enum courseStatus {normalCourse, chartCourse}
 
     Controller controller;
@@ -24,7 +24,7 @@ public class CourseUtils {
 
     CourseView courseView;
 
-    public CourseUtils(courseStatus courseState, CourseView courseView, Controller controller) {
+    public CourseController(courseStatus courseState, CourseView courseView, Controller controller) {
         this.courseState = courseState;
         this.courseView = courseView;
 

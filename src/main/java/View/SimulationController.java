@@ -15,7 +15,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -43,7 +42,7 @@ public class SimulationController extends Controller {
     public SimulationController() {
         super();
         setWalletView();
-        courseUtils.adjustCourseSize(
+        courseController.adjustCourseSize(
                 groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(),
                 groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
 
@@ -68,7 +67,7 @@ public class SimulationController extends Controller {
 
     /**
      * Methode zum Anpassen der Inhalte an die Fentergroesse
-     * Unterschied zum Controller nur beim Aufruf courseUtils.adjustCourseSize() weil dort auch die Walletbreite weggerechnet werden muss
+     * Unterschied zum Controller nur beim Aufruf courseController.adjustCourseSize() weil dort auch die Walletbreite weggerechnet werden muss
      */
     @Override
     protected void setWindowAdjustment(){
@@ -86,7 +85,7 @@ public class SimulationController extends Controller {
                 double heightRatio = newSceneHeight / groundView.oldSceneHeight;
 
                 //folgende Zeile ist zum normalen Controller unterschiedlich
-                courseUtils.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+                courseController.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
                 groundView.oldSceneWidth = newSceneWidth;
                 groundView.oldSceneHeight = newSceneHeight;
             }
@@ -149,7 +148,7 @@ public class SimulationController extends Controller {
                     System.out.println(e.getMessage());
                 }
             }
-            courseUtils.showCourse();
+            courseController.showCourse();
             walletSafeCurrentArticle(currentArticle.getName());
         });
 

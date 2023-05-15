@@ -25,7 +25,7 @@ public class Controller {
 
     Article currentArticle;
     CourseView courseView = new CourseView();
-    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, this);
+    CourseController courseController = new CourseController(CourseController.courseStatus.normalCourse, courseView, this);
     TimeSpan currentTimeSpan = TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
     SafeArticle safeArticle = new SafeArticle();
@@ -86,7 +86,7 @@ public class Controller {
                             currentTimeSpan = max;
                             break;
                     }
-                    courseUtils.displayCourse(currentArticle.getName(), currentArticle.getSymbol());
+                    courseController.displayCourse(currentArticle.getName(), currentArticle.getSymbol());
                 }
             });
             groundView.root.setOnMouseClicked(e -> {
@@ -113,7 +113,7 @@ public class Controller {
                 double widthRatio = newSceneWidth / groundView.oldSceneWidth;
                 double heightRatio = newSceneHeight / groundView.oldSceneHeight;
 
-                courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+                courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
                 groundView.oldSceneWidth = newSceneWidth;
                 groundView.oldSceneHeight = newSceneHeight;
 
@@ -130,12 +130,12 @@ public class Controller {
     public void setCourseView() {
         safeArticle.setSafedArticles();
 
-        courseUtils.displayCourse("IBM", "IBM");
+        courseController.displayCourse("IBM", "IBM");
         groundView.timeButtons[6].getStyleClass().add("buttonTimeClicked");
 
         groundView.window.setCenter(courseView.root);
 
-        courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
 
 
         //Handler für den Button zum Veraendern der Ansicht
@@ -145,12 +145,12 @@ public class Controller {
 
                 if (groundView.changeStateButton.getText().equals("Normal")) {
                     groundView.changeStateButton.setText("Charts");
-                    courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
-                    courseUtils.showCourse();
+                    courseController.courseState = CourseController.courseStatus.chartCourse;
+                    courseController.showCourse();
                 } else {
                     groundView.changeStateButton.setText("Normal");
-                    courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
-                    courseUtils.showCourse();
+                    courseController.courseState = CourseController.courseStatus.normalCourse;
+                    courseController.showCourse();
                 }
             }
         });
@@ -217,7 +217,7 @@ public class Controller {
             searchView.recommends[count].setText(result[i].getName());
             int finalI = i;
             searchView.recommends[count].setOnMouseClicked(e -> {
-                SearchUtils.buttonClicked(result[finalI], courseUtils, searchView);
+                SearchUtils.buttonClicked(result[finalI], courseController, searchView);
             });
             searchView.recommendsBox.getChildren().add(searchView.recommends[count]);
             count++;
@@ -282,7 +282,7 @@ public class Controller {
                     System.out.println(e.getMessage());
                 }
             }
-            courseUtils.showCourse();
+            courseController.showCourse();
             wlSafeCurrentArticle(currentArticle.getName());
         });
     }

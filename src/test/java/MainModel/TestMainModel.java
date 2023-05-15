@@ -21,7 +21,7 @@ public class TestMainModel {
             while(!art.setValues(TimeSpan.oneMonth))
                 Thread.sleep(5000);
             CourseView cv= new CourseView();
-            CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.chartCourse, cv, art, new Controller());
+            CourseController courseUtils = new CourseController(CourseController.courseStatus.chartCourse, cv, art, new Controller());
             courseUtils.setCurrentArticle(art);
             courseUtils.showCourse();
         }
