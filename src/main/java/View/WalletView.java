@@ -36,6 +36,7 @@ public class WalletView{
     Button saveSimButton = new Button();
     boolean open = false;
     public WalletView(SimulationController controller) {
+        setSimulationElements();
 
         this.controller = controller;
 

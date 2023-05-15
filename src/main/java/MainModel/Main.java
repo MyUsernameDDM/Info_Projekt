@@ -36,16 +36,38 @@ public class Main extends Application {
             //System.out.println(mode.toString());
             if (mode == status.realtime){
                 scene = realtimeController.getScene();
-                stage.setWidth(simulationController.getScene().getWidth());
-                stage.setHeight(simulationController.getScene().getHeight());
+
+                //+15 und +30 weil scene nicht genau gelcih groß ist wie die stage
+                stage.setWidth(simulationController.getScene().getWidth() + 15);
+                stage.setHeight(simulationController.getScene().getHeight() + 30);
+                /*
+                realtimeController.getGroundView().getWindow().setPrefWidth(simulationController.getScene().getWidth());
+                realtimeController.getGroundView().getWindow().setPrefHeight(simulationController.getScene().getHeight());
+
+                 */
+
+                realtimeController.adjustWindowSize(simulationController.getScene().getWidth(), simulationController.getScene().getHeight());
+
                 stage.setTitle("Realtime");
                 stage.setScene(scene);
                 stage.show();
                 mode = status.standby;
             } else if(mode == status.simulation){
                 scene = simulationController.getScene();
-                stage.setWidth(realtimeController.getScene().getWidth());
-                stage.setHeight(realtimeController.getScene().getHeight());
+
+
+                stage.setWidth(realtimeController.getScene().getWidth() + 15);
+                stage.setHeight(realtimeController.getScene().getHeight() + 30);
+
+
+
+                /*
+                simulationController.getGroundView().getWindow().setPrefWidth(realtimeController.getScene().getWidth());
+                simulationController.getGroundView().getWindow().setPrefHeight(realtimeController.getScene().getHeight());
+                 */
+
+                simulationController.adjustWindowSize(realtimeController.getScene().getWidth(), realtimeController.getScene().getHeight());
+
                 stage.setTitle("Simulation");
                 stage.setScene(scene);
                 stage.show();

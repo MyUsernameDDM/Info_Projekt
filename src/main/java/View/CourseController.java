@@ -43,7 +43,6 @@ public class CourseController {
         courseView.root.getChildren().add(courseView.backGround);
 
         showCourse();
-
     }
 
 

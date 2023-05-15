@@ -65,34 +65,21 @@ public class SimulationController extends Controller {
         return simulation;
     }
 
+
     /**
-     * Methode zum Anpassen der Inhalte an die Fentergroesse
+     * Methode zum Anpassen der Inhalte an die Fenstergroesse
      * Unterschied zum Controller nur beim Aufruf courseController.adjustCourseSize() weil dort auch die Walletbreite weggerechnet werden muss
+     *
      */
-    @Override
-    protected void setWindowAdjustment(){
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                double newSceneWidth = groundView.scene.getWidth();
-                double newSceneHeight = groundView.scene.getHeight();
+    public void adjustWindowSize(double newSceneWidth, double newSceneHeight){
+        //Hintergrund
+        groundView.window.setPrefWidth(newSceneWidth);
+        groundView.window.setPrefHeight(newSceneHeight);
 
-                //Hintergrund
-                groundView.window.setPrefWidth(newSceneWidth);
-                groundView.window.setPrefHeight(newSceneHeight);
-
-                double widthRatio = newSceneWidth / groundView.oldSceneWidth;
-                double heightRatio = newSceneHeight / groundView.oldSceneHeight;
-
-                //folgende Zeile ist zum normalen Controller unterschiedlich
-                courseController.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
-                groundView.oldSceneWidth = newSceneWidth;
-                groundView.oldSceneHeight = newSceneHeight;
-            }
-        };
-
-        groundView.scene.heightProperty().addListener(changeListener);
-        groundView.scene.widthProperty().addListener(changeListener);
+        //folgende Zeile ist zum normalen Controller unterschiedlich
+        courseController.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        groundView.oldSceneWidth = newSceneWidth;
+        groundView.oldSceneHeight = newSceneHeight;
     }
 
     /**

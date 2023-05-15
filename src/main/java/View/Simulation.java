@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Klasse zum speichern der Daten einer Simulation, so sollen auch mehrere Simulationen gleichzeitg möglich sein.
  */
-public class Simulation {
+public class Simulation implements Serializable{
     ArrayList<Article> walletListArticles = new ArrayList<>();
     double fee = 0.05; // 5 prozent an spesen
     int moneyInv = 0;

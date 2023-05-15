@@ -31,6 +31,10 @@ public class Controller {
     SafeArticle safeArticle = new SafeArticle();
     InfoView infoView= new InfoView();
 
+    public CourseController getCourseController(){
+        return courseController;
+    }
+
     public GroundView getGroundView() {
         return groundView;
     }
@@ -98,30 +102,31 @@ public class Controller {
 
     }
 
-
+    /**
+     * setzt den Listener, sodass auf die Fenstergrößenänderung reagiert werden kann
+     */
     protected void setWindowAdjustment() {
         ChangeListener changeListener = new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                double newSceneWidth = groundView.scene.getWidth();
-                double newSceneHeight = groundView.scene.getHeight();
-
-                //Hintergrund
-                groundView.window.setPrefWidth(newSceneWidth);
-                groundView.window.setPrefHeight(newSceneHeight);
-
-                double widthRatio = newSceneWidth / groundView.oldSceneWidth;
-                double heightRatio = newSceneHeight / groundView.oldSceneHeight;
-
-                courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
-                groundView.oldSceneWidth = newSceneWidth;
-                groundView.oldSceneHeight = newSceneHeight;
-
+                adjustWindowSize(groundView.scene.getWidth(), groundView.scene.getHeight());
             }
         };
-
         groundView.scene.heightProperty().addListener(changeListener);
         groundView.scene.widthProperty().addListener(changeListener);
+    }
+
+    /**
+     * Methode passt die Elemente an die Fenstergröße an
+     */
+    public void adjustWindowSize(double newSceneWidth, double newSceneHeight){
+        //Hintergrund
+        groundView.window.setPrefWidth(newSceneWidth);
+        groundView.window.setPrefHeight(newSceneHeight);
+
+        courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        groundView.oldSceneWidth = newSceneWidth;
+        groundView.oldSceneHeight = newSceneHeight;
     }
 
     /**
