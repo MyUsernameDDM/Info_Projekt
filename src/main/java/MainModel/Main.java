@@ -23,29 +23,25 @@ public class Main extends Application {
     public enum status {realtime, simulation, standby}
     public static status mode = status.realtime;
 
+
+    public static Controller realtimeController = new Controller();
+    public static SimulationController simulationController = new SimulationController();
     @Override
     public void start(Stage stage)  {
 
         stage.setTitle("Aktienkurs");
 
         mode = status.realtime;
-        Controller realtimeController = new Controller();
-        SimulationController simulationController = new SimulationController();
-        SimulationUtils simulationUtils = new SimulationUtils(simulationController);
+
         Timeline run = new Timeline(new KeyFrame(new Duration(50), actionEvent -> {
             //System.out.println(mode.toString());
             if (mode == status.realtime){
                 scene = realtimeController.getScene();
 
+                //Groesse anpassen
                 //+15 und +30 weil scene nicht genau gelcih groß ist wie die stage
                 stage.setWidth(simulationController.getScene().getWidth() + 15);
                 stage.setHeight(simulationController.getScene().getHeight() + 30);
-                /*
-                realtimeController.getGroundView().getWindow().setPrefWidth(simulationController.getScene().getWidth());
-                realtimeController.getGroundView().getWindow().setPrefHeight(simulationController.getScene().getHeight());
-
-                 */
-
                 realtimeController.adjustWindowSize(simulationController.getScene().getWidth(), simulationController.getScene().getHeight());
 
                 stage.setTitle("Realtime");
@@ -55,18 +51,11 @@ public class Main extends Application {
             } else if(mode == status.simulation){
                 scene = simulationController.getScene();
 
-
+                //Groesse anpassen
                 stage.setWidth(realtimeController.getScene().getWidth() + 15);
                 stage.setHeight(realtimeController.getScene().getHeight() + 30);
-
-
-
-                /*
-                simulationController.getGroundView().getWindow().setPrefWidth(realtimeController.getScene().getWidth());
-                simulationController.getGroundView().getWindow().setPrefHeight(realtimeController.getScene().getHeight());
-                 */
-
                 simulationController.adjustWindowSize(realtimeController.getScene().getWidth(), realtimeController.getScene().getHeight());
+
 
                 stage.setTitle("Simulation");
                 stage.setScene(scene);

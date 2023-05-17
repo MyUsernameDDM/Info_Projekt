@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 public class WalletView{
 
     boolean isAv = true;
-    Simulation simulation = new Simulation();
     SimulationController controller;
     VBox walletRoot = new VBox();
     ScrollPane scrollPane = new ScrollPane();
@@ -40,6 +39,11 @@ public class WalletView{
     Text cash;
     Text priceArticle;
     Text shares;
+
+    public Label getMoneyShow() {
+        return moneyShow;
+    }
+
     public WalletView(SimulationController controller) {
         setSimulationElements();
 
@@ -49,7 +53,7 @@ public class WalletView{
 
         result.money().setOnAction(event -> {
             if (isAv == true){
-                result.money().setText(String.valueOf(simulation.moneyInv));
+                result.money().setText(String.valueOf(controller.simulation.moneyInv));
                 isAv = false;
             } else {
                 result.money().setText("*****");
@@ -67,9 +71,9 @@ public class WalletView{
                 result.confirmBuyButton().setOnAction(event1 -> {
                     confirmWindow.getChildren().remove(window);
 
-                    if (simulation.moneyAv > 0 && Integer.valueOf(textFieldUserAmount.getText()) <= simulation.moneyAv) {
-                        simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
-                        simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
+                    if (controller.simulation.moneyAv > 0 && Integer.valueOf(textFieldUserAmount.getText()) <= controller.simulation.moneyAv) {
+                        controller.simulation.moneyAv -= Integer.valueOf(textFieldUserAmount.getText());
+                        controller.simulation.moneyInv += Integer.valueOf(textFieldUserAmount.getText());
 
                         controller.walletAddArticle(Integer.valueOf(textFieldUserAmount.getText()));
                     }
@@ -92,7 +96,7 @@ public class WalletView{
         });
 
         sellAllButton.setOnAction(event -> { // nicht d.
-            //controller.sellAllButton(simulation.walletListArticles);
+            //controller.sellAllButton(controller.simulation.walletListArticles);
             controller.walletRemoveAllArticles();
         });
 
@@ -107,8 +111,7 @@ public class WalletView{
         buyButton.setPrefWidth(100);
         sellButton.setPrefWidth(100);
         sellAllButton.setPrefWidth(210);
-        moneyShow.setText(String.valueOf(simulation.moneyAv));
-        Button money = new Button(String.valueOf(simulation.moneyInv));
+        Button money = new Button("0");
         Button confirmBuyButton = new Button("CONFIRM");
         Button confirmCancelButton = new Button("CANCEL");
 
@@ -196,5 +199,14 @@ public class WalletView{
 
     public void removeSimulationOptions() {
         simulationButtonVBox.setVisible(false);
+    }
+
+    /**
+     * Methode wird aufgerufen, um eine neu geladene Simulation anzuzeigen
+     */
+    public void reloadSimulation(){
+        moneyShow.setText(controller.simulation.getMoneyAv() + "");
+        //todo do miaßat man olle Artikel fa dor neuen SImulation usw. lodn
+
     }
 }

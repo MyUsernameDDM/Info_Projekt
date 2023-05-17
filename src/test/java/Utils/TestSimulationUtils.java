@@ -13,6 +13,6 @@ public class TestSimulationUtils {
         Simulation simulation = new Simulation();
         SimulationController controller = new SimulationController();
         SimulationUtils simulationUtils = new SimulationUtils(controller);
-        simulationUtils.openNewSimulation();
+        simulationUtils.openSimulation();
     }
 }

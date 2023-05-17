@@ -25,6 +25,7 @@ public class Article implements Serializable {
     private final transient SafeArticle safeArticle;
 
 
+
     public ArrayList<Unit> getValues() {
         return values;
     }

@@ -341,6 +341,10 @@ public class Controller {
      */
     public void changeModeSimulation() {
         mode = Main.status.simulation;
+        //nur beim ersten mal in den Simulationsmodus wechseln eine SImulation starten
+        if(Main.simulationController.getSimulation() == null){
+            Main.simulationController.simulationUtils.newSimulation();
+        }
     }
 
     public void changeModeRealtime() {
@@ -443,9 +447,6 @@ public class Controller {
                 changeModeSimulation();
             }
         });
-        {
-
-        }
     }
 
 }

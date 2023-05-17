@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static MainModel.Main.mode;
@@ -30,7 +31,7 @@ import static MainModel.Main.mode;
 public class SimulationController extends Controller {
 
     InfoView infoView = new InfoView();
-    Simulation simulation = new Simulation();
+    Simulation simulation = null;
     WalletView walletView = new WalletView(this);
     Article walletCurrentArticle = null; // Aktueller Artikle
     ArrayList<Article> walletListArticles = new ArrayList<>();
@@ -65,6 +66,9 @@ public class SimulationController extends Controller {
         return simulation;
     }
 
+    public WalletView getWalletView() {
+        return walletView;
+    }
 
     /**
      * Methode zum Anpassen der Inhalte an die Fenstergroesse
@@ -91,6 +95,7 @@ public class SimulationController extends Controller {
     }
 
     private void setWalletView() {
+
         //Liste für die Buttons anzeigen
         groundView.root.getChildren().add(walletView.simulationButtonVBox);
         walletView.simulationButtonVBox.setVisible(false);
@@ -98,6 +103,8 @@ public class SimulationController extends Controller {
         groundView.menu.getChildren().add(walletView.simulationCoverInMenu);
 
         groundView.window.setLeft(walletView.walletRoot);
+
+        //Buttons für das Laden und Speichern der Simulation
         walletView.simulationCoverInMenu.setOnAction(actionEvent -> {
             walletView.simulationButtonVBox.setLayoutX(walletView.simulationCoverInMenu.getLayoutX() + 20);
             walletView.simulationButtonVBox.setLayoutY(walletView.simulationCoverInMenu.getLayoutY() + walletView.simulationCoverInMenu.getHeight());
@@ -105,10 +112,16 @@ public class SimulationController extends Controller {
         });
 
         walletView.newSimButton.setOnAction(actionEvent -> {
-
+            simulationUtils.newSimulation();
         });
         walletView.loadSimButton.setOnAction(actionEvent -> {
-
+            try {
+                simulationUtils.openSimulation();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         });
         walletView.saveSimButton.setOnAction(actionEvent -> {
             simulationUtils.saveCurrentSimulation();
@@ -121,34 +134,44 @@ public class SimulationController extends Controller {
     }
 
     public void walletAddArticle(int money) {
+        if(simulation.walletListArticles.contains(currentArticle)){
+            simulation.moneyAv -= money;
+            simulation.openShares += 1;
+            //todo hier wäre noch anzupassen,dass sich das grafische schon auch ändert
+        }else{
+            moneyInvest = money;
 
-        moneyInvest = money;
+            Button temp = simulationArticle(money);
 
-        Button temp = simulationArticle(money);
+            //Artikel hinzufuegen zur Walletliste
+            simulation.walletListArticles.add(currentArticle);
 
-        temp.setOnAction(actionEvent -> {
-            //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
-            while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
+            temp.setOnAction(actionEvent -> {
+                //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
+                while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
-            }
-            courseController.showCourse();
-            walletSafeCurrentArticle(currentArticle.getName());
-        });
+                courseController.showCourse();
+                walletSafeCurrentArticle(currentArticle.getName());
+            });
 
-        simulation.openShares += 1;
-        simulation.moneyAv -= moneyInvest;
+            simulation.openShares += 1;
+            simulation.moneyAv -= moneyInvest;
 
-        timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
-            for (int i = 0; i < simulation.walletListArticles.size(); i++){
-                refreshArticle(i);
-            }
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+            timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
+                for (int i = 0; i < simulation.walletListArticles.size(); i++){
+                    refreshArticle(i);
+                }
+            }));
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
+        }
+
+
     }
 
     private void refreshArticle(int i) {
@@ -218,7 +241,7 @@ public class SimulationController extends Controller {
         }
 
         //neuen Artikel als aktuellen Artikel erstellen
-        for (Article article : walletListArticles) {
+        for (Article article : simulation.getWalletListArticles()) {
             if (articleName.equals(article.getName())) {
                 walletCurrentArticle = article;
                 for (int i = 0; i < walletList.size(); i++) {

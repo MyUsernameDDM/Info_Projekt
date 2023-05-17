@@ -54,6 +54,7 @@
 }
 
 .menuButton{
+    -fx-text-fill: white;
     -fx-alignment: center;
     -fx-font-size: 30px;
     -fx-background-radius: 10px;

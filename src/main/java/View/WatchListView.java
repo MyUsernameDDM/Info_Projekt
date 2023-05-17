@@ -1,6 +1,7 @@
 package View;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -27,6 +28,8 @@ public class WatchListView {
 
         scrollPane.prefHeight(500);
         scrollPane.setContent(vBox);
+        wlRoot.setAlignment(Pos.TOP_CENTER);
+        scrollPane.setStyle("-fx-background-color: transparent");
 
         wlRoot.getChildren().addAll(titel,addButton, removeButton, scrollPane);
         wlRoot.setPrefWidth(200);
@@ -50,20 +53,6 @@ public class WatchListView {
         wlRoot.setMargin(removeButton, new Insets(10, 10, 10, 10));
     }
 
-    /**
-     * Methode zum setzen der Artikel-Namen in der buttonList, mehrere auf einmal
-     * @param articleNames Enthält die Namen von den Artikeln die angezeigt werden sollen
-     *
-     */
-    public void addArticles(ArrayList<String> articleNames){
-        for (String str :articleNames) {
-            Button temp = new Button(str);
-            temp.setPrefHeight(30);
-            temp.setPrefWidth(100);
-            buttonList.add(temp);
-            vBox.getChildren().add(temp);
-        }
-    }
 
     public void setAddButtonHover(Boolean status){
         if(status){
