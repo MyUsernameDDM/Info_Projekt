@@ -46,18 +46,6 @@ public class CourseController {
     }
 
 
-    /**
-     * Die View wird so umgestellt, dass das angegebene Intervall angezeigt wird
-     */
-    public void changeShowInterval(TimeSpan interval) {
-
-        while (!(controller.currentArticle.setValues(interval))) {
-            controller.currentArticle.setValues(interval);
-        }
-        showCourse();
-    }
-
-
     public void displayCourse(String articleName, String symbol) {
         Article article = new Article(articleName, symbol, controller.safeArticle);
         while (!article.setValues(controller.currentTimeSpan)) {

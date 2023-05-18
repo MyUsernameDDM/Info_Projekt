@@ -24,7 +24,7 @@ public class WatchListView {
     public WatchListView(Controller controller) {
         this.controller = controller;
         setButtons();
-        setTitel();
+        titel.setStyle("-fx-font-size: 35px;");
 
         scrollPane.prefHeight(500);
         scrollPane.setContent(vBox);
@@ -35,11 +35,7 @@ public class WatchListView {
         wlRoot.setPrefWidth(200);
     }
 
-    public void setTitel(){
-        titel.setStyle("-fx-font-size: 35px;");
-    }
-
-
+    //Methode, um das Layout und den Style des Add- und Removebuttons zu setzen
     private void setButtons() {
         addButton.setPrefWidth(150);
         addButton.setPrefHeight(30);
@@ -54,6 +50,7 @@ public class WatchListView {
     }
 
 
+
     public void setAddButtonHover(Boolean status){
         if(status){
             addButton.getStyleClass().remove("addAndRemoveButtonNormal");
@@ -64,6 +61,10 @@ public class WatchListView {
         }
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setRemoveButtonHover(Boolean status){
         if(status){
             removeButton.getStyleClass().remove("addAndRemoveButtonNormal");
@@ -71,6 +72,20 @@ public class WatchListView {
         } else {
             removeButton.getStyleClass().remove("addAndRemhoverButtonHover");
             removeButton.getStyleClass().add("addAndRemoveButtonNormal");
+        }
+    }
+
+    /**
+     * Methode, die bei Überhovern durch die Maus den Style ändert
+     * @param status wenn true, dann ist die Maus über dem Button
+     */
+    public void setButtonHover(Boolean status, Button button){
+        if(status){
+            button.getStyleClass().remove("addAndRemoveButtonNormal");
+            button.getStyleClass().add("addAndRemhoverButtonHover");
+        } else {
+            button.getStyleClass().remove("addAndRemhoverButtonHover");
+            button.getStyleClass().add("addAndRemoveButtonNormal");
         }
     }
 }

@@ -235,7 +235,8 @@ public class SimulationController extends Controller {
         if (walletCurrentArticle != null) {
             for (int i = 0; i < walletList.size(); i++) {
                 if (walletCurrentArticle.getName().equals(walletList.get(i).getText())) {
-                    walletList.get(i).setStyle("");
+                    walletList.get(i).getStyleClass().remove("buttonInListClicked");
+                    walletList.get(i).getStyleClass().add("buttonInList");
                 }
             }
         }
@@ -246,7 +247,8 @@ public class SimulationController extends Controller {
                 walletCurrentArticle = article;
                 for (int i = 0; i < walletList.size(); i++) {
                     if (articleName.equals(walletList.get(i).getText())) {
-                        setButtonStyle(walletList.get(i));
+                        walletList.get(i).getStyleClass().remove("buttonInList");
+                        watchListView.buttonList.get(i).getStyleClass().add("buttonInListClicked");
                     }
                 }
             }

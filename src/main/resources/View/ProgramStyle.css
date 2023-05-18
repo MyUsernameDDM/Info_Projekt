@@ -14,7 +14,17 @@
     -fx-border-color: #2b5da2;
     -fx-start-margin: 5;
     -fx-end-margin: 5;
+}
 
+.buttonInListClicked{
+    -fx-background-color: #a1bfec;
+    -fx-font-size: 15px;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-text-alignment: center;
+    -fx-border-color: #2b5da2;
+    -fx-start-margin: 5;
+    -fx-end-margin: 5;
 }
 
 .buttonTime{

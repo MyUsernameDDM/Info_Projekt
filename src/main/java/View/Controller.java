@@ -52,7 +52,6 @@ public class Controller {
         setWatchList();
         setSearchList();
         setCourseView();
-        setAddAndRemoveArticle();
         menuButtonsListener();
         timeButtonListener();
         modeSceneChanger();
@@ -197,11 +196,10 @@ public class Controller {
     /**
      * Methode, die die Liste aus Artikelvorschlaegen anzeigt
      */
-    public void showSearchResults() {
+    private void showSearchResults() {
         if (searchView.searchInputTextField.getText().equals("")) {
             return;
         }
-
 
         searchView.outputSearchView.setMaxHeight(100);
         searchView.outputSearchView.setLayoutX(searchView.root.getLayoutX());
@@ -235,7 +233,7 @@ public class Controller {
 
 
     /**
-     * setzt die ActionHandler
+     * Methode gibt die Watchlist in die BorderPane der Groundview und setzt die ActionHandler fuer die Elemente der Watchlist
      */
     private void setWatchList() {
         groundView.window.setRight(watchListView.wlRoot);
@@ -251,6 +249,35 @@ public class Controller {
                 if (currentArticle != null) {
                     wlAddArticle();
                 }
+            }
+        });
+
+        //Handler für das darueberhovern
+        watchListView.addButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(true, watchListView.addButton);
+            }
+        });
+
+        watchListView.addButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(false, watchListView.addButton);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(true, watchListView.removeButton);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(false, watchListView.removeButton);
             }
         });
 
@@ -279,15 +306,18 @@ public class Controller {
         watchListView.vBox.getChildren().add(temp);
 
         temp.setOnAction(actionEvent -> {
-            //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
-            while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
+            if(!(temp.getText().equals(currentArticle.getName()))){
+                //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
+                while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
+                    System.out.println("Test");
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
+                courseController.showCourse();
             }
-            courseController.showCourse();
             wlSafeCurrentArticle(currentArticle.getName());
         });
     }
@@ -300,7 +330,8 @@ public class Controller {
         if (watchLCurrentArticle != null) {
             for (int i = 0; i < watchListView.buttonList.size(); i++) {
                 if (watchLCurrentArticle.getName().equals(watchListView.buttonList.get(i).getText())) {
-                    watchListView.buttonList.get(i).setStyle("");
+                    watchListView.buttonList.get(i).getStyleClass().remove("buttonInListClicked");
+                    watchListView.buttonList.get(i).getStyleClass().add("buttonInList");
                 }
             }
         }
@@ -311,7 +342,8 @@ public class Controller {
                 watchLCurrentArticle = article;
                 for (int i = 0; i < watchListView.buttonList.size(); i++) {
                     if (articleName.equals(watchListView.buttonList.get(i).getText())) {
-                        setButtonStyle(watchListView.buttonList.get(i));
+                        watchListView.buttonList.get(i).getStyleClass().remove("buttonInList");
+                        watchListView.buttonList.get(i).getStyleClass().add("buttonInListClicked");
                     }
                 }
             }
@@ -351,45 +383,6 @@ public class Controller {
         mode = status.realtime;
     }
 
-    /**
-     * Diese Methode kann häufiger aufgerufen werden um einen einheitlichen Stil zu haben
-     *
-     * @param button Button der bearbeitet wird
-     */
-    public void setButtonStyle(Button button) {
-        button.setStyle("-fx-border-insets: 5");
-        button.setStyle("-fx-border-color: #1970d2");
-    }
-
-    public void setAddAndRemoveArticle() {
-        watchListView.addButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setAddButtonHover(true);
-            }
-        });
-
-        watchListView.addButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setAddButtonHover(false);
-            }
-        });
-
-        watchListView.removeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setRemoveButtonHover(true);
-            }
-        });
-
-        watchListView.removeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setRemoveButtonHover(false);
-            }
-        });
-    }
 
     public void menuButtonsListener() {
         groundView.modeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
