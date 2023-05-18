@@ -38,11 +38,13 @@ public class InfoView {
             } else {
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.YEAR, unit.getDate().getYear() );
-                cal.set(Calendar.MONTH, unit.getDate().getMonth());
+                cal.set(Calendar.MONTH, unit.getDate().getMonth()-1);
                 cal.set(Calendar.DAY_OF_MONTH, unit.getDate().getDate());
                 Date date = cal.getTime();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = sdf.format(date);
+                System.out.println(unit.getDate().getDay()+"/"+unit.getDate().getMonth()+"/"+unit.getDate().getYear());
+                System.out.println(formattedDate);
                 t.setText("Low: " + unit.getLow() + "\n" + "High: " + unit.getHigh() + "\n" + "Open: " + unit.getOpen()
                         + "\n" + "Close: " + unit.getClose() + "\n" + "Volume: " + unit.getVolume() + "\n" + "Time: " + formattedDate);
             }
