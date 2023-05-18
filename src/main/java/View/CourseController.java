@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.Date;
 
 
-public class CourseUtils {
+public class CourseController {
     public enum courseStatus {normalCourse, chartCourse}
 
     Controller controller;
@@ -24,7 +24,7 @@ public class CourseUtils {
 
     CourseView courseView;
 
-    public CourseUtils(courseStatus courseState, CourseView courseView, Controller controller) {
+    public CourseController(courseStatus courseState, CourseView courseView, Controller controller) {
         this.courseState = courseState;
         this.courseView = courseView;
 
@@ -42,19 +42,6 @@ public class CourseUtils {
         courseView.root.getChildren().clear();
         courseView.root.getChildren().add(courseView.backGround);
 
-        showCourse();
-
-    }
-
-
-    /**
-     * Die View wird so umgestellt, dass das angegebene Intervall angezeigt wird
-     */
-    public void changeShowInterval(TimeSpan interval) {
-
-        while (!(controller.currentArticle.setValues(interval))) {
-            controller.currentArticle.setValues(interval);
-        }
         showCourse();
     }
 

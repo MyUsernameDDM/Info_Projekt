@@ -1,6 +1,6 @@
 package Utils;
 import MainModel.MatchUnits;
-import View.CourseUtils;
+import View.CourseController;
 import View.SearchView;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.net.URL;
 public class SearchUtils extends Thread{
 
 
-    public static void buttonClicked(MatchUnits result, CourseUtils courseUtils, SearchView searchView){
-        courseUtils.displayCourse(result.getName(), result.getSymbol());
+    public static void buttonClicked(MatchUnits result, CourseController courseController, SearchView searchView){
+        courseController.displayCourse(result.getName(), result.getSymbol());
         searchView.clearSearching();
     }
     public MatchUnits[] getMatchings (String str) {

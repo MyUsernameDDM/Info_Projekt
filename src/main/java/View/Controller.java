@@ -25,11 +25,15 @@ public class Controller {
 
     Article currentArticle;
     CourseView courseView = new CourseView();
-    CourseUtils courseUtils = new CourseUtils(CourseUtils.courseStatus.normalCourse, courseView, this);
+    CourseController courseController = new CourseController(CourseController.courseStatus.normalCourse, courseView, this);
     TimeSpan currentTimeSpan = TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
     SafeArticle safeArticle = new SafeArticle();
     InfoView infoView= new InfoView();
+
+    public CourseController getCourseController(){
+        return courseController;
+    }
 
     public GroundView getGroundView() {
         return groundView;
@@ -48,7 +52,6 @@ public class Controller {
         setWatchList();
         setSearchList();
         setCourseView();
-        setAddAndRemoveArticle();
         menuButtonsListener();
         timeButtonListener();
         modeSceneChanger();
@@ -86,7 +89,7 @@ public class Controller {
                             currentTimeSpan = max;
                             break;
                     }
-                    courseUtils.displayCourse(currentArticle.getName(), currentArticle.getSymbol());
+                    courseController.displayCourse(currentArticle.getName(), currentArticle.getSymbol());
                 }
             });
             groundView.root.setOnMouseClicked(e -> {
@@ -98,30 +101,31 @@ public class Controller {
 
     }
 
-
+    /**
+     * setzt den Listener, sodass auf die Fenstergrößenänderung reagiert werden kann
+     */
     protected void setWindowAdjustment() {
         ChangeListener changeListener = new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                double newSceneWidth = groundView.scene.getWidth();
-                double newSceneHeight = groundView.scene.getHeight();
-
-                //Hintergrund
-                groundView.window.setPrefWidth(newSceneWidth);
-                groundView.window.setPrefHeight(newSceneHeight);
-
-                double widthRatio = newSceneWidth / groundView.oldSceneWidth;
-                double heightRatio = newSceneHeight / groundView.oldSceneHeight;
-
-                courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
-                groundView.oldSceneWidth = newSceneWidth;
-                groundView.oldSceneHeight = newSceneHeight;
-
+                adjustWindowSize(groundView.scene.getWidth(), groundView.scene.getHeight());
             }
         };
-
         groundView.scene.heightProperty().addListener(changeListener);
         groundView.scene.widthProperty().addListener(changeListener);
+    }
+
+    /**
+     * Methode passt die Elemente an die Fenstergröße an
+     */
+    public void adjustWindowSize(double newSceneWidth, double newSceneHeight){
+        //Hintergrund
+        groundView.window.setPrefWidth(newSceneWidth);
+        groundView.window.setPrefHeight(newSceneHeight);
+
+        courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        groundView.oldSceneWidth = newSceneWidth;
+        groundView.oldSceneHeight = newSceneHeight;
     }
 
     /**
@@ -130,12 +134,12 @@ public class Controller {
     public void setCourseView() {
         safeArticle.setSafedArticles();
 
-        courseUtils.displayCourse("IBM", "IBM");
+        courseController.displayCourse("IBM", "IBM");
         groundView.timeButtons[6].getStyleClass().add("buttonTimeClicked");
 
         groundView.window.setCenter(courseView.root);
 
-        courseUtils.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
 
 
         //Handler für den Button zum Veraendern der Ansicht
@@ -145,12 +149,12 @@ public class Controller {
 
                 if (groundView.changeStateButton.getText().equals("Normal")) {
                     groundView.changeStateButton.setText("Charts");
-                    courseUtils.courseState = CourseUtils.courseStatus.chartCourse;
-                    courseUtils.showCourse();
+                    courseController.courseState = CourseController.courseStatus.chartCourse;
+                    courseController.showCourse();
                 } else {
                     groundView.changeStateButton.setText("Normal");
-                    courseUtils.courseState = CourseUtils.courseStatus.normalCourse;
-                    courseUtils.showCourse();
+                    courseController.courseState = CourseController.courseStatus.normalCourse;
+                    courseController.showCourse();
                 }
             }
         });
@@ -192,11 +196,10 @@ public class Controller {
     /**
      * Methode, die die Liste aus Artikelvorschlaegen anzeigt
      */
-    public void showSearchResults() {
+    private void showSearchResults() {
         if (searchView.searchInputTextField.getText().equals("")) {
             return;
         }
-
 
         searchView.outputSearchView.setMaxHeight(100);
         searchView.outputSearchView.setLayoutX(searchView.root.getLayoutX());
@@ -217,7 +220,7 @@ public class Controller {
             searchView.recommends[count].setText(result[i].getName());
             int finalI = i;
             searchView.recommends[count].setOnMouseClicked(e -> {
-                SearchUtils.buttonClicked(result[finalI], courseUtils, searchView);
+                SearchUtils.buttonClicked(result[finalI], courseController, searchView);
             });
             searchView.recommendsBox.getChildren().add(searchView.recommends[count]);
             count++;
@@ -230,7 +233,7 @@ public class Controller {
 
 
     /**
-     * setzt die ActionHandler
+     * Methode gibt die Watchlist in die BorderPane der Groundview und setzt die ActionHandler fuer die Elemente der Watchlist
      */
     private void setWatchList() {
         groundView.window.setRight(watchListView.wlRoot);
@@ -246,6 +249,35 @@ public class Controller {
                 if (currentArticle != null) {
                     wlAddArticle();
                 }
+            }
+        });
+
+        //Handler für das darueberhovern
+        watchListView.addButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(true, watchListView.addButton);
+            }
+        });
+
+        watchListView.addButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(false, watchListView.addButton);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(true, watchListView.removeButton);
+            }
+        });
+
+        watchListView.removeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                watchListView.setButtonHover(false, watchListView.removeButton);
             }
         });
 
@@ -274,15 +306,18 @@ public class Controller {
         watchListView.vBox.getChildren().add(temp);
 
         temp.setOnAction(actionEvent -> {
-            //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
-            while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
+            if(!(temp.getText().equals(currentArticle.getName()))){
+                //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
+                while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
+                    System.out.println("Test");
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
+                courseController.showCourse();
             }
-            courseUtils.showCourse();
             wlSafeCurrentArticle(currentArticle.getName());
         });
     }
@@ -295,7 +330,8 @@ public class Controller {
         if (watchLCurrentArticle != null) {
             for (int i = 0; i < watchListView.buttonList.size(); i++) {
                 if (watchLCurrentArticle.getName().equals(watchListView.buttonList.get(i).getText())) {
-                    watchListView.buttonList.get(i).setStyle("");
+                    watchListView.buttonList.get(i).getStyleClass().remove("buttonInListClicked");
+                    watchListView.buttonList.get(i).getStyleClass().add("buttonInList");
                 }
             }
         }
@@ -306,7 +342,8 @@ public class Controller {
                 watchLCurrentArticle = article;
                 for (int i = 0; i < watchListView.buttonList.size(); i++) {
                     if (articleName.equals(watchListView.buttonList.get(i).getText())) {
-                        setButtonStyle(watchListView.buttonList.get(i));
+                        watchListView.buttonList.get(i).getStyleClass().remove("buttonInList");
+                        watchListView.buttonList.get(i).getStyleClass().add("buttonInListClicked");
                     }
                 }
             }
@@ -336,51 +373,16 @@ public class Controller {
      */
     public void changeModeSimulation() {
         mode = Main.status.simulation;
+        //nur beim ersten mal in den Simulationsmodus wechseln eine SImulation starten
+        if(Main.simulationController.getSimulation() == null){
+            Main.simulationController.simulationUtils.newSimulation();
+        }
     }
 
     public void changeModeRealtime() {
         mode = status.realtime;
     }
 
-    /**
-     * Diese Methode kann häufiger aufgerufen werden um einen einheitlichen Stil zu haben
-     *
-     * @param button Button der bearbeitet wird
-     */
-    public void setButtonStyle(Button button) {
-        button.setStyle("-fx-border-insets: 5");
-        button.setStyle("-fx-border-color: #1970d2");
-    }
-
-    public void setAddAndRemoveArticle() {
-        watchListView.addButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setAddButtonHover(true);
-            }
-        });
-
-        watchListView.addButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setAddButtonHover(false);
-            }
-        });
-
-        watchListView.removeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setRemoveButtonHover(true);
-            }
-        });
-
-        watchListView.removeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                watchListView.setRemoveButtonHover(false);
-            }
-        });
-    }
 
     public void menuButtonsListener() {
         groundView.modeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -438,9 +440,6 @@ public class Controller {
                 changeModeSimulation();
             }
         });
-        {
-
-        }
     }
 
 }

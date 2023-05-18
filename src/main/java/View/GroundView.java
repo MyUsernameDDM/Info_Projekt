@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 import java.util.Objects;
@@ -138,6 +139,9 @@ public class GroundView {
         timeButtons[i].getStyleClass().add("buttonTimeClicked");
     }
 
+    public BorderPane getWindow() {
+        return window;
+    }
 }
 
 

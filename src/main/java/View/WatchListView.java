@@ -1,6 +1,7 @@
 package View;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -23,20 +24,18 @@ public class WatchListView {
     public WatchListView(Controller controller) {
         this.controller = controller;
         setButtons();
-        setTitel();
+        titel.setStyle("-fx-font-size: 35px;");
 
         scrollPane.prefHeight(500);
         scrollPane.setContent(vBox);
+        wlRoot.setAlignment(Pos.TOP_CENTER);
+        scrollPane.setStyle("-fx-background-color: transparent");
 
         wlRoot.getChildren().addAll(titel,addButton, removeButton, scrollPane);
         wlRoot.setPrefWidth(200);
     }
 
-    public void setTitel(){
-        titel.setStyle("-fx-font-size: 35px;");
-    }
-
-
+    //Methode, um das Layout und den Style des Add- und Removebuttons zu setzen
     private void setButtons() {
         addButton.setPrefWidth(150);
         addButton.setPrefHeight(30);
@@ -50,20 +49,7 @@ public class WatchListView {
         wlRoot.setMargin(removeButton, new Insets(10, 10, 10, 10));
     }
 
-    /**
-     * Methode zum setzen der Artikel-Namen in der buttonList, mehrere auf einmal
-     * @param articleNames Enthält die Namen von den Artikeln die angezeigt werden sollen
-     *
-     */
-    public void addArticles(ArrayList<String> articleNames){
-        for (String str :articleNames) {
-            Button temp = new Button(str);
-            temp.setPrefHeight(30);
-            temp.setPrefWidth(100);
-            buttonList.add(temp);
-            vBox.getChildren().add(temp);
-        }
-    }
+
 
     public void setAddButtonHover(Boolean status){
         if(status){
@@ -75,6 +61,10 @@ public class WatchListView {
         }
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setRemoveButtonHover(Boolean status){
         if(status){
             removeButton.getStyleClass().remove("addAndRemoveButtonNormal");
@@ -82,6 +72,20 @@ public class WatchListView {
         } else {
             removeButton.getStyleClass().remove("addAndRemhoverButtonHover");
             removeButton.getStyleClass().add("addAndRemoveButtonNormal");
+        }
+    }
+
+    /**
+     * Methode, die bei Überhovern durch die Maus den Style ändert
+     * @param status wenn true, dann ist die Maus über dem Button
+     */
+    public void setButtonHover(Boolean status, Button button){
+        if(status){
+            button.getStyleClass().remove("addAndRemoveButtonNormal");
+            button.getStyleClass().add("addAndRemhoverButtonHover");
+        } else {
+            button.getStyleClass().remove("addAndRemhoverButtonHover");
+            button.getStyleClass().add("addAndRemoveButtonNormal");
         }
     }
 }
