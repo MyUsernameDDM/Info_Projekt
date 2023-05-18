@@ -308,7 +308,7 @@ public class Controller {
         temp.setOnAction(actionEvent -> {
             if(!(temp.getText().equals(currentArticle.getName()))){
                 //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
-                while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
+                while (!currentArticle.setValues(currentTimeSpan)) {
                     System.out.println("Test");
                     try {
                         Thread.sleep(10);
