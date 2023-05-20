@@ -68,7 +68,8 @@ public class CourseController {
     }
 
     /**
-     * Die Methode showChartCourse setzt den View so, dass der Kurs mit den Charts angezeigt wird
+     * Die Methode showCourse zeichnet den Kurs und ruft dabei, je nachdem ob der normale oder der Chartkurs angezeigt werden soll
+     * setNormalView oder setCandleStick auf
      */
     public void showCourse() {
         if (controller.currentArticle == null || controller.currentArticle.getValues() == null || controller.currentArticle.getPointAmount() == 0)
@@ -146,16 +147,20 @@ public class CourseController {
                 endPosY = (controller.currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
             }
             Line l = new Line(startPosX, courseView.backGround.getHeight() - startPosY, endPosX, courseView.backGround.getHeight() - endPosY);
-            controller.courseView.points.add(new Ellipse(startPosX, startPosY, 5, 5));
+            Ellipse tempEllipse = new Ellipse(startPosX, courseView.backGround.getHeight() - startPosY, 1.5, 1.5);
+            controller.courseView.points.add(tempEllipse);
 
 
             if (rise) {
                 l.setStroke(Color.GREEN);
+                tempEllipse.setFill(Color.GREEN);
             } else {
                 l.setStroke(Color.RED);
+                tempEllipse.setFill(Color.RED);
             }
             controller.infoView.showChartInfoView(l, controller.currentArticle.getValues().get(i));
-            courseView.root.getChildren().add(l);
+            controller.infoView.showChartInfoView(tempEllipse, controller.currentArticle.getValues().get(i));
+            courseView.root.getChildren().addAll(l,tempEllipse);
         }
     }
 

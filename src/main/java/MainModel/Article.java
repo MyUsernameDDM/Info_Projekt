@@ -15,6 +15,10 @@ import com.google.gson.stream.JsonReader;
 import okhttp3.Response;
 
 
+/**
+ * Die Article Klasse stellt einen Artikel (z.B. eine Aktie oder Kryptowährung) dar und speichert die nötigen Attribute.
+ * Die Klasse implementiert das Interface Serializable, damit die Artikel in serialisiert werden können
+ */
 public class Article implements Serializable {
     private ArrayList<Unit> values = new ArrayList<>();
     private final String name;
@@ -51,7 +55,7 @@ public class Article implements Serializable {
     /**
      * Wandelt String in date um
      *
-     * @param str ; nimmt parameter und wandelt in in Date um
+     * @param str ; nimmt parameter und wandelt ihn in Date um
      * @return ; Date vom angegebenen String
      */
     public static Date convStringToDate(String str) {

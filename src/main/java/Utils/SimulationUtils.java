@@ -38,7 +38,7 @@ public class SimulationUtils {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(value -> {
             controller.getSimulation().setMoneyAv(Integer.parseInt(value));
-            controller.getWalletView().getMoneyShow().setText(value);
+            controller.getWalletView().setNewSimulation(value);
         });
     }
 

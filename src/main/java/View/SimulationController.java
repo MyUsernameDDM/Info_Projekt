@@ -2,26 +2,14 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
-import MainModel.Unit;
 import Utils.SimulationUtils;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,9 +28,8 @@ public class SimulationController extends Controller {
     Article walletCurrentArticle = null; // Aktueller Artikle
     ArrayList<Article> walletListArticles = new ArrayList<>();
     ArrayList<Button> walletList = new ArrayList<>();
-    Timeline timeline;
     SimulationUtils simulationUtils = new SimulationUtils(this);
-    int moneyInvest;
+    Double moneyInvest;
 
     public SimulationController() {
         super();
@@ -137,47 +124,45 @@ public class SimulationController extends Controller {
         });
     }
 
-    public void walletAddArticle(int money) {
-        if(simulation.walletListArticles.contains(currentArticle)){
-            simulation.moneyAv -= money;
-            simulation.openShares += 1;
-            //todo hier wäre noch anzupassen,dass sich das grafische schon auch ändert
-        }else{
-            moneyInvest = money;
+    public void walletAddArticle(Double money) {
 
-            Button temp = simulationArticle(money);
+        moneyInvest = money;
 
-            //Artikel hinzufuegen zur Walletliste
-            simulation.walletListArticles.add(currentArticle);
+        //View fuer den Artikel in der Wallet erstellen
+        ArticleInWalletView temp = new ArticleInWalletView(currentArticle, this);
+        //Werte setzen
+        temp.articlePrice.setText("" + (currentArticle.getValues().get(0).getOpen()));
+        temp.sharesAmount = money/(currentArticle.getValues().get(0).getOpen());
+        temp.sharesAmountText.setText(String.format("%.2f", temp.sharesAmount));
+        //todo Currency eintragen
 
-            temp.setOnAction(actionEvent -> {
-                //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
-                while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        System.out.println(e.getMessage());
+        //Artikel hinzufuegen zur Walletliste
+        simulation.walletListArticles.add(currentArticle);
+        walletView.articlesInWalletView.add(temp);
+
+        temp.articleButton.setOnAction(actionEvent -> {
+            if (!(temp.articleButton.getText().equals(currentArticle.getName()))) {
+                //Daten aus dem Zwischenspeicher holen. TimeSpan dieselbe von Artikel, das davor angezeigt wurde
+                for (Article s : safeArticle.getSafedArticles()) {
+                    if (s.getTimeSpan() == currentTimeSpan && s.getName().equals(temp.articleButton.getText())) {
+                        currentArticle = s;
+                        break;
                     }
                 }
                 courseController.showCourse();
-                walletSafeCurrentArticle(currentArticle.getName());
-            });
+            }
+            courseController.showCourse();
+            walletSafeCurrentArticle(currentArticle.getName());
+        });
 
-            simulation.openShares += 1;
-            simulation.moneyAv -= moneyInvest;
-
-            timeline = new Timeline(new KeyFrame(new Duration(1000), event -> {
-                for (int i = 0; i < simulation.walletListArticles.size(); i++){
-                    refreshArticle(i);
-                }
-            }));
-            timeline.setCycleCount(Animation.INDEFINITE);
-            timeline.play();
-        }
+        simulation.openShares += 1;
+        simulation.moneyAv -= moneyInvest;
+        walletView.articlesVBox.getChildren().add(temp.root);
 
 
     }
 
+    /*
     private void refreshArticle(int i) {
         Article article = simulation.walletListArticles.get(i);
         Unit lastUnit = article.getValues().get(article.getValues().size() - 1);
@@ -198,14 +183,22 @@ public class SimulationController extends Controller {
         walletView.priceArticle.setText(String.valueOf(lastUnit.getClose()));
     }
 
+     */
+
+    /*
+
+     * Methode liefert den Button fuer einen Artikel in der Walletlist zurueck
+     * @param avMoneyButton
+     * @return
+
     @NotNull
-    private Button simulationArticle(int money) {
+    private Button setGetSimulationArticle(int avMoneyButton) {
 
         Button temp = new Button(currentArticle.getName());
         temp.setPrefWidth(50);
         temp.getStyleClass().add("walletArticle");
 
-        walletView.priceArticle = new Text(String.valueOf(money));
+        walletView.priceArticle = new Text(String.valueOf(avMoneyButton));
         walletView.currency = new Text("€");
         walletView.shares = new Text("0");
         walletView.cash = new Text("0");
@@ -213,6 +206,11 @@ public class SimulationController extends Controller {
         walletView.currency.getStyleClass().add("priceArticle");
         walletView.shares.getStyleClass().add("priceArticle");
         walletView.cash.getStyleClass().add("priceArticle");
+
+        //IDs für die Wertanzeige eines Artikels setzen
+        walletView.priceArticle.setId("Articleprice");
+        walletView.shares.setId("Amount of Articles");
+        walletView.cash.setId("Nicht definiert noch");
 
         simulation.walletListArticles.add(currentArticle);
         infoView.showInfoView(temp, walletView.controller);
@@ -230,6 +228,7 @@ public class SimulationController extends Controller {
         walletView.vBox.getChildren().add(addArticle);
         return temp;
     }
+    */
 
     /**
      * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
@@ -264,12 +263,12 @@ public class SimulationController extends Controller {
      */
     public void walletRemoveCurrentArticle() {
         if (walletCurrentArticle != null) {
-            for (Node node : walletView.vBox.getChildren()) {
+            for (Node node : walletView.articlesVBox.getChildren()) {
                 if (node instanceof HBox) {
                     HBox hbox = (HBox) node;
                     Button b = (Button) hbox.getChildren().get(0);
                     if (b.getText().equals(walletCurrentArticle.getName())) {
-                        walletView.vBox.getChildren().remove(hbox);
+                        walletView.articlesVBox.getChildren().remove(hbox);
                         walletList.remove(hbox);
 
                         // get the price Text node and print its text content
@@ -279,7 +278,7 @@ public class SimulationController extends Controller {
 
                         simulation.openShares -= 1;
                         simulation.moneyAv += Double.valueOf(price);
-                        walletView.labelAv.setText(String.valueOf(simulation.moneyAv));
+                        walletView.walletMoneyDisplay.avMoneyButton().setText(String.valueOf(simulation.moneyAv));
                         break;
                     }
                 }
@@ -298,19 +297,5 @@ public class SimulationController extends Controller {
         }
     }
 
-    public void walletRemoveAllArticles(){
-        // Lösche alle Artikel aus der View
-        walletView.vBox.getChildren().clear();
-        walletList.clear();
-        // Setze den aktuellen Artikel zurück
-        walletCurrentArticle = null;
-        // Lösche alle Artikel aus der Simulation
-        simulation.walletListArticles.clear();
-        simulation.openShares = 0;
-        simulation.moneyAv = 1000;
-
-        // Setze die Label zurück
-        walletView.labelAv.setText(String.valueOf(simulation.moneyAv));
-    }
 }
 

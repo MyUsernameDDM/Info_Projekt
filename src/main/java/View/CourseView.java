@@ -21,7 +21,6 @@ public class CourseView {
     Label articleNameLabel = new Label();
 
     ArrayList<Ellipse> points = new ArrayList<>();
-    ArrayList<Chart> charts = new ArrayList<>();
 
 
     public CourseView() {

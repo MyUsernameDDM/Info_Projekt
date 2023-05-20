@@ -15,8 +15,8 @@ public class WatchListView {
     Controller controller;
     VBox wlRoot = new VBox();
     ScrollPane scrollPane = new ScrollPane();
-    Button addButton = new Button("Artikel hinzufügen");
-    Button removeButton = new Button("Artikel entfernen");
+    Button addButton = new Button("Add article");
+    Button removeButton = new Button("Remove article");
     ArrayList<Button> buttonList = new ArrayList<>();
     Label titel = new Label("Watchlist");
     VBox vBox = new VBox();
