@@ -24,10 +24,16 @@ public class Article implements Serializable {
     private final String symbol;
     private int pointAmount = 0;
     private TimeSpan timeSpan;
+
+    private double sharesAmount;
     private transient TimeSeriesResponse apiResponse = null;
     private final transient SafeArticle safeArticle;
-
-
+    public double getSharesAmount() {
+        return sharesAmount;
+    }
+    public void setSharesAmount(double sharesAmount) {
+        this.sharesAmount = sharesAmount;
+    }
 
     public ArrayList<Unit> getValues() {
         return values;

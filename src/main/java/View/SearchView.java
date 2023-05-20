@@ -41,8 +41,8 @@ public class SearchView extends Thread {
 
         //Layout der vBox root
         root.setAlignment(Pos.CENTER);
-
     }
+
     public void clearScrollPane(){
         outputSearchView.setVisible(false);
     }

@@ -133,12 +133,14 @@ public class SimulationController extends Controller {
         ArticleInWalletView temp = new ArticleInWalletView(currentArticle, this);
         //Werte setzen
         temp.articlePrice.setText("" + (currentArticle.getValues().get(0).getOpen()));
-        temp.sharesAmount = money/(currentArticle.getValues().get(0).getOpen());
-        temp.sharesAmountText.setText(String.format("%.2f", temp.sharesAmount));
+        temp.article.setSharesAmount(money/(currentArticle.getValues().get(0).getOpen()));
+        temp.sharesAmountText.setText(String.format("%.2f", temp.article.getSharesAmount()));
         //todo Currency eintragen
 
         //Artikel hinzufuegen zur Walletliste
-        simulation.walletListArticles.add(currentArticle);
+        if(!(simulation.walletListArticles.contains(currentArticle))){
+            simulation.walletListArticles.add(currentArticle);
+        }
         walletView.articlesInWalletView.add(temp);
 
         temp.articleButton.setOnAction(actionEvent -> {
@@ -163,73 +165,6 @@ public class SimulationController extends Controller {
 
     }
 
-    /*
-    private void refreshArticle(int i) {
-        Article article = simulation.walletListArticles.get(i);
-        Unit lastUnit = article.getValues().get(article.getValues().size() - 1);
-
-        if (lastUnit.getClose() < moneyInvest){
-            walletView.cash.setFill(Color.GREEN);
-        } else {
-            walletView.cash.setFill(Color.RED);
-        }
-
-        double result = ((moneyInvest - (moneyInvest * simulation.fee)) / lastUnit.getClose());
-        String formattedResult = String.format("%.4f", result);
-        walletView.shares.setText(formattedResult);
-
-        double cashText = (result * lastUnit.getClose());
-        String formattedResult2 = String.format("%.2f", cashText);
-        walletView.cash.setText(formattedResult2);
-        walletView.priceArticle.setText(String.valueOf(lastUnit.getClose()));
-    }
-
-     */
-
-    /*
-
-     * Methode liefert den Button fuer einen Artikel in der Walletlist zurueck
-     * @param avMoneyButton
-     * @return
-
-    @NotNull
-    private Button setGetSimulationArticle(int avMoneyButton) {
-
-        Button temp = new Button(currentArticle.getName());
-        temp.setPrefWidth(50);
-        temp.getStyleClass().add("walletArticle");
-
-        walletView.priceArticle = new Text(String.valueOf(avMoneyButton));
-        walletView.currency = new Text("€");
-        walletView.shares = new Text("0");
-        walletView.cash = new Text("0");
-        walletView.priceArticle.getStyleClass().add("priceArticle");
-        walletView.currency.getStyleClass().add("priceArticle");
-        walletView.shares.getStyleClass().add("priceArticle");
-        walletView.cash.getStyleClass().add("priceArticle");
-
-        //IDs für die Wertanzeige eines Artikels setzen
-        walletView.priceArticle.setId("Articleprice");
-        walletView.shares.setId("Amount of Articles");
-        walletView.cash.setId("Nicht definiert noch");
-
-        simulation.walletListArticles.add(currentArticle);
-        infoView.showInfoView(temp, walletView.controller);
-        walletList.add(temp);
-
-        VBox.setMargin(temp, new Insets(5, 5, 5, 10));
-        HBox.setMargin(walletView.priceArticle, new Insets(5, 5, 5, 10));
-        HBox.setMargin(walletView.cash, new Insets(5, 5, 5, 5));
-        HBox.setMargin(walletView.currency, new Insets(5, 5, 5, 0));
-        HBox addArticle = new HBox(temp, walletView.priceArticle, walletView.shares, walletView.cash, walletView.currency);
-
-        addArticle.getStyleClass().add("frameHBox");
-        addArticle.setAlignment(Pos.CENTER);
-
-        walletView.vBox.getChildren().add(addArticle);
-        return temp;
-    }
-    */
 
     /**
      * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
@@ -268,12 +203,12 @@ public class SimulationController extends Controller {
                 if (articleInWalletView.articleButton.getText().equals(walletCurrentArticle.getName())) {
 
                     //wenn mehr als man hat oder genau so viel eingegeben wird, dann werden die Artikel verkauft und entfernt aus der Waleltliste
-                    if(amount >= articleInWalletView.sharesAmount){
+                    if(amount >= articleInWalletView.article.getSharesAmount()){
                         //aus WalletArticleListe und aus Anzeige entfernen
                         simulation.walletListArticles.remove(walletCurrentArticle);
                         walletView.articlesVBox.getChildren().remove(articleInWalletView.root);
                         simulation.openShares -= 1;
-                        simulation.moneyAv += articleInWalletView.sharesAmount * articleInWalletView.article.getLastUnit().getOpen();
+                        simulation.moneyAv += articleInWalletView.article.getSharesAmount() * articleInWalletView.article.getLastUnit().getOpen();
                     }else{
                         //wenn nur ein Teil verkauft wird
                         simulation.moneyAv += amount * articleInWalletView.article.getLastUnit().getOpen();

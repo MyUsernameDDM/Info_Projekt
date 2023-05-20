@@ -1,5 +1,6 @@
 package View;
 
+import MainModel.Article;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.Background;
@@ -94,9 +95,9 @@ public class WalletView{
                         }else{
                             for (ArticleInWalletView articleView :articlesInWalletView) {
                                 if(articleView.article.getName().equals(controller.currentArticle.getName())){
-                                    System.out.println("Test");
                                     //die Artikelmenge um so viel erweitern, wie viel gekauft wurde
-                                    articleView.sharesAmountText.setText(String.format("%.2f", articleView.sharesAmount + Double.parseDouble(textFieldUserAmount.getText())/controller.currentArticle.getValues().get(0).getOpen()));
+                                    articleView.article.setSharesAmount(articleView.article.getSharesAmount() + Double.parseDouble(textFieldUserAmount.getText())/controller.currentArticle.getLastUnit().getOpen());
+                                    articleView.sharesAmountText.setText(String.format("%.2f", articleView.article.getSharesAmount()));
                                 }
                             }
                         }
@@ -154,10 +155,15 @@ public class WalletView{
 
     }
 
+    /**
+     * Methode, um eine neue Simulation zu starten
+     * @param startMoney Startgeld
+     */
     public void setNewSimulation(String startMoney){
+        controller.simulation.startMoney = Double.parseDouble(startMoney);
         startMoneyLabel.setText(startMoney);
         walletMoneyDisplay.avMoneyButton.setText(startMoney);
-
+        articlesVBox.getChildren().clear();
     }
 
     @NotNull
@@ -260,8 +266,14 @@ public class WalletView{
      * Methode wird aufgerufen, um eine neu geladene Simulation anzuzeigen
      */
     public void reloadSimulation(){
-        startMoneyLabel.setText(controller.simulation.getMoneyAv() + "");
-        //todo do miaßat man olle Artikel fa dor neuen SImulation usw. lodn
+        startMoneyLabel.setText(controller.simulation.startMoney + "");
+        articlesVBox.getChildren().clear();
+        walletMoneyDisplay.avMoneyButton.setText(controller.simulation.getMoneyAv()+"");
+        for (Article article: controller.simulation.walletListArticles) {
+            controller.currentArticle = article;
+            //zurueckrechnen mit money, weil ja nicht aktuelisiert, kommt es wieder auf die selben Shareamount
+            controller.walletAddArticle(article.getSharesAmount() * article.getLastUnit().getOpen());
+        }
 
     }
 }

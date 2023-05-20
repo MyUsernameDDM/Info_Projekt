@@ -14,6 +14,7 @@ public class Simulation implements Serializable{
     int moneyInv = 0;
     int moneyAv = 0;
     int openShares = 0;
+    double startMoney = 0;
 
     public ArrayList<Article> getWalletListArticles() {
         return walletListArticles;

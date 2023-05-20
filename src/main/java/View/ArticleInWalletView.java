@@ -15,7 +15,6 @@ public class ArticleInWalletView {
     Button articleButton = new Button();
     Text articlePrice = new Text("0");
     Text sharesAmountText = new Text("0");
-    double sharesAmount;
 
     Text currency = new Text("€");
 
