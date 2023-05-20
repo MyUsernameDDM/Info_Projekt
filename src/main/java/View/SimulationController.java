@@ -28,6 +28,10 @@ import java.util.ArrayList;
 
 import static MainModel.Main.mode;
 
+/**
+ * SimulationsController dient als Controller für die Simulationsanzeige, in der der User selbst Aktien und Artikel kaufen
+ * kann.
+ */
 public class SimulationController extends Controller {
 
     InfoView infoView = new InfoView();

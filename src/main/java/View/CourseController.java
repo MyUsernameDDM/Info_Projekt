@@ -11,23 +11,31 @@ import javafx.scene.shape.Rectangle;
 import java.util.Date;
 
 
+/**
+ * CourseController dient als Controller fuer die Kursanzeige
+ */
 public class CourseController {
+    //courseStatus stellt das enum für die normale Kursanzeige und jene mit Charts bereit
     public enum courseStatus {normalCourse, chartCourse}
 
     Controller controller;
 
 
-    /**
-     * courseState: Gibt an, ob die normale Kursansicht gezeigt wird, oder die Ansicht mit Hämmern
-     */
+
+    //courseState: Gibt an, ob die normale Kursansicht gezeigt wird, oder die Ansicht mit Hämmern
     courseStatus courseState;
 
     CourseView courseView;
 
+    /**
+     * Der Konstruktor von courseUtils hat den Anzeigestatus, den View für die Kursanzeige und den Controller als Parameter
+     * @param courseState
+     * @param courseView
+     * @param controller
+     */
     public CourseController(courseStatus courseState, CourseView courseView, Controller controller) {
         this.courseState = courseState;
         this.courseView = courseView;
-
         this.controller = controller;
     }
 
@@ -122,6 +130,7 @@ public class CourseController {
         }
     }
 
+    //setNormalView zeichnet die normale Kursanzeige als Aneinanderreihungen von Linien
     private void setNormalView(double posx, double posy, double startHeight, Date startTime, boolean rise) {
         for (int i = 0; i < controller.currentArticle.getPointAmount() - 1; ++i) {
 
@@ -149,15 +158,8 @@ public class CourseController {
         }
     }
 
-    /**
-     * private Klasse, um einen Chart zu erstellen
-     *
-     * @param u           Unit
-     * @param posx        x-Koordinate des Chart
-     * @param posy        y-Koordinate
-     * @param width
-     * @param startHeight
-     */
+
+    //setCandleStick wird verwendet, um einen einzelnen Chart/CandleStick zu zeichnen und wird daher für jeden Chart einzeln aufgerufen
     private void setCandleStick(Unit u, double posx, double posy, double width, double startHeight, long startTime, int index) {
         double candlePosy = ((Math.max(u.getOpen(), u.getClose()) - startHeight) / posy);
         double candlePosx = (u.getDate().getTime() - startTime) / posx;

@@ -17,7 +17,7 @@ import static MainModel.Main.status;
 import static MainModel.TimeSpan.*;
 
 public class Controller {
-    GroundView groundView = new GroundView(this);
+    GroundView groundView = new GroundView(this);       //View, in die andere View-Bausteine durch den COntroller eingefuegt werden
     SearchView searchView = new SearchView(this);
     WatchListView watchListView = new WatchListView(this);
     ArrayList<Article> watchListArticles = new ArrayList<>();

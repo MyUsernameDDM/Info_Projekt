@@ -12,6 +12,9 @@ import java.io.*;
 import java.net.ContentHandler;
 import java.util.Optional;
 
+/**
+ * SimulationsUtils dient zum laden und speichern von Simulationen und Simulationsdateien
+ */
 public class SimulationUtils {
 
     SimulationController controller;
