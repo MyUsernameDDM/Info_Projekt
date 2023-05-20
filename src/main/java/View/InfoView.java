@@ -38,7 +38,7 @@ public class InfoView {
             } else {
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.YEAR, unit.getDate().getYear() );
-                cal.set(Calendar.MONTH, unit.getDate().getMonth());
+                cal.set(Calendar.MONTH, unit.getDate().getMonth()-1);
                 cal.set(Calendar.DAY_OF_MONTH, unit.getDate().getDate());
                 Date date = cal.getTime();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

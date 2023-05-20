@@ -10,21 +10,32 @@ import java.net.URL;
 
 public class SearchUtils extends Thread{
 
-
+    /**
+     * Anzeigen der gesuchten Aktie
+     * @param result ist die Aktie die Ausgewählt wurde und dargestellt werden soll
+     * @param courseController wird benötigt um den Kurs darzustellen.
+     * @param searchView wird benötigt um bei der searchView die Scrollpane auszublenden.
+     */
     public static void buttonClicked(MatchUnits result, CourseController courseController, SearchView searchView){
         courseController.displayCourse(result.getName(), result.getSymbol());
         searchView.clearSearching();
     }
+
+    /**
+     * Sucht in der AlphaVantage API nach verschlägen basierend auf den Übergabestring.
+     * @param str String von dem aus ähnliche Aktien von der Api gesucht werden
+     * @return ein Array aus String, maximal 10, was die ähnlichen Aktien beinhaltet.
+     */
     public MatchUnits[] getMatchings (String str) {
         MatchUnits[] matches= new MatchUnits[10];
-        try {
-            URL url = new URL("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + str + "&apikey=" + "QESJBL81ZZ99LAQX");
-            HttpURLConnection con;
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String input;
-            int count = 0;
+            try {
+                URL url = new URL("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + str + "&apikey=" + "QESJBL81ZZ99LAQX");
+                HttpURLConnection con;
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String input;
+                int count = 0;
             while (count < 2) {
                 input = in.readLine();
                 if (input == null)

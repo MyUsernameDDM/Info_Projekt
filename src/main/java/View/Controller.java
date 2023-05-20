@@ -29,9 +29,9 @@ public class Controller {
     TimeSpan currentTimeSpan = TimeSpan.max;
     SearchUtils searchUtils = new SearchUtils();
     SafeArticle safeArticle = new SafeArticle();
-    InfoView infoView= new InfoView();
+    InfoView infoView = new InfoView();
 
-    public CourseController getCourseController(){
+    public CourseController getCourseController() {
         return courseController;
     }
 
@@ -118,7 +118,7 @@ public class Controller {
     /**
      * Methode passt die Elemente an die Fenstergröße an
      */
-    public void adjustWindowSize(double newSceneWidth, double newSceneHeight){
+    public void adjustWindowSize(double newSceneWidth, double newSceneHeight) {
         //Hintergrund
         groundView.window.setPrefWidth(newSceneWidth);
         groundView.window.setPrefHeight(newSceneHeight);
@@ -306,14 +306,12 @@ public class Controller {
         watchListView.vBox.getChildren().add(temp);
 
         temp.setOnAction(actionEvent -> {
-            if(!(temp.getText().equals(currentArticle.getName()))){
+            if (!(temp.getText().equals(currentArticle.getName()))) {
                 //Daten aus Datei oder von API holen: TimeSpan dieselbe von Artikel, das davor angezeigt wurde
-                while (!currentArticle.setValues(currentArticle.getTimeSpan())) {
-                    System.out.println("Test");
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        System.out.println(e.getMessage());
+                for (Article s : safeArticle.getSafedArticles()) {
+                    if (s.getTimeSpan() == currentTimeSpan && s.getName().equals(temp.getText())) {
+                        currentArticle = s;
+                        break;
                     }
                 }
                 courseController.showCourse();
@@ -367,14 +365,13 @@ public class Controller {
     }
 
 
-
     /**
      * Wechsel auf den SimulationController und somit auf den SimulationMode
      */
     public void changeModeSimulation() {
         mode = Main.status.simulation;
         //nur beim ersten mal in den Simulationsmodus wechseln eine SImulation starten
-        if(Main.simulationController.getSimulation() == null){
+        if (Main.simulationController.getSimulation() == null) {
             Main.simulationController.simulationUtils.newSimulation();
         }
     }

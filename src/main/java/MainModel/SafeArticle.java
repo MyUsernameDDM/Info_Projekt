@@ -41,6 +41,9 @@ public class SafeArticle {
         return null;
     }
 
+    /**
+     * In safedArticles ArrayList werden alle Articles von der Datei geschrieben
+     */
     public void setSafedArticles() {
         String nameFile = "ArtSafe.ser";
         File f = new File(nameFile);
@@ -56,6 +59,11 @@ public class SafeArticle {
         }
     }
 
+    /**
+     * Methode, um newArticle in der Datei ganz am ende zu speichern.
+     * Wenn mehr als 100 Article in der Datei sind wird der älteste Article entfernt.
+     * @param newArticle Article, der an den Anfang der Serialization Datei gegeben wird.
+     */
     public static void addArticleFile(Article newArticle) {
         if (newArticle == null || newArticle.getValues() == null || newArticle.getValues().size() == 0)
             throw new IllegalArgumentException();
@@ -98,6 +106,10 @@ public class SafeArticle {
         }
     }
 
+    /**
+     * Methode um Article in der safedARticles Arraylist abzuspeichern.
+     * @param art Article der Abgespeichert wird.
+     */
     public void addArticleToSafe(Article art) {
         if (safedArticles == null)
             safedArticles = new ArrayList<>();
