@@ -126,6 +126,7 @@ public class Controller {
         courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
         groundView.oldSceneWidth = newSceneWidth;
         groundView.oldSceneHeight = newSceneHeight;
+
     }
 
     /**
@@ -202,6 +203,7 @@ public class Controller {
         }
 
         searchView.outputSearchView.setMaxHeight(100);
+        searchView.outputSearchView.setMaxWidth(400);
         searchView.outputSearchView.setLayoutX(searchView.root.getLayoutX());
         searchView.outputSearchView.setLayoutY(searchView.searchInputTextField.getLayoutY() + searchView.searchInputTextField.getHeight());
         MatchUnits[] result = searchUtils.getMatchings(searchView.searchInputTextField.getText());

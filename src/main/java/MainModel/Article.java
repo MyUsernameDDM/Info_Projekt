@@ -7,7 +7,6 @@ import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
 
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +40,10 @@ public class Article implements Serializable {
         Config cfg = Config.builder().key("QESJBL81ZZ99LAQX").timeOut(10).build();
         AlphaVantage.api().init(cfg);
         this.safeArticle = safeArticle;
+    }
+
+    public Unit getLastUnit(){
+        return values.get(0);
     }
 
 

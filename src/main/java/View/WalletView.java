@@ -35,6 +35,14 @@ public class WalletView{
     Button newSimButton = new Button();
     Button loadSimButton = new Button();
     Button saveSimButton = new Button();
+
+    //Artikel Verkaufsansicht
+    BorderPane sellArticleView = new BorderPane();
+    Label sellQuestionLabel = new Label("Enter Amount to sell:");
+    TextField textFieldSellAmount = new TextField();
+    HBox sellHBox = new HBox();
+    Button confirmButton = new Button("Confirm");
+    Button cancelButton = new Button("Cancel");
     windowSettingUp walletMoneyDisplay;
     boolean open = false;
 
@@ -45,7 +53,7 @@ public class WalletView{
 
     public WalletView(SimulationController controller) {
         setSimulationElements();
-
+        setSellArticleView();
         this.controller = controller;
 
         walletMoneyDisplay = getWindowSettingUp();
@@ -99,6 +107,7 @@ public class WalletView{
                 });
 
                 walletMoneyDisplay.confirmCancelButton().setOnAction(event1 -> {
+
                     confirmWindow.getChildren().remove(window);
 
                     open = false;
@@ -108,19 +117,41 @@ public class WalletView{
             }
         });
 
+        //Handler fuer das Angeben der Anzahl der zu verkaufenden Artikel
         sellButton.setOnAction(event -> {
-            controller.walletRemoveCurrentArticle();
+            confirmWindow.getChildren().add(sellArticleView);
+
+        });
+        confirmButton.setOnAction(actionEvent -> {
+            controller.walletRemoveCurrentArticle(Double.parseDouble(textFieldSellAmount.getText()));
+            confirmWindow.getChildren().remove(sellArticleView);
+        });
+        cancelButton.setOnAction(actionEvent -> {
+            confirmWindow.getChildren().remove(sellArticleView);
         });
 
-        sellAllButton.setOnAction(event -> { // nicht d.
-            //controller.sellAllButton(controller.simulation.walletListArticles);
-            //controller.walletRemoveAllArticles();
-        });
 
         VBox upperwallervbox = walletViewSetting(walletMoneyDisplay.avMoneyButton(), hBox);
 
         walletRoot.getChildren().addAll(upperwallervbox, articlesScrollPane);
         walletRoot.setPrefWidth(270);
+    }
+
+    private void setSellArticleView() {
+        sellArticleView.setTop(sellQuestionLabel);
+        sellArticleView.setCenter(textFieldSellAmount);
+        sellHBox.getChildren().addAll(confirmButton, cancelButton);
+        sellArticleView.setBottom(sellHBox);
+
+        sellHBox.setMargin(confirmButton, new Insets(5, 5, 5, 10));
+        sellHBox.setMargin(cancelButton, new Insets(5, 5, 5, 10));
+        sellArticleView.setMargin(note, new Insets(5,5,5,10));
+        sellArticleView.setMargin(textFieldSellAmount, new Insets(5,5,5,10));
+
+        confirmButton.getStyleClass().add("confirmBuyButton");
+        cancelButton.getStyleClass().add("cancelButton");
+
+
     }
 
     public void setNewSimulation(String startMoney){
@@ -150,8 +181,7 @@ public class WalletView{
         return result;
     }
 
-    public record windowSettingUp(Button avMoneyButton, Button confirmBuyButton, Button confirmCancelButton) {
-    }
+    public record windowSettingUp(Button avMoneyButton, Button confirmBuyButton, Button confirmCancelButton) {}
 
     @NotNull
     private VBox walletViewSetting(Button money, HBox hBox) {
@@ -163,8 +193,7 @@ public class WalletView{
         upperwallervbox.setMargin(startMoneyLabel, new Insets(5,5,5,10));
         upperwallervbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
-        articlesScrollPane.prefHeight(500);
-        articlesScrollPane.setMinHeight(200);
+        articlesScrollPane.prefHeight(200);
         articlesScrollPane.setMaxWidth(240);
         articlesScrollPane.setContent(articlesVBox);
         articlesScrollPane.setBackground(Background.fill(Color.WHITE));
@@ -220,6 +249,9 @@ public class WalletView{
         saveSimButton.getStyleClass().add("buttonInList");
     }
 
+    /**
+     * Methode, die die Optionen zum laden, speichern und erstellen einer Simulation ausblendet
+     */
     public void removeSimulationOptions() {
         simulationButtonVBox.setVisible(false);
     }

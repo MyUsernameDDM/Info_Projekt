@@ -26,8 +26,7 @@ public class SimulationController extends Controller {
     Simulation simulation = null;
     WalletView walletView = new WalletView(this);
     Article walletCurrentArticle = null; // Aktueller Artikle
-    ArrayList<Article> walletListArticles = new ArrayList<>();
-    ArrayList<Button> walletList = new ArrayList<>();
+
     SimulationUtils simulationUtils = new SimulationUtils(this);
     Double moneyInvest;
 
@@ -71,10 +70,12 @@ public class SimulationController extends Controller {
         groundView.window.setPrefWidth(newSceneWidth);
         groundView.window.setPrefHeight(newSceneHeight);
 
-        //folgende Zeile ist zum normalen Controller unterschiedlich
-        courseController.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
         groundView.oldSceneWidth = newSceneWidth;
         groundView.oldSceneHeight = newSceneHeight;
+
+        //folgende Zeilen sind zum normalen Controller unterschiedlich
+        courseController.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        walletView.articlesScrollPane.setPrefHeight(walletView.articlesScrollPane.getPrefHeight());
     }
 
     /**
@@ -236,10 +237,10 @@ public class SimulationController extends Controller {
     public void walletSafeCurrentArticle(String articleName) {
         //vorher ausgewählten Button wieder zuruecksetzen
         if (walletCurrentArticle != null) {
-            for (int i = 0; i < walletList.size(); i++) {
-                if (walletCurrentArticle.getName().equals(walletList.get(i).getText())) {
-                    walletList.get(i).getStyleClass().remove("buttonInListClicked");
-                    walletList.get(i).getStyleClass().add("buttonInList");
+            for (int i = 0; i < walletView.articlesInWalletView.size(); i++) {
+                if (walletCurrentArticle.getName().equals(walletView.articlesInWalletView.get(i).articleButton.getText())) {
+                    walletView.articlesInWalletView.get(i).articleButton.getStyleClass().remove("walletArticleClicked");
+                    walletView.articlesInWalletView.get(i).articleButton.getStyleClass().add("walletArticle");
                 }
             }
         }
@@ -248,10 +249,10 @@ public class SimulationController extends Controller {
         for (Article article : simulation.getWalletListArticles()) {
             if (articleName.equals(article.getName())) {
                 walletCurrentArticle = article;
-                for (int i = 0; i < walletList.size(); i++) {
-                    if (articleName.equals(walletList.get(i).getText())) {
-                        walletList.get(i).getStyleClass().remove("buttonInList");
-                        watchListView.buttonList.get(i).getStyleClass().add("buttonInListClicked");
+                for (int i = 0; i < walletView.articlesInWalletView.size(); i++) {
+                    if (articleName.equals(walletView.articlesInWalletView.get(i).articleButton.getText())) {
+                        walletView.articlesInWalletView.get(i).articleButton.getStyleClass().remove("walletArticle");
+                        walletView.articlesInWalletView.get(i).articleButton.getStyleClass().add("walletArticleClicked");
                     }
                 }
             }
@@ -261,29 +262,26 @@ public class SimulationController extends Controller {
     /**
      * Die Methode löscht das aktuell ausgewählte Element der Walletlist aus dieser
      */
-    public void walletRemoveCurrentArticle() {
+    public void walletRemoveCurrentArticle(double amount) {
         if (walletCurrentArticle != null) {
-            for (Node node : walletView.articlesVBox.getChildren()) {
-                if (node instanceof HBox) {
-                    HBox hbox = (HBox) node;
-                    Button b = (Button) hbox.getChildren().get(0);
-                    if (b.getText().equals(walletCurrentArticle.getName())) {
-                        walletView.articlesVBox.getChildren().remove(hbox);
-                        walletList.remove(hbox);
+            for (ArticleInWalletView articleInWalletView : walletView.articlesInWalletView) {
+                if (articleInWalletView.articleButton.getText().equals(walletCurrentArticle.getName())) {
 
-                        // get the price Text node and print its text content
-                        Text priceText = (Text) hbox.getChildren().get(1);
-                        String price = priceText.getText();
-                        System.out.println("Removed article: " + walletCurrentArticle.getName() + ", price: " + price);
-
+                    //wenn mehr als man hat oder genau so viel eingegeben wird, dann werden die Artikel verkauft und entfernt aus der Waleltliste
+                    if(amount >= articleInWalletView.sharesAmount){
+                        //aus WalletArticleListe und aus Anzeige entfernen
+                        simulation.walletListArticles.remove(walletCurrentArticle);
+                        walletView.articlesVBox.getChildren().remove(articleInWalletView.root);
                         simulation.openShares -= 1;
-                        simulation.moneyAv += Double.valueOf(price);
-                        walletView.walletMoneyDisplay.avMoneyButton().setText(String.valueOf(simulation.moneyAv));
-                        break;
+                        simulation.moneyAv += articleInWalletView.sharesAmount * articleInWalletView.article.getLastUnit().getOpen();
+                    }else{
+                        //wenn nur ein Teil verkauft wird
+                        simulation.moneyAv += amount * articleInWalletView.article.getLastUnit().getOpen();
                     }
+                    walletView.walletMoneyDisplay.avMoneyButton().setText(String.valueOf(simulation.moneyAv));
+                    break;
                 }
             }
-            walletListArticles.remove(walletCurrentArticle);
         }
     }
 
@@ -293,8 +291,7 @@ public class SimulationController extends Controller {
             public void handle(MouseEvent mouseEvent) {
                 changeMode();
             }
-        });{
-        }
+        });
     }
 
 }

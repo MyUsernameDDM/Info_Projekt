@@ -21,7 +21,6 @@ public class SearchView extends Thread {
     VBox recommendsBox = new VBox();
 
     final Button[] recommends = new Button[10];
-    //GroundView groundView = new GroundView(controller);
 
 
     /**
@@ -29,10 +28,10 @@ public class SearchView extends Thread {
      */
     public SearchView(Controller controller) {
         this.controller = controller;
-        outputSearchView.setStyle("-fx-background-color: transparent");
+        outputSearchView.setStyle("-fx-fill: transparent");
         recommendsBox.setStyle("-fx-background-radius-radius: 10");
         recommendsBox.setStyle("-fx-border-radius: 10");
-        recommendsBox.setStyle("-fx-background-color: rgba(206,15,15,0.9)");
+        recommendsBox.setStyle("-fx-background-color: #95adf1");
         setButtonsSearchView();
 
         //Styleklassen setzen
@@ -43,10 +42,6 @@ public class SearchView extends Thread {
         //Layout der vBox root
         root.setAlignment(Pos.CENTER);
 
-        //groundView.setMenu(searchBox);
-        //groundView.setMenu(searchButton);
-        //GroundView.menu.getChildren().addAll(searchBox, searchButton);
-        //root.getChildren().addAll(searchBox, searchButton);
     }
     public void clearScrollPane(){
         outputSearchView.setVisible(false);
