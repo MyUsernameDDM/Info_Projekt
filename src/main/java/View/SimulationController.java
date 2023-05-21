@@ -2,17 +2,13 @@ package View;
 
 import MainModel.Article;
 import MainModel.Main;
+import MainModel.Simulation;
 import Utils.SimulationUtils;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static MainModel.Main.mode;
 
@@ -31,6 +27,7 @@ public class SimulationController extends Controller {
     Double moneyInvest;
 
     public SimulationController() {
+        //Aufruf des Konstruktors der Superklasse Controller
         super();
         setWalletView();
         courseController.adjustCourseSize(
@@ -48,14 +45,26 @@ public class SimulationController extends Controller {
         return groundView.scene;
     }
 
+    /**
+     * Sie Simulatin wird auf die übergebene Simulaiton gesetzt. Dies passiert, wenn eine neue Simulaiton begonnen wird oder eine Simulation aus einer Serialization-Datei geladen wird.
+     * @param simulation
+     */
     public void setSimulation(Simulation simulation) {
         this.simulation = simulation;
     }
 
+    /**
+     * Methode zum zurückgeben der aktuellen Simulation
+     * @return Simulation, die aktuell verwendet wird
+     */
     public Simulation getSimulation() {
         return simulation;
     }
 
+    /**
+     * Getter fuer die Walletview
+     * @return die View des Wallets wird zurueckgegeben
+     */
     public WalletView getWalletView() {
         return walletView;
     }
@@ -86,6 +95,9 @@ public class SimulationController extends Controller {
         mode = Main.status.realtime;
     }
 
+    /**
+     * setWalletView fügt die WalletView der GroundView hinzu und setzt Actionhandler
+     */
     private void setWalletView() {
 
         //Liste für die Buttons anzeigen
@@ -96,13 +108,14 @@ public class SimulationController extends Controller {
 
         groundView.window.setLeft(walletView.walletRoot);
 
-        //Buttons für das Laden und Speichern der Simulation
+        //Button für das Laden, Erstellen und Speichern der Simulation
         walletView.simulationCoverInMenu.setOnAction(actionEvent -> {
             walletView.simulationButtonVBox.setLayoutX(walletView.simulationCoverInMenu.getLayoutX() + 20);
             walletView.simulationButtonVBox.setLayoutY(walletView.simulationCoverInMenu.getLayoutY() + walletView.simulationCoverInMenu.getHeight());
             walletView.simulationButtonVBox.setVisible(true);
         });
 
+        //setzen der Handler fuer die SimulationsButtons
         walletView.newSimButton.setOnAction(actionEvent -> {
             simulationUtils.newSimulation();
         });
@@ -138,8 +151,8 @@ public class SimulationController extends Controller {
         //todo Currency eintragen
 
         //Artikel hinzufuegen zur Walletliste
-        if(!(simulation.walletListArticles.contains(currentArticle))){
-            simulation.walletListArticles.add(currentArticle);
+        if(!(simulation.getWalletListArticles().contains(currentArticle))){
+            simulation.getWalletListArticles().add(currentArticle);
         }
         walletView.articlesInWalletView.add(temp);
 
@@ -157,9 +170,7 @@ public class SimulationController extends Controller {
             courseController.showCourse();
             walletSafeCurrentArticle(currentArticle.getName());
         });
-
-        simulation.openShares += 1;
-        simulation.moneyAv -= moneyInvest;
+        simulation.setMoneyAv(simulation.getMoneyAv()-moneyInvest);
         walletView.articlesVBox.getChildren().add(temp.root);
 
 
@@ -205,15 +216,15 @@ public class SimulationController extends Controller {
                     //wenn mehr als man hat oder genau so viel eingegeben wird, dann werden die Artikel verkauft und entfernt aus der Waleltliste
                     if(amount >= articleInWalletView.article.getSharesAmount()){
                         //aus WalletArticleListe und aus Anzeige entfernen
-                        simulation.walletListArticles.remove(walletCurrentArticle);
+                        simulation.getWalletListArticles().remove(walletCurrentArticle);
                         walletView.articlesVBox.getChildren().remove(articleInWalletView.root);
-                        simulation.openShares -= 1;
-                        simulation.moneyAv += articleInWalletView.article.getSharesAmount() * articleInWalletView.article.getLastUnit().getOpen();
+                        simulation.setMoneyAv(articleInWalletView.article.getSharesAmount() * articleInWalletView.article.getLastUnit().getOpen());
                     }else{
                         //wenn nur ein Teil verkauft wird
-                        simulation.moneyAv += amount * articleInWalletView.article.getLastUnit().getOpen();
+                        simulation.setMoneyAv(simulation.getMoneyAv() + amount * articleInWalletView.article.getLastUnit().getOpen());
+
                     }
-                    walletView.walletMoneyDisplay.avMoneyButton().setText(String.valueOf(simulation.moneyAv));
+                    walletView.walletMoneyDisplay.avMoneyButton().setText(String.valueOf(simulation.getMoneyAv()));
                     break;
                 }
             }

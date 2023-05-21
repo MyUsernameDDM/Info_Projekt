@@ -1,6 +1,6 @@
 package Utils;
 
-import View.Simulation;
+import MainModel.Simulation;
 import View.SimulationController;
 import org.junit.jupiter.api.Test;
 

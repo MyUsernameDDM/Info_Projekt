@@ -1,7 +1,6 @@
 package Utils;
 
-import MainModel.Main;
-import View.Simulation;
+import MainModel.Simulation;
 import View.SimulationController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -9,7 +8,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 
 import java.io.*;
-import java.net.ContentHandler;
 import java.util.Optional;
 
 /**
