@@ -17,7 +17,7 @@ public class SearchUtils extends Thread{
      * @param searchView wird benötigt um bei der searchView die Scrollpane auszublenden.
      */
     public static void buttonClicked(MatchUnits result, CourseController courseController, SearchView searchView){
-        courseController.displayCourse(result.getName(), result.getSymbol());
+        courseController.displayCourse(result.getName(), result.getSymbol(), result.getCurrency());
         searchView.clearSearching();
     }
 

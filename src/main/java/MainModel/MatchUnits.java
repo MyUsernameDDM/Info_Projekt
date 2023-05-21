@@ -65,7 +65,7 @@ public class MatchUnits {
     }
 
     public String getCurrency() {
-        return currency;
+        return getOnlyData(currency);
     }
 
 

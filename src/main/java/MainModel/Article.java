@@ -22,6 +22,7 @@ public class Article implements Serializable {
     private ArrayList<Unit> values = new ArrayList<>();
     private final String name;
     private final String symbol;
+    private final String currency;
     private int pointAmount = 0;
     private TimeSpan timeSpan;
 
@@ -40,12 +41,13 @@ public class Article implements Serializable {
     }
 
 
-    public Article(String name, String symbol, SafeArticle safeArticle) {
+    public Article(String name, String symbol, SafeArticle safeArticle, String currency) {
         this.name = name;
         this.symbol = symbol;
         Config cfg = Config.builder().key("QESJBL81ZZ99LAQX").timeOut(10).build();
         AlphaVantage.api().init(cfg);
         this.safeArticle = safeArticle;
+        this.currency= currency;
     }
 
     public Unit getLastUnit(){
@@ -59,6 +61,9 @@ public class Article implements Serializable {
 
     public String getSymbol() {
         return symbol;
+    }
+    public String getCurrency(){
+        return currency;
     }
 
     /**
@@ -138,7 +143,7 @@ public class Article implements Serializable {
         int count = 0;
         for (TimeSpan t : TimeSpan.values()) {
             if (t != timeSpan) {
-                otherTimeSpans[count] = new Article(name, symbol, safeArticle);
+                otherTimeSpans[count] = new Article(name, symbol, safeArticle, currency);
                 boolean tsInOther = false;
                 int indexInOther = -1;
                 for (int i = 0; i < otherTimeSpans.length; ++i) {
