@@ -12,6 +12,9 @@ import java.io.*;
 import java.net.ContentHandler;
 import java.util.Optional;
 
+/**
+ * SimulationsUtils dient zum laden und speichern von Simulationen und Simulationsdateien
+ */
 public class SimulationUtils {
 
     SimulationController controller;
@@ -35,7 +38,7 @@ public class SimulationUtils {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(value -> {
             controller.getSimulation().setMoneyAv(Integer.parseInt(value));
-            controller.getWalletView().getMoneyShow().setText(value);
+            controller.getWalletView().setNewSimulation(value);
         });
     }
 

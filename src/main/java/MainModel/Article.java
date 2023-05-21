@@ -7,7 +7,6 @@ import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
 
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +14,10 @@ import com.google.gson.stream.JsonReader;
 import okhttp3.Response;
 
 
+/**
+ * Die Article Klasse stellt einen Artikel (z.B. eine Aktie oder Kryptowährung) dar und speichert die nötigen Attribute.
+ * Die Klasse implementiert das Interface Serializable, damit die Artikel in serialisiert werden können
+ */
 public class Article implements Serializable {
     private ArrayList<Unit> values = new ArrayList<>();
     private final String name;
@@ -22,10 +25,16 @@ public class Article implements Serializable {
     private final String currency;
     private int pointAmount = 0;
     private TimeSpan timeSpan;
+
+    private double sharesAmount;
     private transient TimeSeriesResponse apiResponse = null;
     private final transient SafeArticle safeArticle;
-
-
+    public double getSharesAmount() {
+        return sharesAmount;
+    }
+    public void setSharesAmount(double sharesAmount) {
+        this.sharesAmount = sharesAmount;
+    }
 
     public ArrayList<Unit> getValues() {
         return values;
@@ -39,6 +48,10 @@ public class Article implements Serializable {
         AlphaVantage.api().init(cfg);
         this.safeArticle = safeArticle;
         this.currency= currency;
+    }
+
+    public Unit getLastUnit(){
+        return values.get(0);
     }
 
 
@@ -56,7 +69,7 @@ public class Article implements Serializable {
     /**
      * Wandelt String in date um
      *
-     * @param str ; nimmt parameter und wandelt in in Date um
+     * @param str ; nimmt parameter und wandelt ihn in Date um
      * @return ; Date vom angegebenen String
      */
     public static Date convStringToDate(String str) {

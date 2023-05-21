@@ -11,23 +11,31 @@ import javafx.scene.shape.Rectangle;
 import java.util.Date;
 
 
+/**
+ * CourseController dient als Controller fuer die Kursanzeige
+ */
 public class CourseController {
+    //courseStatus stellt das enum für die normale Kursanzeige und jene mit Charts bereit
     public enum courseStatus {normalCourse, chartCourse}
 
     Controller controller;
 
 
-    /**
-     * courseState: Gibt an, ob die normale Kursansicht gezeigt wird, oder die Ansicht mit Hämmern
-     */
+
+    //courseState: Gibt an, ob die normale Kursansicht gezeigt wird, oder die Ansicht mit Hämmern
     courseStatus courseState;
 
     CourseView courseView;
 
+    /**
+     * Der Konstruktor von courseUtils hat den Anzeigestatus, den View für die Kursanzeige und den Controller als Parameter
+     * @param courseState
+     * @param courseView
+     * @param controller
+     */
     public CourseController(courseStatus courseState, CourseView courseView, Controller controller) {
         this.courseState = courseState;
         this.courseView = courseView;
-
         this.controller = controller;
     }
 
@@ -60,7 +68,8 @@ public class CourseController {
     }
 
     /**
-     * Die Methode showChartCourse setzt den View so, dass der Kurs mit den Charts angezeigt wird
+     * Die Methode showCourse zeichnet den Kurs und ruft dabei, je nachdem ob der normale oder der Chartkurs angezeigt werden soll
+     * setNormalView oder setCandleStick auf
      */
     public void showCourse() {
         if (controller.currentArticle == null || controller.currentArticle.getValues() == null || controller.currentArticle.getPointAmount() == 0)
@@ -122,6 +131,7 @@ public class CourseController {
         }
     }
 
+    //setNormalView zeichnet die normale Kursanzeige als Aneinanderreihungen von Linien
     private void setNormalView(double posx, double posy, double startHeight, Date startTime, boolean rise) {
         int points=controller.currentArticle.getPointAmount();
         for (int i = 0; i < points - 1; ++i) {
@@ -137,28 +147,25 @@ public class CourseController {
                 endPosY = (controller.currentArticle.getValues().get(i + 1).getClose() - startHeight) / posy;
             }
             Line l = new Line(startPosX, courseView.backGround.getHeight() - startPosY, endPosX, courseView.backGround.getHeight() - endPosY);
-            controller.courseView.points.add(new Ellipse(startPosX, startPosY, 5, 5));
+            Ellipse tempEllipse = new Ellipse(startPosX, courseView.backGround.getHeight() - startPosY, 1.5, 1.5);
+            controller.courseView.points.add(tempEllipse);
 
 
             if (rise) {
                 l.setStroke(Color.GREEN);
+                tempEllipse.setFill(Color.GREEN);
             } else {
                 l.setStroke(Color.RED);
+                tempEllipse.setFill(Color.RED);
             }
             controller.infoView.showChartInfoView(l, controller.currentArticle.getValues().get(i));
-            courseView.root.getChildren().add(l);
+            controller.infoView.showChartInfoView(tempEllipse, controller.currentArticle.getValues().get(i));
+            courseView.root.getChildren().addAll(l,tempEllipse);
         }
     }
 
-    /**
-     * private Klasse, um einen Chart zu erstellen
-     *
-     * @param u           Unit
-     * @param posx        x-Koordinate des Chart
-     * @param posy        y-Koordinate
-     * @param width
-     * @param startHeight
-     */
+
+    //setCandleStick wird verwendet, um einen einzelnen Chart/CandleStick zu zeichnen und wird daher für jeden Chart einzeln aufgerufen
     private void setCandleStick(Unit u, double posx, double posy, double width, double startHeight, long startTime, int index) {
         double candlePosy = ((Math.max(u.getOpen(), u.getClose()) - startHeight) / posy);
         double candlePosx = (u.getDate().getTime() - startTime) / posx;

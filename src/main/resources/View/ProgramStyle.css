@@ -145,12 +145,19 @@
     -fx-background-color: #d3d3d3;
     -fx-background-radius: 10px;
 }
+.walletArticleClicked{
+    -fx-font-size: 12px;
+    -fx-font-family: 'Anton', sans-serif;
+    -fx-background-color: #9fe1a5;
+    -fx-background-radius: 10px;
+}
 
 .cancelButton{
     -fx-alignment: center;
     -fx-font-size: 10px;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
+    -fx-pref-width: 125;
     -fx-font-family: 'Anton', sans-serif;
     -fx-background-color: #ffb6c1;
     -fx-border-color: #b20222;
@@ -162,7 +169,8 @@
    -fx-font-size: 10px;
    -fx-background-radius: 10px;
    -fx-border-radius: 10px;
-   -fx-font-family: 'Anton', sans-serif;
+    -fx-pref-width: 125;
+    -fx-font-family: 'Anton', sans-serif;
    -fx-background-color: #90ee90;
    -fx-border-color: #226b22;
    -fx-border-width: 1.75px;
