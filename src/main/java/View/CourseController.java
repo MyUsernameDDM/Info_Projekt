@@ -46,8 +46,8 @@ public class CourseController {
     }
 
 
-    public void displayCourse(String articleName, String symbol) {
-        Article article = new Article(articleName, symbol, controller.safeArticle);
+    public void displayCourse(String articleName, String symbol, String currency) {
+        Article article = new Article(articleName, symbol, controller.safeArticle, currency);
         while (!article.setValues(controller.currentTimeSpan)) {
             try {
                 Thread.sleep(500);
@@ -70,7 +70,7 @@ public class CourseController {
         courseView.root.getChildren().addAll(courseView.backGround, courseView.articleNameLabel);
 
         //Artikelname setzen
-        courseView.articleNameLabel.setText(controller.currentArticle.getName());
+        courseView.articleNameLabel.setText(controller.currentArticle.getName()+"\nCurrency:"+ controller.currentArticle.getCurrency());
 
         Unit min = controller.currentArticle.getValues().get(0);
         Unit max = controller.currentArticle.getValues().get(0);

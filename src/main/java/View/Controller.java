@@ -89,7 +89,7 @@ public class Controller {
                             currentTimeSpan = max;
                             break;
                     }
-                    courseController.displayCourse(currentArticle.getName(), currentArticle.getSymbol());
+                    courseController.displayCourse(currentArticle.getName(), currentArticle.getSymbol(), currentArticle.getCurrency());
                 }
             });
             groundView.root.setOnMouseClicked(e -> {
@@ -134,7 +134,7 @@ public class Controller {
     public void setCourseView() {
         safeArticle.setSafedArticles();
 
-        courseController.displayCourse("IBM", "IBM");
+        courseController.displayCourse("IBM", "IBM", "USD");
         groundView.timeButtons[6].getStyleClass().add("buttonTimeClicked");
 
         groundView.window.setCenter(courseView.root);
