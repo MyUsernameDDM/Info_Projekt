@@ -1,6 +1,8 @@
 package Utils;
 
+import MainModel.Article;
 import MainModel.Simulation;
+import MainModel.TimeSpan;
 import View.SimulationController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -43,7 +45,7 @@ public class SimulationUtils {
     /**
      * Methode, sodass eine andere serializable-Datei geöffnet werden kann, um andere Simulationen zu öffnen
      */
-    public void openSimulation() throws IOException, ClassNotFoundException {
+    public void openSimulation() throws IOException, ClassNotFoundException, InterruptedException {
 
         checkIfSimSaved();
         //Simulation öffnen
@@ -57,6 +59,12 @@ public class SimulationUtils {
             controller.setSimulation((Simulation) inputStream.readObject());
             fileInputStream.close();
             inputStream.close();
+        }
+
+        //die Values für die Artikel aktualisieren
+        for (Article article :
+                controller.getSimulation().getWalletListArticles()) {
+            updateUnitsOfArticle(article);
         }
 
         //die Simulation in die Anzeigen laden
@@ -104,5 +112,21 @@ public class SimulationUtils {
                 ex.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * Methode, die die Values des übergebenen Aritkels aktualisiert.
+     * Das passiert, wenn eine "alte" Simulation geladen wird, und daher die dort gespeicherten Values nicht mehr aktuell sind.
+     * @param article
+     * @throws InterruptedException
+     */
+    public void updateUnitsOfArticle(Article article) throws InterruptedException {
+        Thread t = new Thread(() ->{
+                article.setValues(TimeSpan.max);
+        });
+        t.start();
+        t.join();
+
     }
 }

@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Screen;
 
 import java.util.ArrayList;
 
@@ -108,7 +109,15 @@ public class Controller {
         ChangeListener changeListener = new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                adjustWindowSize(groundView.scene.getWidth(), groundView.scene.getHeight());
+
+                //um Fehler zu vermeiden, wird maximal die Bildschirmgröße mitgegeben
+                //Abrufen des primären Bildschirms
+                Screen screen = Screen.getPrimary();
+
+                //Abrufen der Bildschirmgröße
+                double screenWidth = screen.getBounds().getWidth();
+                double screenHeight = screen.getBounds().getHeight();
+                adjustWindowSize(Math.min(groundView.scene.getWidth(), screenWidth), Math.min(groundView.scene.getHeight(), screenHeight));
             }
         };
         groundView.scene.heightProperty().addListener(changeListener);
@@ -123,7 +132,7 @@ public class Controller {
         groundView.window.setPrefWidth(newSceneWidth);
         groundView.window.setPrefHeight(newSceneHeight);
 
-        courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        courseController.adjustCourseSize(newSceneWidth - watchListView.wlRoot.getPrefWidth(), newSceneHeight - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
         groundView.oldSceneWidth = newSceneWidth;
         groundView.oldSceneHeight = newSceneHeight;
 
@@ -372,6 +381,7 @@ public class Controller {
      */
     public void changeModeSimulation() {
         mode = Main.status.simulation;
+        Main.changeBetweenModes();
         //nur beim ersten mal in den Simulationsmodus wechseln eine SImulation starten
         if (Main.simulationController.getSimulation() == null) {
             Main.simulationController.simulationUtils.newSimulation();

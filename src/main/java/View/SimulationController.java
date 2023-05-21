@@ -93,6 +93,7 @@ public class SimulationController extends Controller {
     //@Override
     public void changeMode() { // Simulation - Realtime
         mode = Main.status.realtime;
+        Main.changeBetweenModes();
     }
 
     /**
@@ -122,9 +123,11 @@ public class SimulationController extends Controller {
         walletView.loadSimButton.setOnAction(actionEvent -> {
             try {
                 simulationUtils.openSimulation();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -148,6 +151,7 @@ public class SimulationController extends Controller {
         temp.articlePrice.setText("" + (currentArticle.getValues().get(0).getOpen()));
         temp.article.setSharesAmount(money/(currentArticle.getValues().get(0).getOpen()));
         temp.sharesAmountText.setText(String.format("%.2f", temp.article.getSharesAmount()));
+        temp.currency.setText(currentArticle.getCurrency());
         //todo Currency eintragen
 
         //Artikel hinzufuegen zur Walletliste
