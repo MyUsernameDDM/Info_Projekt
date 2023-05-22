@@ -92,9 +92,15 @@ public class WalletView{
                                 }
                             }
                         }
+                    }else{
+                        //wenn er nicht genügend Geld hat, wird ein Warnungsfenster angezeigt
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Warnung");
+                        alert.setHeaderText("You don't have enough money!");
 
+                        // Benutzeraktion überprüfen
+                        alert.showAndWait();
                     }
-
                     open = false;
                 });
 
