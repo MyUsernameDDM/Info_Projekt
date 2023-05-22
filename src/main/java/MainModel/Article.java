@@ -36,7 +36,7 @@ public class Article implements Serializable {
         this.sharesAmount = sharesAmount;
     }
 
-    public ArrayList<Unit> getValues() {
+    public synchronized ArrayList<Unit> getValues() {
         return values;
     }
 
@@ -118,7 +118,7 @@ public class Article implements Serializable {
      * @param timeSpan ; Gibt an, welche Zeitspanne von daten gewollt sind.
      * @return ; false: Wenn zu viele anfragen an die Api gesendet wurden. true: Wenn keine fehler aufgetreten sind.
      */
-    public boolean setValues(TimeSpan timeSpan) {
+    public synchronized boolean setValues(TimeSpan timeSpan) {
         if (safeArticle.getSafedArticles() != null) {
             for (Article a : safeArticle.getSafedArticles()) {
                 if (a.getSymbol().equals(symbol) && timeSpan == a.getTimeSpan()) {

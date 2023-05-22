@@ -1,6 +1,6 @@
 package Utils;
 
-import View.Simulation;
+import MainModel.Simulation;
 import View.SimulationController;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 public class TestSimulationUtils {
     //todo geat logisch net, i miaßat quasi olls mochn
     @Test
-    public void openNewSimulation() throws IOException, ClassNotFoundException {
+    public void openNewSimulation() throws IOException, ClassNotFoundException, InterruptedException {
         Simulation simulation = new Simulation();
         SimulationController controller = new SimulationController();
         SimulationUtils simulationUtils = new SimulationUtils(controller);
