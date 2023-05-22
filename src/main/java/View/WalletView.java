@@ -28,7 +28,7 @@ public class WalletView{
     Rectangle buySettings = new Rectangle(230, 50);
     TextField textFieldUserAmount = new TextField("0");
     Label startMoneyLabel = new Label();
-    Label note = new Label("Enter Amount:");
+    Label note = new Label("Enter Amount in Currency:");
 
     //Elemente zum Laden etc. einer Simulation
     VBox simulationButtonVBox = new VBox();
@@ -39,7 +39,7 @@ public class WalletView{
 
     //Elemente für die Verkaufsansicht
     BorderPane sellArticleView = new BorderPane();
-    Label sellQuestionLabel = new Label("Enter Amount to sell:");
+    Label sellQuestionLabel = new Label("Enter Amount of Articles to sell:");
     TextField textFieldSellAmount = new TextField();
     HBox sellHBox = new HBox();
     Button sellConfirmButton = new Button("CONFIRM");
@@ -59,9 +59,12 @@ public class WalletView{
 
         walletMoneyDisplay = getWindowSettingUp();
 
-        //ID setzen und Infoview für das StartGeldLabel setzen
+        //ID setzen und Infoview für das StartGeldLabel und moneyAv setzen
         startMoneyLabel.setId("Start Money");
+        walletMoneyDisplay.avMoneyButton().setId("Available Money");
         controller.infoView.showIDofNodeInfoView(startMoneyLabel);
+        controller.infoView.showIDofNodeInfoView(walletMoneyDisplay.avMoneyButton());
+
 
         //HBox für Kauf- und Verkaufbutton
         HBox hBox = new HBox(buyButton, sellButton);
@@ -106,20 +109,6 @@ public class WalletView{
             }
         });
 
-        //Handler fuer das Angeben der Anzahl der zu verkaufenden Artikel
-        sellButton.setOnAction(event -> {
-            if(!(confirmWindow.getChildren().contains(sellArticleView))){
-                confirmWindow.getChildren().add(sellArticleView);
-            }
-
-        });
-        sellConfirmButton.setOnAction(actionEvent -> {
-            controller.walletRemoveCurrentArticle(Double.parseDouble(textFieldSellAmount.getText()));
-            confirmWindow.getChildren().remove(sellArticleView);
-        });
-        sellCancelButton.setOnAction(actionEvent -> {
-            confirmWindow.getChildren().remove(sellArticleView);
-        });
 
         VBox upperwallervbox = walletViewSetting(walletMoneyDisplay.avMoneyButton(), hBox);
 
