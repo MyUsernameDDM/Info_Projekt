@@ -5,6 +5,9 @@ import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Klasse zum Abspeicheren von einer Einheit einer Aktie
+ */
 public class Unit implements Serializable {
     private final double open;
     private final double high;
@@ -15,6 +18,11 @@ public class Unit implements Serializable {
     private final double dividendAmount;
     private final double splitCoefficient;
     private final Date dateTime;
+
+    /**
+     * Erstellen von einer Neuen Unit aus einer Einheit einer Aktie von der API
+     * @param unit eine Einheit einer Aktie die von der API verwendet wird
+     */
     public Unit(StockUnit unit){
         this.open= unit.getOpen();
         this.high= unit.getHigh();

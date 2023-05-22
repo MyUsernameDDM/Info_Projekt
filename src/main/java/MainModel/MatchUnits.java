@@ -1,5 +1,8 @@
 package MainModel;
 
+/**
+ * Klasse zum Speichern von Aktien Voschlägen mit verschiedenen Werten.
+ */
 public class MatchUnits {
     private final String symbol;
     private final String name;
@@ -10,6 +13,11 @@ public class MatchUnits {
     private final String timeZone;
     private final String currency;
 
+    /**
+     * Constructor für MatchUnits
+     *
+     * @param values String array das von der API ausgelesen wird.
+     */
     public MatchUnits(String[] values) {
         if (values.length != 9) {
             throw new IllegalArgumentException();
@@ -24,7 +32,13 @@ public class MatchUnits {
         currency = values[7];
     }
 
-    private String getOnlyData(String str){
+    /**
+     * Wandelt den String so um, dass nur noch der Wert enthalten ist. Beispiel: "Currency":"USD" -> USD
+     *
+     * @param str String der von der API Ausgelesen wird
+     * @return string der nur mehr den wert enthält
+     */
+    private String getOnlyData(String str) {
         StringBuilder ret = new StringBuilder();
         int amountMarks = 0;
         for (int i = 0; i < str.length(); ++i) {
@@ -37,9 +51,11 @@ public class MatchUnits {
         }
         return ret.toString();
     }
+
     public String getSymbol() {
         return getOnlyData(symbol);
     }
+
     public String getName() {
         return getOnlyData(name);
     }
@@ -57,11 +73,11 @@ public class MatchUnits {
     }
 
     public String getMarketClose() {
-        return marketClose;
+        return getOnlyData(marketClose);
     }
 
     public String getTimeZone() {
-        return timeZone;
+        return getOnlyData(timeZone);
     }
 
     public String getCurrency() {
