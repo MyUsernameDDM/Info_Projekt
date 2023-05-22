@@ -10,37 +10,6 @@ public class SafeArticle {
     public SafeArticle() {
         safedArticles = new ArrayList<>();
     }
-
-    public static void clearFile() {
-        try (FileOutputStream fileOut = new FileOutputStream("ArtSafe.ser", false)) {
-            // Write an empty byte array to the file to clear its contents
-            fileOut.write(new byte[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Article getArticleFromFile(String name, TimeSpan ts) {
-        String nameFile = "ArtSafe.ser";
-        File f = new File(nameFile);
-        if (f.length() == 0)
-            return null;
-        try (FileInputStream fileIn = new FileInputStream(nameFile);
-             ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            Article[] articles = (Article[]) in.readObject();
-            for (Article article : articles) {
-                if (article.getName().equals(name) && article.getTimeSpan() == ts) {
-                    return article;
-                }
-            }
-        } catch (EOFException e) {
-            return null;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     /**
      * In safedArticles ArrayList werden alle Articles von der Datei geschrieben
      */

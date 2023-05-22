@@ -40,7 +40,13 @@ public class Article implements Serializable {
         return values;
     }
 
-
+    /**
+     * Constructor für Article
+     * @param name der Name der Aktie
+     * @param symbol das symbol wodurch die Aktie, in der API gesucht wird.
+     * @param safeArticle gespeicherten Aktien in serialization datei und in ArrayList
+     * @param currency währung der Aktie
+     */
     public Article(String name, String symbol, SafeArticle safeArticle, String currency) {
         this.name = name;
         this.symbol = symbol;
@@ -77,6 +83,11 @@ public class Article implements Serializable {
         return new Date(Integer.parseInt(endSplit[0]), Integer.parseInt(endSplit[1]), Integer.parseInt(endSplit[2]));
     }
 
+    /**
+     * Gibt das Jahr vom angegebenen String zurück
+     * @param str ist ein string von der StockUnit klasse von der AlphaVantage api
+     * @return integer wert als jahr der Aktien einheit.
+     */
     private int getYear(String str) {
         int i = 0;
         StringBuilder year = new StringBuilder();
@@ -138,6 +149,10 @@ public class Article implements Serializable {
         return true;
     }
 
+    /**
+     * Methode speichert die anderen Timespans in safeArticles um das umschalten der Zeiten so schnell wie möglich zu machen.
+     * Dadurch können auch API-calls gespaart werden.
+     */
     private void addOtherTimeSpansToFile() {
         Article[] otherTimeSpans = new Article[7];
         int count = 0;
@@ -204,6 +219,12 @@ public class Article implements Serializable {
         }
     }
 
+    /**
+     * Methode holt sich von der api die Werte für die angegebenen timespan und aktie.
+     * @param timeSpan die zeitspanne für welche man die Aktien werte will.
+     * @return gibt eine TimeSeriesResponse von der Aktie und Zeitspanne zurück
+     * @throws IOException wird dann geworfen wenn ein Input output fehler passiert
+     */
     private TimeSeriesResponse getResponse(TimeSpan timeSpan) throws IOException {
         TimeSeriesResponse response = null;
         if (timeSpan == TimeSpan.day) {
@@ -280,6 +301,12 @@ public class Article implements Serializable {
         return response;
     }
 
+    /**
+     * Methode kürzt die rückgabe von der Api auf die angegebenne Zeitspanne
+     * @param timeSpan gewollte Zeitspanne der aktie
+     * @param response die TimeSeriesResponse der Api
+     * @return ArrayList von Unit in der die Gesamten werte der Aktie in der richtigen Zeitspanne ist.
+     */
     private ArrayList<Unit> getValuesFromSpan(TimeSpan timeSpan, TimeSeriesResponse response) {
         ArrayList<Unit> values = new ArrayList<>();
         String first = response.getStockUnits().get(0).getDate();
