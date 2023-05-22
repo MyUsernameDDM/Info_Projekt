@@ -5,12 +5,14 @@ import MainModel.Main;
 import MainModel.Simulation;
 import Utils.SimulationUtils;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
+
 import javafx.scene.input.MouseEvent;
+import java.util.Locale;
 
 import java.io.IOException;
 
 import static MainModel.Main.*;
+
 
 /**
  * SimulationsController dient als Controller für die Simulationsanzeige, in der der User selbst Aktien und Artikel kaufen
@@ -36,7 +38,7 @@ public class SimulationController extends Controller {
 
     /**
      * Sie Simulatin wird auf die übergebene Simulaiton gesetzt. Dies passiert, wenn eine neue Simulaiton begonnen wird oder eine Simulation aus einer Serialization-Datei geladen wird.
-     * @param simulation
+     * @param simulation simulation die auf this.simulation gesetzt wird
      */
     public void setSimulation(Simulation simulation) {
         this.simulation = simulation;
@@ -126,10 +128,8 @@ public class SimulationController extends Controller {
         //Werte setzen
         temp.articlePrice.setText("" + (currentArticle.getValues().get(0).getOpen()));
         temp.article.setSharesAmount(money/(currentArticle.getValues().get(0).getOpen()));
-        temp.sharesAmountText.setText(String.format("%.2f", temp.article.getSharesAmount()));
+        temp.sharesAmountText.setText(String.format(Locale.US, "%.2f", temp.article.getSharesAmount()));
         temp.currency.setText(currentArticle.getCurrency());
-        //todo Currency eintragen
-
         //Artikel hinzufuegen zur Walletliste
         if(!(simulation.getWalletListArticles().contains(currentArticle))){
             simulation.getWalletListArticles().add(currentArticle);
