@@ -7,11 +7,12 @@ import Utils.SimulationUtils;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import java.util.Locale;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 import static MainModel.Main.*;
+
 
 /**
  * SimulationsController dient als Controller für die Simulationsanzeige, in der der User selbst Aktien und Artikel kaufen
@@ -114,22 +115,6 @@ public class SimulationController extends Controller {
         groundView.root.setOnMouseClicked(e -> {
             walletView.removeSimulationOptions();
         });
-
-        //Handler für die Simulation
-        //Handler fuer das Angeben der Anzahl der zu verkaufenden Artikel
-        walletView.sellButton.setOnAction(event -> {
-            if(!(walletView.confirmWindow.getChildren().contains(walletView.sellArticleView))){
-                walletView.confirmWindow.getChildren().add(walletView.sellArticleView);
-            }
-
-        });
-        walletView.sellConfirmButton.setOnAction(actionEvent -> {
-            walletRemoveCurrentArticle(Double.parseDouble(walletView.textFieldSellAmount.getText()));
-            walletView.confirmWindow.getChildren().remove(walletView.sellArticleView);
-        });
-        walletView.sellCancelButton.setOnAction(actionEvent -> {
-            walletView.confirmWindow.getChildren().remove(walletView.sellArticleView);
-        });
     }
 
     /**
@@ -141,13 +126,10 @@ public class SimulationController extends Controller {
         //View fuer den Artikel in der Wallet erstellen
         ArticleInWalletView temp = new ArticleInWalletView(currentArticle, this);
         //Werte setzen
-        temp.articlePrice.setText("" + (currentArticle.getLastUnit().getOpen()));
-        temp.article.setSharesAmount(money/(currentArticle.getLastUnit().getOpen()));
-        DecimalFormat f = new DecimalFormat("#0.00");
-        String help = f.format(temp.article.getSharesAmount());
-        temp.sharesAmountText.setText(help);
+        temp.articlePrice.setText("" + (currentArticle.getValues().get(0).getOpen()));
+        temp.article.setSharesAmount(money/(currentArticle.getValues().get(0).getOpen()));
+        temp.sharesAmountText.setText(String.format(Locale.US, "%.2f", temp.article.getSharesAmount()));
         temp.currency.setText(currentArticle.getCurrency());
-
         //Artikel hinzufuegen zur Walletliste
         if(!(simulation.getWalletListArticles().contains(currentArticle))){
             simulation.getWalletListArticles().add(currentArticle);
@@ -168,6 +150,7 @@ public class SimulationController extends Controller {
             courseController.showCourse();
             walletSafeCurrentArticle(currentArticle.getName());
         });
+        simulation.setMoneyAv(simulation.getMoneyAv()-money);
         walletView.articlesVBox.getChildren().add(temp.root);
 
 
@@ -204,9 +187,7 @@ public class SimulationController extends Controller {
     }
 
     /**
-     * Die Methode entfernt die angegebene Menge an Artikeln, des aktuell ausgewählten Artikel der WalletView aus der View.
-     * Dabei entfernt sie es voll, wenn mehr angegeben wird, als man hat und sonst wird nur die Anzahl verändert.
-     * Zudem wird das moneyAv angepasst, da durch den Verkauf Geld erhalten wird.
+     * Die Methode löscht das aktuell ausgewählte Element der Walletlist aus dieser
      */
     public void walletRemoveCurrentArticle(double amount) {
         if (walletCurrentArticle != null) {
@@ -218,13 +199,11 @@ public class SimulationController extends Controller {
                         //aus WalletArticleListe und aus Anzeige entfernen
                         simulation.getWalletListArticles().remove(walletCurrentArticle);
                         walletView.articlesVBox.getChildren().remove(articleInWalletView.root);
-                        simulation.setMoneyAv(simulation.getMoneyAv() + articleInWalletView.article.getSharesAmount() * articleInWalletView.article.getLastUnit().getOpen());
+                        simulation.setMoneyAv(articleInWalletView.article.getSharesAmount() * articleInWalletView.article.getLastUnit().getOpen());
                     }else{
                         //wenn nur ein Teil verkauft wird
                         simulation.setMoneyAv(simulation.getMoneyAv() + amount * articleInWalletView.article.getLastUnit().getOpen());
-                        DecimalFormat f = new DecimalFormat("#0.00");
-                        String help = f.format(articleInWalletView.article.getSharesAmount() - amount);
-                        articleInWalletView.sharesAmountText.setText(help);
+
                     }
                     walletView.walletMoneyDisplay.avMoneyButton().setText(String.valueOf(simulation.getMoneyAv()));
                     break;
