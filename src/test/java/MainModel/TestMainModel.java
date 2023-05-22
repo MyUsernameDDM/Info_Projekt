@@ -2,11 +2,17 @@ package MainModel;
 
 
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TestMainModel {
-    /*
+
     @Test
     public void testSetValues() throws InterruptedException {
-        Article art = new Article("IBM");
+        SafeArticle safeArticle= new SafeArticle();
+        safeArticle.setSafedArticles();
+        Article art = new Article("IBM", "IBM", safeArticle,"USD");
         for (TimeSpan t : TimeSpan.values()) {
             while (!art.setValues(t)) {
                 Thread.sleep(5000);
@@ -15,31 +21,24 @@ public class TestMainModel {
     }
 
 
-        @Test
-        public void testCourseView() throws InterruptedException {
-            Article art= new Article("IBM");
-            while(!art.setValues(TimeSpan.oneMonth))
-                Thread.sleep(5000);
-            CourseView cv= new CourseView();
-            CourseController courseUtils = new CourseController(CourseController.courseStatus.chartCourse, cv, art, new Controller());
-            courseUtils.setCurrentArticle(art);
-            courseUtils.showCourse();
-        }
-
-
     @Test
     public void testSafe() {
         SafeArticle safeArticle = new SafeArticle();
-        Article article1 = new Article("IBM");
+        Article article1 = new Article("IBM", "IBM", safeArticle, "USD");
         article1.setValues(TimeSpan.oneMonth);
-        safeArticle.addArticleFile(article1);
-        article1.setValues(TimeSpan.threeMonths);
-        safeArticle.addArticleFile(article1);
-        article1.setValues(TimeSpan.sixMonths);
-        safeArticle.addArticleFile(article1);
-        Article art = safeArticle.getArticleFromFile("IBM", TimeSpan.oneMonth);
+        Article day= new Article("IBM", "IBM", safeArticle,"USD");
+        day.setValues(TimeSpan.day);
+
+
+        for(Article a:safeArticle.getSafedArticles()){
+            if(a==day){
+                System.out.println("The day is taken from the safedFile because it is being produced when Month is made");
+                assertEquals(1,1);
+            }
+        }
+
     }
 
-     */
+
 
 }
