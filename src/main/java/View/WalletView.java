@@ -28,7 +28,7 @@ public class WalletView{
     Rectangle buySettings = new Rectangle(230, 50);
     TextField textFieldUserAmount = new TextField("0");
     Label startMoneyLabel = new Label();
-    Label note = new Label("Enter Amount:");
+    Label note = new Label("Enter Amount in Currency:");
 
     //Elemente zum Laden etc. einer Simulation
     VBox simulationButtonVBox = new VBox();
@@ -39,7 +39,7 @@ public class WalletView{
 
     //Elemente für die Verkaufsansicht
     BorderPane sellArticleView = new BorderPane();
-    Label sellQuestionLabel = new Label("Enter Amount to sell:");
+    Label sellQuestionLabel = new Label("Enter Amount of Articles to sell:");
     TextField textFieldSellAmount = new TextField();
     HBox sellHBox = new HBox();
     Button sellConfirmButton = new Button("CONFIRM");
@@ -59,27 +59,31 @@ public class WalletView{
 
         walletMoneyDisplay = getWindowSettingUp();
 
-        //ID setzen und Infoview für das StartGeldLabel setzen
+        //ID setzen und Infoview für das StartGeldLabel und moneyAv setzen
         startMoneyLabel.setId("Start Money");
+        walletMoneyDisplay.avMoneyButton().setId("Available Money");
         controller.infoView.showIDofNodeInfoView(startMoneyLabel);
+        controller.infoView.showIDofNodeInfoView(walletMoneyDisplay.avMoneyButton());
+
 
         //HBox für Kauf- und Verkaufbutton
         HBox hBox = new HBox(buyButton, sellButton);
         //Handler für Kaufbutton
         buyButton.setOnAction(event -> {
 
-            if (!open){
+            if (!open){ // window kann nur einmal geöffnet werden
                 BorderPane window = windowSettingDown(walletMoneyDisplay.confirmBuyButton(), walletMoneyDisplay.confirmCancelButton());
 
                 walletMoneyDisplay.confirmBuyButton().setOnAction(event1 -> {
                     confirmWindow.getChildren().remove(window);
 
                     if (controller.simulation.getMoneyAv() > 0 && Integer.valueOf(textFieldUserAmount.getText()) <= controller.simulation.getMoneyAv()) {
+                        //Überprüfung, ob man genügend Geld zu verfügung hat
                         controller.simulation.setMoneyAv(controller.simulation.getMoneyAv() - Integer.valueOf(textFieldUserAmount.getText()));
                         walletMoneyDisplay.avMoneyButton().setText(String.valueOf(controller.simulation.getMoneyAv()));
 
-                        if (!(controller.simulation.getWalletListArticles().contains(controller.currentArticle))) {
-                            controller.walletAddArticle(Double.valueOf(textFieldUserAmount.getText()));
+                        if (!(controller.simulation.getWalletListArticles().contains(controller.currentArticle))) { // Überprüfung, ob das Article vorhanden ist
+                            controller.walletAddArticle(Double.valueOf(textFieldUserAmount.getText())); // Füge Article hinzu
                         }else{
                             for (ArticleInWalletView articleView :articlesInWalletView) {
                                 if(articleView.article.getName().equals(controller.currentArticle.getName())){
@@ -93,6 +97,7 @@ public class WalletView{
                     }
 
                     open = false;
+                    // Buttons wird open auf false gesetzt, window kann wieder geöffnet werden
                 });
 
                 walletMoneyDisplay.confirmCancelButton().setOnAction(event1 -> {
@@ -100,26 +105,13 @@ public class WalletView{
                     confirmWindow.getChildren().remove(window);
 
                     open = false;
+                    // Buttons wird open auf false gesetzt, window kann wieder geöffnet werden
                 });
 
                 open = true;
             }
         });
 
-        //Handler fuer das Angeben der Anzahl der zu verkaufenden Artikel
-        sellButton.setOnAction(event -> {
-            if(!(confirmWindow.getChildren().contains(sellArticleView))){
-                confirmWindow.getChildren().add(sellArticleView);
-            }
-
-        });
-        sellConfirmButton.setOnAction(actionEvent -> {
-            controller.walletRemoveCurrentArticle(Double.parseDouble(textFieldSellAmount.getText()));
-            confirmWindow.getChildren().remove(sellArticleView);
-        });
-        sellCancelButton.setOnAction(actionEvent -> {
-            confirmWindow.getChildren().remove(sellArticleView);
-        });
 
         VBox upperwallervbox = walletViewSetting(walletMoneyDisplay.avMoneyButton(), hBox);
 
@@ -149,8 +141,6 @@ public class WalletView{
         //Style setzen
         sellConfirmButton.getStyleClass().add("confirmBuyButton");
         sellCancelButton.getStyleClass().add("cancelButton");
-
-
     }
 
     /**
@@ -166,17 +156,21 @@ public class WalletView{
 
     @NotNull
     private windowSettingUp getWindowSettingUp() {
+        // Width
         buyButton.setPrefWidth(100);
         sellButton.setPrefWidth(100);
+        // money, confirmBuyButton und confirmCancelButton namen setzen
         Button money = new Button("0");
         Button confirmBuyButton = new Button("CONFIRM");
         Button confirmCancelButton = new Button("CANCEL");
 
+        // money, Style und Größe
         money.setStyle("-fx-background-color: #ffffff");
         money.setPrefHeight(75);
         money.setPrefWidth(230);
         money.getStyleClass().add("moneyButton");
 
+        // Style von CSS
         buyButton.getStyleClass().add("buyButton");
         sellButton.getStyleClass().add("sellButton");
         windowSettingUp result = new windowSettingUp(money, confirmBuyButton, confirmCancelButton);
@@ -186,7 +180,7 @@ public class WalletView{
     public record windowSettingUp(Button avMoneyButton, Button confirmBuyButton, Button confirmCancelButton) {}
 
     @NotNull
-    private VBox walletViewSetting(Button money, HBox hBox) {
+    private VBox walletViewSetting(Button money, HBox hBox) { // hbox und upperwalletbox, Margin, Größe, Background setzen
         hBox.setMargin(buyButton, new Insets(10, 10, 10, 10));
         hBox.setMargin(sellButton, new Insets(10, 10, 10, 10));
 
@@ -194,6 +188,7 @@ public class WalletView{
 
         upperwallervbox.setMargin(startMoneyLabel, new Insets(5,5,5,10));
 
+        // articelsScrollPane Größe, Background
         articlesScrollPane.prefHeight(200);
         articlesScrollPane.setMaxWidth(240);
         articlesScrollPane.setContent(articlesVBox);
@@ -211,13 +206,17 @@ public class WalletView{
      */
     @NotNull
     private BorderPane windowSettingDown(Button confirmBuyButton, Button confirmCancelButton) {
+
+        // Erstellung von window, um den Kauf zu betätigen
         BorderPane window = new BorderPane();
 
+        // Setze Background, Größe
         buySettings.setFill(Color.WHITESMOKE);
         buySettings.setWidth(270);
         buySettings.setHeight(100);
         window.getChildren().add(buySettings);
 
+        // StyleClass
         confirmCancelButton.getStyleClass().add("cancelButton");
         confirmBuyButton.getStyleClass().add("confirmBuyButton");
 
@@ -226,6 +225,7 @@ public class WalletView{
         textFieldUserAmount.setPrefWidth(170);
         textFieldUserAmount.setMaxWidth(200);
 
+        // Layout, Pos
         window.setTop(note);
         window.setCenter(labelTextfieldVbox);
         window.setBottom(barConfirm);
@@ -279,6 +279,5 @@ public class WalletView{
             //zurueckrechnen mit money, weil ja nicht aktuelisiert, kommt es wieder auf die selben Shareamount
             controller.walletAddArticle(article.getSharesAmount() * article.getLastUnit().getOpen());
         }
-
     }
 }

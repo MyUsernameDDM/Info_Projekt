@@ -5,7 +5,7 @@ import MainModel.Main;
 import MainModel.Simulation;
 import Utils.SimulationUtils;
 import javafx.event.EventHandler;
-
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import java.util.Locale;
 
@@ -38,7 +38,7 @@ public class SimulationController extends Controller {
 
     /**
      * Sie Simulatin wird auf die übergebene Simulaiton gesetzt. Dies passiert, wenn eine neue Simulaiton begonnen wird oder eine Simulation aus einer Serialization-Datei geladen wird.
-     * @param simulation simulation die auf this.simulation gesetzt wird
+     * @param simulation
      */
     public void setSimulation(Simulation simulation) {
         this.simulation = simulation;

@@ -34,9 +34,6 @@ public class Simulation implements Serializable{
         this.startMoney = startMoney;
     }
 
-    public void setMoneyAv(int moneyAv) {
-        this.moneyAv = moneyAv;
-    }
 
 }
 

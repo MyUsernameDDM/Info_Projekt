@@ -96,6 +96,8 @@ public class Controller {
                     courseController.displayCourse(currentArticle.getName(), currentArticle.getSymbol(), currentArticle.getCurrency());
                 }
             });
+
+            //Handler, sodass die Suchergebnisse nicht mehr angezeigt werden
             groundView.root.setOnMouseClicked(e -> {
                 searchView.clearScrollPane();
             });
