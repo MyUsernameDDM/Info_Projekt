@@ -12,6 +12,8 @@ public class SafeArticle {
 
     public SafeArticle() {
         safedArticles = new ArrayList<>();
+        String nameFile = "ArtSafe.ser";
+        File f = new File(nameFile);
     }
     /**
      * In safedArticles ArrayList werden alle Articles von der Datei geschrieben
