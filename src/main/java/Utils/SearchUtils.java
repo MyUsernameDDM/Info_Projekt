@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SearchUtils extends Thread{
+public class SearchUtils{
 
     /**
      * Anzeigen der gesuchten Aktie
@@ -74,11 +74,4 @@ public class SearchUtils extends Thread{
         }
         return matches;
     }
-
-
-
-
-
-
-
 }

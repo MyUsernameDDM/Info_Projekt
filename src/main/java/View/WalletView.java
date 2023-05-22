@@ -15,30 +15,29 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class WalletView{
-
-    boolean isAv = true;
     SimulationController controller;
-    VBox walletRoot = new VBox();
+    VBox walletRoot = new VBox();       //unterstes Element in der WalletView
     ScrollPane articlesScrollPane = new ScrollPane();
     VBox articlesVBox = new VBox();
-    ArrayList<ArticleInWalletView> articlesInWalletView = new ArrayList<>();
+    ArrayList<ArticleInWalletView> articlesInWalletView = new ArrayList<>();        //Liste der Artikel im WalletView
+    VBox confirmWindow = new VBox();        //View über den Artikeln
 
-    VBox confirmWindow = new VBox();
+    //Buttons und Elemente für die View der Wallet
     Button sellButton = new Button("SELL");
-    Button sellAllButton = new Button("SELL EVERYTHING");
     Button buyButton = new Button("BUY");
     Rectangle buySettings = new Rectangle(230, 50);
     TextField textFieldUserAmount = new TextField("0");
     Label startMoneyLabel = new Label();
     Label note = new Label("Enter Amount:");
-    VBox upperwalletvbox = new VBox();
+
+    //Elemente zum Laden etc. einer Simulation
     VBox simulationButtonVBox = new VBox();
     Button simulationCoverInMenu = new Button("SIMULATION");
     Button newSimButton = new Button();
     Button loadSimButton = new Button();
     Button saveSimButton = new Button();
 
-    //Artikel Verkaufsansicht
+    //Elemente für die Verkaufsansicht
     BorderPane sellArticleView = new BorderPane();
     Label sellQuestionLabel = new Label("Enter Amount to sell:");
     TextField textFieldSellAmount = new TextField();
@@ -46,13 +45,13 @@ public class WalletView{
     Button sellConfirmButton = new Button("CONFIRM");
     Button sellCancelButton = new Button("CANCEL");
     windowSettingUp walletMoneyDisplay;
-    boolean open = false;
+    boolean open = false;       //Hilfsattribut
 
 
-    public Label getStartMoneyLabel() {
-        return startMoneyLabel;
-    }
-
+    /**
+     * Konstruktor von WalletView
+     * @param controller SimulationController
+     */
     public WalletView(SimulationController controller) {
         setSimulationElements();
         setSellArticleView();
@@ -64,19 +63,9 @@ public class WalletView{
         startMoneyLabel.setId("Start Money");
         controller.infoView.showIDofNodeInfoView(startMoneyLabel);
 
-
-        walletMoneyDisplay.avMoneyButton().setOnAction(event -> {
-            if (isAv == true){
-                walletMoneyDisplay.avMoneyButton().setText(String.valueOf(controller.simulation.getMoneyAv()));
-                isAv = false;
-            } else {
-                walletMoneyDisplay.avMoneyButton().setText("*****");
-                isAv = true;
-            }
-        });
-
+        //HBox für Kauf- und Verkaufbutton
         HBox hBox = new HBox(buyButton, sellButton);
-
+        //Handler für Kaufbutton
         buyButton.setOnAction(event -> {
 
             if (!open){
@@ -86,7 +75,6 @@ public class WalletView{
                     confirmWindow.getChildren().remove(window);
 
                     if (controller.simulation.getMoneyAv() > 0 && Integer.valueOf(textFieldUserAmount.getText()) <= controller.simulation.getMoneyAv()) {
-                        System.out.println("Test!");
                         controller.simulation.setMoneyAv(controller.simulation.getMoneyAv() - Integer.valueOf(textFieldUserAmount.getText()));
                         walletMoneyDisplay.avMoneyButton().setText(String.valueOf(controller.simulation.getMoneyAv()));
 
@@ -133,19 +121,23 @@ public class WalletView{
             confirmWindow.getChildren().remove(sellArticleView);
         });
 
-
         VBox upperwallervbox = walletViewSetting(walletMoneyDisplay.avMoneyButton(), hBox);
 
         walletRoot.getChildren().addAll(upperwallervbox, articlesScrollPane);
         walletRoot.setPrefWidth(270);
     }
 
+    /**
+     * Methode, um die Elemente beim Verkaufen eines Artikels zu setzen. Es ist eine Abfrage, wie viele Elemente verkauft werden sollen.
+     */
     private void setSellArticleView() {
+        //Elemente hinzufügen
         sellArticleView.setTop(sellQuestionLabel);
         sellArticleView.setCenter(textFieldSellAmount);
         sellHBox.getChildren().addAll(sellConfirmButton, sellCancelButton);
         sellArticleView.setBottom(sellHBox);
 
+        //Layout
         sellArticleView.setMargin(sellQuestionLabel, new Insets(5, 5, 5, 10));
         sellHBox.setMargin(sellConfirmButton, new Insets(5, 5, 5, 10));
         sellHBox.setMargin(sellCancelButton, new Insets(5, 5, 5, 10));
@@ -154,7 +146,7 @@ public class WalletView{
         textFieldSellAmount.setAlignment(Pos.CENTER_LEFT);
         textFieldSellAmount.setPrefWidth(100);
 
-
+        //Style setzen
         sellConfirmButton.getStyleClass().add("confirmBuyButton");
         sellCancelButton.getStyleClass().add("cancelButton");
 
@@ -176,19 +168,17 @@ public class WalletView{
     private windowSettingUp getWindowSettingUp() {
         buyButton.setPrefWidth(100);
         sellButton.setPrefWidth(100);
-        sellAllButton.setPrefWidth(210);
         Button money = new Button("0");
         Button confirmBuyButton = new Button("CONFIRM");
         Button confirmCancelButton = new Button("CANCEL");
 
-        money.setStyle("-fx-background-color: #ffffff;");
+        money.setStyle("-fx-background-color: #ffffff");
         money.setPrefHeight(75);
         money.setPrefWidth(230);
         money.getStyleClass().add("moneyButton");
 
         buyButton.getStyleClass().add("buyButton");
         sellButton.getStyleClass().add("sellButton");
-        sellAllButton.getStyleClass().add("sellAllButton");
         windowSettingUp result = new windowSettingUp(money, confirmBuyButton, confirmCancelButton);
         return result;
     }
@@ -203,7 +193,6 @@ public class WalletView{
         VBox upperwallervbox = new VBox(money, startMoneyLabel, hBox, confirmWindow);
 
         upperwallervbox.setMargin(startMoneyLabel, new Insets(5,5,5,10));
-        upperwallervbox.setMargin(sellAllButton, new Insets(5, 5, 10, 10));
 
         articlesScrollPane.prefHeight(200);
         articlesScrollPane.setMaxWidth(240);
