@@ -1,5 +1,6 @@
 package View;
 
+import MainModel.Main;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,26 +12,30 @@ import javafx.scene.paint.Color;
 
 import java.util.Objects;
 
-
+/**
+ * GroundView Klasse: Diese Klasse bildet
+ */
 public class GroundView {
-    private int sceneWith = 800;
-    private int sceneHeight = 500;
-    double oldSceneWidth = sceneWith;
-    double oldSceneHeight = sceneHeight;
-
+    /*
+     * Das Attribut root: Diese Group wird verwendet, um unabhängig von der BorderPane window, Elemente auf dem Bildschirm
+     * anzuzeigen. Dies wird z.B. bei der Liste für die gesuchten Artikelvorschläge oder bei den Buttons für das Laden, Speicher
+     * und Erstellen einer SImulation verwendet.
+     */
     Group root = new Group();
+    /*
+    Window ist die Borderpane, die die grundsätzliche Struktur der Anzeige bildet, in sie werden anshcließend die einzelnen Elemente
+    eingefügt.
+     */
     BorderPane window = new BorderPane();
     Scene scene;
 
 
     //Menu erstellen
     HBox menu = new HBox();
-    Button modeButton = new Button();
-    Button simulationModeButton = new Button();
-    Button changeStateButton = new Button("Normal");
-    HBox timeBox = new HBox();
+    Button modeButton = new Button();       //Button zum Umschalten in den jeweiligen anderen Modus
+    Button changeStateButton = new Button("Normal");        //Button zum Umschalten zwischen normaler Kursanzeige und Chart-Kursanzeige
 
-
+    HBox timeBox = new HBox();      //HBox für die changeStateButton und die timeBUttons
     Controller controller;
 
     //Button Array für die Zeitspanne
@@ -50,13 +55,12 @@ public class GroundView {
         this.controller = controller;
         displayGraphic();
 
+        //Inhalte der BorderPane setzen und dann in die root-Group geben
         window.setTop(menu);
-        window.getTop().setStyle("-fx-background-color: #3f6cc9;");
+        window.getTop().setStyle("-fx-background-color: #3f6cc9;");     //TOP mit blauen Hintergrund
         window.setBottom(timeBox);
         root.getChildren().add(window);
     }
-
-
 
     /**
      * Methode um die GroundView grafisch darzustellen
@@ -68,13 +72,11 @@ public class GroundView {
         modeButton.setPrefWidth(150);
         modeButton.setPrefHeight(30);
         modeButton.setTextFill(Color.WHITE);
-
-
         menu.getChildren().add(modeButton);
         menu.setMargin(modeButton, new Insets(1, 1, 1, 1));
         menu.setPrefHeight(70);
 
-
+        //UmschalteButton in andere Ansicht Groesse setzen
         changeStateButton.setPrefWidth(60);
         changeStateButton.setPrefHeight(40);
         changeStateButton.getStyleClass().add("buttonTime");
@@ -82,6 +84,7 @@ public class GroundView {
         timeBox.setMargin(changeStateButton, new Insets(2, 2, 2, 2));
         timeBox.setPrefHeight(40);
 
+        //Style und Groesse der Zeitbuttons einstellen
         for (int i = 0; i < timeButtons.length; i++){
             timeButtons[i] = new Button();
             timeButtons[i].setText(timeButtonsName[i]);
@@ -94,26 +97,16 @@ public class GroundView {
 
         timeButtons[6].setPrefWidth(60);
 
-        simulationModeButton.setText("Mode");
-        simulationModeButton.setLayoutY(200);
-        simulationModeButton.setLayoutX(200);
-
-
-        InfoView infoView = new InfoView();
-
-        for (int i = 0; i < timeButtons.length; i++){
-            //infoView.showInfoView(timeButtons[i]);
-        }
-
-
-
-
-        scene = new Scene(root, sceneWith, sceneHeight);
-
+        scene = new Scene(root, Main.windowWidth, Main.windowHeight);
+        //CSS-Datei einbinden
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("ProgramStyle.css")).toExternalForm());
     }
 
 
+    /**
+     *Methode um die Schriftfarbe des AnzeigeModusButton verändern
+     * @param status
+     */
     public void simulationModeHover(Boolean status){
         if(status){
             modeButton.setTextFill(Color.LIGHTBLUE);
@@ -122,6 +115,11 @@ public class GroundView {
         }
     }
 
+    /**
+     * Bei Überhovern, über die TimeButtons die Schriftfare ändern
+     * @param i
+     * @param status
+     */
     public void timeButtonsHover(int i, Boolean status){
         if(status){
             timeButtons[i].setTextFill(Color.RED);
@@ -130,6 +128,10 @@ public class GroundView {
         }
     }
 
+    /**
+     * Style für die ZeitUmstellungs-Buttons bei Anklicken setzen
+     * @param i
+     */
     public void timeButtonsOnMouseClicked(int i){
         for(int u = 0; u < timeButtons.length; u++) {
             timeButtons[u].getStyleClass().remove("buttonTimeClicked");
@@ -139,9 +141,6 @@ public class GroundView {
         timeButtons[i].getStyleClass().add("buttonTimeClicked");
     }
 
-    public BorderPane getWindow() {
-        return window;
-    }
 }
 
 

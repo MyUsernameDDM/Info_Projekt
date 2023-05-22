@@ -8,6 +8,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+
+/**
+ * ArticleInWalletView dient als View für einen Artikel im Wallet und enthält die Anzahl an gekauften Artikeln und, wie viel der Artikel wert ist
+ */
 public class ArticleInWalletView {
     SimulationController controller;
     Article article;
@@ -15,7 +19,6 @@ public class ArticleInWalletView {
     Button articleButton = new Button();
     Text articlePrice = new Text("0");
     Text sharesAmountText = new Text("0");
-
     Text currency = new Text("€");
 
 
@@ -25,11 +28,9 @@ public class ArticleInWalletView {
         articleButton.setText(article.getName());
         root.getChildren().addAll(articleButton, sharesAmountText, articlePrice, currency);
         setStyle();
+        //Infoview setzen
         setInfoViews();
 
-
-        //Infoview setzen
-        controller.infoView.showInfoView(articleButton, controller);
     }
 
     private void setInfoViews() {
@@ -38,9 +39,12 @@ public class ArticleInWalletView {
         sharesAmountText.setId("Amount of Articles");
         controller.infoView.showIDofNodeInfoView(articlePrice);
         controller.infoView.showIDofNodeInfoView(sharesAmountText);
-
+        controller.infoView.showInfoView(articleButton, controller);
     }
 
+    /**
+     * Style der Buttons und Elemente anpassen
+     */
     private void setStyle() {
         articleButton.setPrefWidth(50);
         articleButton.getStyleClass().add("walletArticle");

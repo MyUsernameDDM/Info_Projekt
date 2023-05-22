@@ -9,56 +9,59 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Screen;
 
 import java.util.ArrayList;
 
-import static MainModel.Main.mode;
-import static MainModel.Main.status;
+import static MainModel.Main.*;
 import static MainModel.TimeSpan.*;
 
+/**
+ * Controller Klasse: Wird als zentraler Kontroller für mehrere Views benutzt.
+ * GroundView, SeachView, WatchlistView als auch WalletView werden durch diesen Kontroller gehandelt.
+ * Alle Attribute sind grundsätzlich package-private. So kann man bewirken, dass alle Klassen in dem Package
+ * View Zugriff auf die jeweiligen Attribute haben und es werden nicht für jedes Attribut Getter und Setter benötigt.
+ */
 public class Controller {
+    //verschiedene verwendete Attribute für die View
     GroundView groundView = new GroundView(this);       //View, in die andere View-Bausteine durch den COntroller eingefuegt werden
     SearchView searchView = new SearchView(this);
     WatchListView watchListView = new WatchListView(this);
-    ArrayList<Article> watchListArticles = new ArrayList<>();
+    ArrayList<Article> watchListArticles = new ArrayList<>();       //Liste der Artikel in der Watchliste
     Article watchLCurrentArticle = null;
 
-    Article currentArticle;
     CourseView courseView = new CourseView();
     CourseController courseController = new CourseController(CourseController.courseStatus.normalCourse, courseView, this);
-    TimeSpan currentTimeSpan = TimeSpan.max;
-    SearchUtils searchUtils = new SearchUtils();
+    TimeSpan currentTimeSpan = TimeSpan.max;    //currentTimeSpan speichert die Zeitspanne, die aktuell vom Artikel angezeigt wird
+    SearchUtils searchUtils = new SearchUtils();        //Hilfsklasse, um Artikel zu suchen
     SafeArticle safeArticle = new SafeArticle();
-    InfoView infoView = new InfoView();
+    InfoView infoView = new InfoView();     //Attribut infoview, um die Methoden davon verwenden zu koennen
+    Article currentArticle;         //Artikel, der aktuell angezeigt wird
 
-    public CourseController getCourseController() {
-        return courseController;
-    }
-
-    public GroundView getGroundView() {
-        return groundView;
-    }
-
-    public SearchView getSearchView() {
-        return searchView;
-    }
-
+    /**
+     * Methode getScene
+     * @return die Scene zum jeweiligen Modus, der Returnwert ist entweder die Scene für den RealTime oder den Simulation-MOdus
+     *
+     */
     public Scene getScene() {
         return groundView.scene;
     }
 
+    /**
+     * Konstruktor: Enthält Methodenaufrufe, die die einzelnen Views zusammenstellen und die die Groundview geben
+     */
     public Controller() {
         setGroundView();
         setWatchList();
-        setSearchList();
+        setSearchView();
         setCourseView();
-        menuButtonsListener();
         timeButtonListener();
-        modeSceneChanger();
+        modeSceneChanger();     //setzt den Handler für den button zum Umschalten in den anderen Modus
         setWindowAdjustment();
     }
 
+    /**
+     * Methode, die die Handler für Elemente in der Groundview setzen
+     */
     private void setGroundView() {
         //Handler fuer die Buttons zum setzen des Intervals
         for (int i = 0; i < groundView.timeButtons.length; i++) {
@@ -100,7 +103,23 @@ public class Controller {
         groundView.window.setPrefWidth(groundView.scene.getWidth());
         groundView.window.setPrefHeight(groundView.scene.getHeight());
 
+        //HoverStyle fuer den ModeButton ändern
+        groundView.modeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                groundView.simulationModeHover(true);
+            }
+        });
+
+        groundView.modeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                groundView.simulationModeHover(false);
+            }
+        });
+
     }
+
 
     /**
      * setzt den Listener, sodass auf die Fenstergrößenänderung reagiert werden kann
@@ -109,19 +128,14 @@ public class Controller {
         ChangeListener changeListener = new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
+                Main.windowWidth = Main.primaryStage.getWidth();
+                Main.windowHeight = Main.primaryStage.getHeight() ;
 
-                //um Fehler zu vermeiden, wird maximal die Bildschirmgröße mitgegeben
-                //Abrufen des primären Bildschirms
-                Screen screen = Screen.getPrimary();
-
-                //Abrufen der Bildschirmgröße
-                double screenWidth = screen.getBounds().getWidth();
-                double screenHeight = screen.getBounds().getHeight();
-                adjustWindowSize(Math.min(groundView.scene.getWidth(), screenWidth), Math.min(groundView.scene.getHeight(), screenHeight));
+                adjustWindowSize(windowWidth, windowHeight);
             }
         };
-        groundView.scene.heightProperty().addListener(changeListener);
         groundView.scene.widthProperty().addListener(changeListener);
+        groundView.scene.heightProperty().addListener(changeListener);
     }
 
     /**
@@ -129,34 +143,32 @@ public class Controller {
      */
     public void adjustWindowSize(double newSceneWidth, double newSceneHeight) {
         //Hintergrund
-        groundView.window.setPrefWidth(newSceneWidth);
-        groundView.window.setPrefHeight(newSceneHeight);
+        groundView.window.setMaxWidth(newSceneWidth);
+        groundView.window.setMaxHeight(newSceneHeight);
 
-        courseController.adjustCourseSize(newSceneWidth - watchListView.wlRoot.getPrefWidth(), newSceneHeight - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
-        groundView.oldSceneWidth = newSceneWidth;
-        groundView.oldSceneHeight = newSceneHeight;
-
+        //Kursgroesse anpassen
+        courseController.adjustCourseSize(newSceneWidth - watchListView.wlRoot.getPrefWidth(), newSceneHeight - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight() - 35);
     }
 
     /**
-     * Methode fuegt die CourseView an den GroundView an
+     * Methode fuegt die CourseView in die GroundView ein
      */
-    public void setCourseView() {
+    private void setCourseView() {
         safeArticle.setSafedArticles();
 
+        //IBM als Standardmaessig gesuchten Artikel einstellen. Macht das Programm intuitiver.
         courseController.displayCourse("IBM", "IBM", "USD");
         groundView.timeButtons[6].getStyleClass().add("buttonTimeClicked");
 
+        //die Groesse direkt anpassen
+        courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        //SearchView in Groundview einfügen
         groundView.window.setCenter(courseView.root);
 
-        courseController.adjustCourseSize(groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
-
-
-        //Handler für den Button zum Veraendern der Ansicht
+        //Handler für den Button zum Veraendern der Ansicht zwischen normaler und Chartansicht
         groundView.changeStateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
                 if (groundView.changeStateButton.getText().equals("Normal")) {
                     groundView.changeStateButton.setText("Charts");
                     courseController.courseState = CourseController.courseStatus.chartCourse;
@@ -170,35 +182,19 @@ public class Controller {
         });
     }
 
-    public void setCurrentArticle(Article currentArticle) {
-        this.currentArticle = currentArticle;
-    }
-
-    private void setSearchList() {
+    /**
+     * Die SearchView in die GroundView einfügen und den Handler für den SearchButton setzen
+     */
+    private void setSearchView() {
         groundView.window.setLeft(searchView.root);
         groundView.root.getChildren().add(searchView.outputSearchView);
 
         //SearchView: Eingabefeld und Search-Button in das Menu einfuegen
         groundView.menu.getChildren().addAll(searchView.root);
-        Controller thisController = this;
         searchView.searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 showSearchResults();
-
-                /*
-                String[] help = searchUtils.search(String.valueOf(searchView.searchBox.getValue()));
-                searchView.showSearchResults(help);
-
-
-                 */
-                /*
-                ArrayList<String> searchHelp = Article.matching (statische Methode);
-                ArrayList<String> searchHelp = searchUtils.search(, shares);
-
-
-                searchView.showSearchResults(searchHelp);
-                 */
             }
         });
     }
@@ -220,9 +216,13 @@ public class Controller {
             return;
         }
         int count = 0;
+
+        //alte Anzeige loeschen
         if (searchView.recommendsBox.getChildren().size() > 0) {
             searchView.recommendsBox.getChildren().clear();
         }
+
+        //bis zu 10 Artikelvorschläge anzeigen
         for (int i = 0; i < 10; ++i) {
             if (result[i] == null) {
                 continue;
@@ -239,6 +239,7 @@ public class Controller {
         searchView.outputSearchView.setContent(searchView.recommendsBox);
         searchView.outputSearchView.setFitToWidth(true);
         searchView.outputSearchView.prefWidthProperty().bind(searchView.getWidthButton().prefWidthProperty());
+        //auf Sichtbar setzen
         searchView.outputSearchView.setVisible(true);
     }
 
@@ -375,42 +376,10 @@ public class Controller {
         }
     }
 
-
     /**
-     * Wechsel auf den SimulationController und somit auf den SimulationMode
+     * MouseHoverListener für die TimeButtons setzen
      */
-    public void changeModeSimulation() {
-        mode = Main.status.simulation;
-        Main.changeBetweenModes();
-        //nur beim ersten mal in den Simulationsmodus wechseln eine SImulation starten
-        if (Main.simulationController.getSimulation() == null) {
-            Main.simulationController.simulationUtils.newSimulation();
-        }
-    }
-
-    public void changeModeRealtime() {
-        mode = status.realtime;
-    }
-
-
-    public void menuButtonsListener() {
-        groundView.modeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                groundView.simulationModeHover(true);
-            }
-        });
-
-        groundView.modeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                groundView.simulationModeHover(false);
-            }
-        });
-
-    }
-
-    public void timeButtonListener() {
+    private void timeButtonListener() {
         for (int i = 0; i < groundView.timeButtons.length; i++) {
             int finalI = i;
             groundView.timeButtons[i].setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -442,13 +411,22 @@ public class Controller {
         }
     }
 
+    /**
+     * Setzt den Handler zum Umschalten auf dem SimulationMode
+     */
     public void modeSceneChanger() {
         groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                changeModeSimulation();
+                mode = Main.status.simulation;
+                Main.changeBetweenModes();
+                //nur beim ersten mal in den Simulationsmodus wechseln eine SImulation starten
+                if (Main.simulationController.getSimulation() == null) {
+                    Main.simulationController.simulationUtils.newSimulation();
+                }
             }
         });
     }
+
 
 }
