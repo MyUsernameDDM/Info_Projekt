@@ -53,7 +53,12 @@ public class CourseController {
         showCourse();
     }
 
-
+    /**
+     * Erzeugt einen neuen Article und setzt den CurrentArticle auf den neu Erzeugten Article
+     * @param articleName Name des Artikles
+     * @param symbol Symbol um in der API die Aktie zu suchen.
+     * @param currency Währung der Aktie um diese anschließend darstellen zu können.
+     */
     public void displayCourse(String articleName, String symbol, String currency) {
         Article article = new Article(articleName, symbol, controller.safeArticle, currency);
         while (!article.setValues(controller.currentTimeSpan)) {
@@ -131,7 +136,9 @@ public class CourseController {
         }
     }
 
-    //setNormalView zeichnet die normale Kursanzeige als Aneinanderreihungen von Linien
+    /**
+     * setNormalView zeichnet die normale Kursanzeige als Aneinanderreihungen von Linien
+     */
     private void setNormalView(double posx, double posy, double startHeight, Date startTime, boolean rise) {
         int points=controller.currentArticle.getPointAmount();
         for (int i = 0; i < points - 1; ++i) {
@@ -164,8 +171,17 @@ public class CourseController {
         }
     }
 
+    /**
+     * setCandleStick wird verwendet, um einen einzelnen Chart/CandleStick zu zeichnen und wird daher für jeden Chart einzeln aufgerufen
+     * @param u unit die als Kerze gezeichnet wird
+     * @param posx wie viel sich pro pixel die x achse verändert
+     * @param posy wie viel sich pro pixel die y achse verändert
+     * @param width die Breite der Kerze
+     * @param startHeight tiefste höhe, aller units, wird benötigt um den verlauf genau so groß zu machen, wie die courseview ist.
+     * @param startTime anfangsZeit, um das Layout der Candles richtig darstellen zu können
+     * @param index wird bei day verwendet, da dabei die zeit immer die selbe ist.
+     */
 
-    //setCandleStick wird verwendet, um einen einzelnen Chart/CandleStick zu zeichnen und wird daher für jeden Chart einzeln aufgerufen
     private void setCandleStick(Unit u, double posx, double posy, double width, double startHeight, long startTime, int index) {
         double candlePosy = ((Math.max(u.getOpen(), u.getClose()) - startHeight) / posy);
         double candlePosx = (u.getDate().getTime() - startTime) / posx;

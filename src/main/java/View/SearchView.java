@@ -9,6 +9,9 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
+/**
+ * Klasse um die Suchleiste darzustellen und Aktien zu suchen
+ */
 public class SearchView extends Thread {
     Controller controller;
     HBox root = new HBox();

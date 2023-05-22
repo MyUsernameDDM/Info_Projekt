@@ -24,7 +24,9 @@ public class CourseView {
 
     ArrayList<Ellipse> points = new ArrayList<>();
 
-
+    /**
+     * Constructor erstellt ein hellblaues Rechteck worauf anschließend der Kurs dargestellt wird
+     */
     public CourseView() {
         //Background anpassen
         backGround = new Rectangle(500, 400);

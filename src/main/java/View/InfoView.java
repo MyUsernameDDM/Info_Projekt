@@ -13,7 +13,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Klasse zum darstellen von informationen beim hovern über verschiedenen Dingen
+ */
 public class InfoView {
+    /**
+     * Methode zum anzeigen eines Infofeldes in der Wallet
+     * @param button der Knopf bei welchem das InfoFeld kommt.
+     * @param controller controller um den aktuellen Article zu bekommen.
+     */
     public void showInfoView(Button button, Controller controller) {
         Tooltip t = new Tooltip();
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> {
