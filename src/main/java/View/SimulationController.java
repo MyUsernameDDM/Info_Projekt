@@ -10,40 +10,29 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
-import static MainModel.Main.mode;
+import static MainModel.Main.*;
 
 /**
  * SimulationsController dient als Controller für die Simulationsanzeige, in der der User selbst Aktien und Artikel kaufen
  * kann.
  */
 public class SimulationController extends Controller {
-
     InfoView infoView = new InfoView();
     Simulation simulation = null;
     WalletView walletView = new WalletView(this);
-    Article walletCurrentArticle = null; // Aktueller Artikle
+    Article walletCurrentArticle = null;    // Aktueller Artikle
 
-    SimulationUtils simulationUtils = new SimulationUtils(this);
-    Double moneyInvest;
+    SimulationUtils simulationUtils = new SimulationUtils(this);        //Utils-Klasse, die verwendet wird, um die SImulation speichern, laden und erstellen zu können
 
     public SimulationController() {
         //Aufruf des Konstruktors der Superklasse Controller
         super();
         setWalletView();
         courseController.adjustCourseSize(
-                groundView.scene.getWidth() - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(),
-                groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
-
-
+                windowWidth - watchListView.wlRoot.getPrefWidth() - walletView.walletRoot.getPrefWidth(),
+                windowHeight - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
     }
 
-    public GroundView getGroundView() {
-        return groundView;
-    }
-
-    public Scene getScene(){
-        return groundView.scene;
-    }
 
     /**
      * Sie Simulatin wird auf die übergebene Simulaiton gesetzt. Dies passiert, wenn eine neue Simulaiton begonnen wird oder eine Simulation aus einer Serialization-Datei geladen wird.
@@ -75,26 +64,15 @@ public class SimulationController extends Controller {
      *
      */
     public void adjustWindowSize(double newSceneWidth, double newSceneHeight){
-        //Hintergrund
-        groundView.window.setPrefWidth(newSceneWidth);
-        groundView.window.setPrefHeight(newSceneHeight);
-
-        groundView.oldSceneWidth = newSceneWidth;
-        groundView.oldSceneHeight = newSceneHeight;
+        //Hintergrund anpassen
+        groundView.window.setMaxWidth(newSceneWidth);
+        groundView.window.setMaxHeight(newSceneHeight);
 
         //folgende Zeilen sind zum normalen Controller unterschiedlich
-        courseController.adjustCourseSize(groundView.scene.getWidth() - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), groundView.scene.getHeight() - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight());
+        courseController.adjustCourseSize(newSceneWidth - walletView.walletRoot.getPrefWidth() - watchListView.wlRoot.getPrefWidth(), newSceneHeight - groundView.timeBox.getPrefHeight() - groundView.menu.getPrefHeight() - 35);
         walletView.articlesScrollPane.setPrefHeight(walletView.articlesScrollPane.getPrefHeight());
     }
 
-    /**
-     * Methode die aufgerufen wird, um in den RealtimeModus zu schalten
-     */
-    //@Override
-    public void changeMode() { // Simulation - Realtime
-        mode = Main.status.realtime;
-        Main.changeBetweenModes();
-    }
 
     /**
      * setWalletView fügt die WalletView der GroundView hinzu und setzt Actionhandler
@@ -123,11 +101,7 @@ public class SimulationController extends Controller {
         walletView.loadSimButton.setOnAction(actionEvent -> {
             try {
                 simulationUtils.openSimulation();
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (ClassNotFoundException | InterruptedException | IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -141,9 +115,11 @@ public class SimulationController extends Controller {
         });
     }
 
+    /**
+     * Methode, die einen Artikel zum Wallet hinzufügt
+     * @param money
+     */
     public void walletAddArticle(Double money) {
-
-        moneyInvest = money;
 
         //View fuer den Artikel in der Wallet erstellen
         ArticleInWalletView temp = new ArticleInWalletView(currentArticle, this);
@@ -174,7 +150,7 @@ public class SimulationController extends Controller {
             courseController.showCourse();
             walletSafeCurrentArticle(currentArticle.getName());
         });
-        simulation.setMoneyAv(simulation.getMoneyAv()-moneyInvest);
+        simulation.setMoneyAv(simulation.getMoneyAv()-money);
         walletView.articlesVBox.getChildren().add(temp.root);
 
 
@@ -182,6 +158,7 @@ public class SimulationController extends Controller {
 
 
     /**
+     * Übergebenen Artikel in der Walletlist speziell markieren, sodass man sieht, welcher ausgewählt ist.
      * @param articleName Name des neuen, aktuell ausgewählten Elements in der WatchList
      */
     public void walletSafeCurrentArticle(String articleName) {
@@ -195,7 +172,7 @@ public class SimulationController extends Controller {
             }
         }
 
-        //neuen Artikel als aktuellen Artikel erstellen
+        //neuen Artikel als aktuellen Artikel kennzeichnen
         for (Article article : simulation.getWalletListArticles()) {
             if (articleName.equals(article.getName())) {
                 walletCurrentArticle = article;
@@ -235,14 +212,19 @@ public class SimulationController extends Controller {
         }
     }
 
+    /**
+     * Methode zum Setzen des Handlers um zum RealtimeModus zu schalten
+     */
     public void modeSceneChanger(){
         groundView.modeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                changeMode();
+                mode = Main.status.realtime;
+                Main.changeBetweenModes();
             }
         });
     }
+
 
 }
 

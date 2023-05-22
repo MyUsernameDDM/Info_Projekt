@@ -24,20 +24,24 @@ public class Main extends Application {
 
     public static Scene scene;
 
-    public static Controller realtimeController = new Controller();
-    public static SimulationController simulationController = new SimulationController();
+    public static Controller realtimeController;
+    public static SimulationController simulationController;
+    public static double windowWidth = 800;
+    public static double windowHeight = 500;
     public static Stage primaryStage;
     @Override
     public void start(Stage stage)  {
         primaryStage = stage;
+        realtimeController = new Controller();
+        simulationController = new SimulationController();
 
-        stage.setTitle("Aktienkurs");
 
         mode = status.realtime;
         //Aufruf, um beim Start die Stage anzuzeigen
         changeBetweenModes();
-        stage.setMinWidth(800);
-        stage.setMinHeight(500);
+        //Mindestgröße festlegen
+        stage.setMinWidth(900);
+        stage.setMinHeight(550);
     }
 
     /**
@@ -45,25 +49,26 @@ public class Main extends Application {
      */
     public static void changeBetweenModes(){
         if (mode == status.realtime){
+            //die Scene des realtimeController holen
             scene = realtimeController.getScene();
 
             //Groesse anpassen
-            //+15 und +30 weil scene nicht genau gelcih groß ist wie die stage
-            primaryStage.setWidth(simulationController.getScene().getWidth() + 15);
-            primaryStage.setHeight(simulationController.getScene().getHeight() + 30);
-            realtimeController.adjustWindowSize(simulationController.getScene().getWidth(), simulationController.getScene().getHeight());
+            primaryStage.setWidth(windowWidth);
+            primaryStage.setHeight(windowHeight);
+            realtimeController.adjustWindowSize(windowWidth, windowHeight);
 
             primaryStage.setTitle("Realtime");
             primaryStage.setScene(scene);
             primaryStage.show();
         } else if(mode == status.simulation){
+
+            //die Scene des simulationController holen
             scene = simulationController.getScene();
 
             //Groesse anpassen
-            primaryStage.setWidth(realtimeController.getScene().getWidth() + 15);
-            primaryStage.setHeight(realtimeController.getScene().getHeight() + 30);
-            simulationController.adjustWindowSize(realtimeController.getScene().getWidth(), realtimeController.getScene().getHeight());
-
+            primaryStage.setWidth(windowWidth);
+            primaryStage.setHeight(windowHeight);
+            simulationController.adjustWindowSize(windowWidth, windowHeight);
             primaryStage.setTitle("Simulation");
             primaryStage.setScene(scene);
             primaryStage.show();

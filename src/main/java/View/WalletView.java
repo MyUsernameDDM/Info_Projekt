@@ -33,7 +33,7 @@ public class WalletView{
     Label note = new Label("Enter Amount:");
     VBox upperwalletvbox = new VBox();
     VBox simulationButtonVBox = new VBox();
-    Button simulationCoverInMenu = new Button("Simulation");
+    Button simulationCoverInMenu = new Button("SIMULATION");
     Button newSimButton = new Button();
     Button loadSimButton = new Button();
     Button saveSimButton = new Button();
