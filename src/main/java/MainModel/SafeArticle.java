@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Klasse um Artikel in einer Datei und ArrayList abzuspeichern
+ */
 public class SafeArticle {
     private ArrayList<Article> safedArticles;
 

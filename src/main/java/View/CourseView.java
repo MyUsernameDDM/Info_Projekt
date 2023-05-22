@@ -13,7 +13,9 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
-
+/**
+ * Klasse um einen Artikel entweder Normal oder in der Kerzenanchicht darzustellen
+ */
 public class CourseView {
     Group root = new Group();
 
